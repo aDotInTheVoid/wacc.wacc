@@ -5,13 +5,19 @@ begin
 #include "gen/utils.wacc.in"
 
 pair(char[], int) src_len = call readAll();
+
 char[] src = fst src_len;
 int lenn = snd src_len;
 
-int i = 0;
-while i < lenn do 
-    print src[i];
-    i = i + 1
+LEXER_T lexer = call lexer_new(src, lenn);
+
+bool run = true;
+
+while run do
+    TOKEN_T t = call next_token(lexer);
+    DISCARD call lexer_print_token(lexer, t);
+    TOKEN_TYPE tt = call token_type(t);
+    run = tt != TOKEN_EOF
 done
 
 end

@@ -28,11 +28,18 @@ LEXER_FN(bool, skipComment)
 end
 
 LEXER_FN(bool, isAtEnd)
-    return current >= len source
+    return current >= lenght
 end
 
 LEXER_FN(bool, skipWhitespace)
     while true do
+        // CLOX doen't need this because it's null terminated, but we arn't
+        // (now)
+        bool isAtEnd = call isAtEnd(self);
+        if isAtEnd then
+            return false
+        ENDIF ;
+
         char c = call peek(self);
         if c == ' ' || c == '\t' || c == '\n' || c == '\r' then
             char _nop = call advance(self)
@@ -47,12 +54,21 @@ LEXER_FN(bool, skipWhitespace)
 end
 
 LEXER_FN(TOKEN_T, makeToken,, TOKEN_TYPE ttype)
-    TOKEN_T r = call token_new(ttype, start, current - start);
+    TOKEN_T r = call token_ctor(ttype, start, current - start);
     return r
 end
 
+LEXER_T lexer_new(char[] source, int lenght) is
+    LEXER_T self = call lexer_ctor(source, 0, 0, lenght);
+    return self
+end
+
 LEXER_FN(TOKEN_T, next_token)
+
     DISCARD call skipWhitespace(self);
+    
+    LEXER_REFRESH;
+
     LEXER_SET_START(current);
 
     bool isAtEnd = call isAtEnd(self);
@@ -62,8 +78,55 @@ LEXER_FN(TOKEN_T, next_token)
         return r
     ENDIF ;
 
+    char c = call advance(self);
+    // LEX_REFRESH??
+    bool b = call isAlpha(c);
+    if b then
+        TOKEN_T t = call identifier(self);
+        return t
+    ENDIF ;
+
     XXXTODO
 end
 
+LEXER_FN(TOKEN_T, identifier)
+    bool run = true;
+
+    while run do
+        char c = call peek(self);
+        bool b = call isAlpha(c);
+        if !b then
+            run = false
+        else 
+            // TODO: check digit
+            char _dis = call advance(self)
+        fi
+    done;
+    TOKEN_T r = call makeToken(self, TOKEN_IDENTIFIER);
+    return r
+end
+
+LEXER_FN(bool, lexer_print_token,, TOKEN_T tok)
+    DISCARD call token_print_token(tok, source);
+    return false
+end
+
+
+TOKEN_FN(bool, token_print_token,, char[] source)
+    print start;
+    print " ";
+    print length;
+    string kind = call token_type_str(type);
+    print " ";
+    print kind;
+    print " ";
+    DISCARD call printStr(source, start, length);
+    println "";
+    return false
+end
+
+TOKEN_FN(TOKEN_TYPE, token_type)
+    return type
+end
 
 #endif

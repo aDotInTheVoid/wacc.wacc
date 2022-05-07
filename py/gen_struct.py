@@ -77,6 +77,16 @@ def gen_init(fielding, prefix):
         case StructField(name, type):
             return f"{type} {name} = {prefix};\n", {name: prefix}
 
+def gen_refresh(fielding, prefix):
+    match fielding:
+        case (l, r):
+            cname = "__" + prefix.replace(" ", "").replace("_", "")
+            ltext = gen_refresh(l, f"fst {cname}")
+            rtext = gen_refresh(r, f"snd {cname}")
+            return  ltext + rtext
+        case StructField(name, _):
+            return f"{name} = {prefix};\n"
+
 
 def trail_slash(s: str):
     return " \\\n".join(s.split("\n"))
@@ -99,7 +109,7 @@ def gen_struct(s: Struct):
         type_name = f"{s.name}_t".upper()
         f.write(f"\n#define {type_name} {nested_pair_name(fielding)}\n\n")
         # Ctor for the struct
-        f.write(f"{type_name} {s.name}_new(\n")
+        f.write(f"{type_name} {s.name}_ctor(\n")
         for idx, field in enumerate(s.fields):
             f.write(
                 f"    {field.field} {field.name}"
@@ -115,6 +125,12 @@ def gen_struct(s: Struct):
         f.write(f"    __rtype __fname({type_name} {obj_name} __VA_ARGS__) is \\\n")
         init, lvmap = gen_init(fielding, obj_name)
         f.write(trail_slash(indent(init.strip())) + "\n\n")
+
+        # Refresh_macro
+        f.write(f"\n#define {s.name.upper()}_REFRESH \\\n")
+        # [:-1] to remove last semi
+        f.write(trail_slash(indent(gen_refresh(fielding, obj_name).strip()[:-1])))
+        f.write("\n\n")
 
         # Setter macro for each field
         for field in s.fields:
@@ -134,6 +150,7 @@ def main():
                 StructField("source", wtype.Array(wtype.Char())),
                 StructField("start", wtype.Int()),
                 StructField("current", wtype.Int()),
+                StructField("lenght", wtype.Int()),
             ],
         ),
         Struct(

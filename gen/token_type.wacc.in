@@ -44,5 +44,164 @@
 #define TOKEN_WHILE 37
 #define TOKEN_ERROR 38
 #define TOKEN_EOF 39
+string token_type_str(TOKEN_TYPE __e) is
+    if __e < 20 then
+        if __e < 10 then
+            if __e < 5 then
+                if __e < 2 then
+                    if __e < 1 then
+                        if __e == 0 then return "LEFT_PAREN" else skip fi
+                    else
+                        if __e == 1 then return "RIGHT_PAREN" else skip fi
+                    fi
+                else
+                    if __e < 3 then
+                        if __e == 2 then return "LEFT_BRACE" else skip fi
+                    else
+                        if __e < 4 then
+                            if __e == 3 then return "RIGHT_BRACE" else skip fi
+                        else
+                            if __e == 4 then return "COMMA" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 7 then
+                    if __e < 6 then
+                        if __e == 5 then return "DOT" else skip fi
+                    else
+                        if __e == 6 then return "MINUS" else skip fi
+                    fi
+                else
+                    if __e < 8 then
+                        if __e == 7 then return "PLUS" else skip fi
+                    else
+                        if __e < 9 then
+                            if __e == 8 then return "SEMICOLON" else skip fi
+                        else
+                            if __e == 9 then return "SLASH" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        else
+            if __e < 15 then
+                if __e < 12 then
+                    if __e < 11 then
+                        if __e == 10 then return "STAR" else skip fi
+                    else
+                        if __e == 11 then return "BANG" else skip fi
+                    fi
+                else
+                    if __e < 13 then
+                        if __e == 12 then return "BANG_EQUAL" else skip fi
+                    else
+                        if __e < 14 then
+                            if __e == 13 then return "EQUAL" else skip fi
+                        else
+                            if __e == 14 then return "EQUAL_EQUAL" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 17 then
+                    if __e < 16 then
+                        if __e == 15 then return "GREATER" else skip fi
+                    else
+                        if __e == 16 then return "GREATER_EQUAL" else skip fi
+                    fi
+                else
+                    if __e < 18 then
+                        if __e == 17 then return "LESS" else skip fi
+                    else
+                        if __e < 19 then
+                            if __e == 18 then return "LESS_EQUAL" else skip fi
+                        else
+                            if __e == 19 then return "IDENTIFIER" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        fi
+    else
+        if __e < 30 then
+            if __e < 25 then
+                if __e < 22 then
+                    if __e < 21 then
+                        if __e == 20 then return "STRING" else skip fi
+                    else
+                        if __e == 21 then return "NUMBER" else skip fi
+                    fi
+                else
+                    if __e < 23 then
+                        if __e == 22 then return "AND" else skip fi
+                    else
+                        if __e < 24 then
+                            if __e == 23 then return "CLASS" else skip fi
+                        else
+                            if __e == 24 then return "ELSE" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 27 then
+                    if __e < 26 then
+                        if __e == 25 then return "FALSE" else skip fi
+                    else
+                        if __e == 26 then return "FOR" else skip fi
+                    fi
+                else
+                    if __e < 28 then
+                        if __e == 27 then return "FUN" else skip fi
+                    else
+                        if __e < 29 then
+                            if __e == 28 then return "IF" else skip fi
+                        else
+                            if __e == 29 then return "NIL" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        else
+            if __e < 35 then
+                if __e < 32 then
+                    if __e < 31 then
+                        if __e == 30 then return "OR" else skip fi
+                    else
+                        if __e == 31 then return "PRINT" else skip fi
+                    fi
+                else
+                    if __e < 33 then
+                        if __e == 32 then return "RETURN" else skip fi
+                    else
+                        if __e < 34 then
+                            if __e == 33 then return "SUPER" else skip fi
+                        else
+                            if __e == 34 then return "THIS" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 37 then
+                    if __e < 36 then
+                        if __e == 35 then return "TRUE" else skip fi
+                    else
+                        if __e == 36 then return "VAR" else skip fi
+                    fi
+                else
+                    if __e < 38 then
+                        if __e == 37 then return "WHILE" else skip fi
+                    else
+                        if __e < 39 then
+                            if __e == 38 then return "ERROR" else skip fi
+                        else
+                            if __e == 39 then return "EOF" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        fi
+    fi    ; exit 1
+end
 
 #endif

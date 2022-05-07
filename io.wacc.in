@@ -24,4 +24,13 @@ pair(char[], int) readAll() is
     return ret
 end
 
+bool printStr(char[] str, int start, int lenn) is
+    int i = 0;
+    while (i < lenn) do
+        print str[start + i];
+        i = i + 1
+    done ;
+    return false
+end
+
 #endif

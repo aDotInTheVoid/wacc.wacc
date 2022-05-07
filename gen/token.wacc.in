@@ -16,7 +16,7 @@
 // ]
 #define TOKEN_T pair(int, pair)
 
-TOKEN_T token_new(
+TOKEN_T token_ctor(
     int type,
     int start,
     int length
@@ -36,6 +36,12 @@ end
     pair(int, int) __sndself = snd __self; \
     int type = fst __sndself; \
     int start = snd __sndself;
+
+
+#define TOKEN_REFRESH \
+    length = fst __self; \
+    type = fst __sndself; \
+    start = snd __sndself
 
 #define TOKEN_SET_TYPE(__val) fst __sndself = __val; type = __val
 #define TOKEN_SET_START(__val) snd __sndself = __val; start = __val

@@ -5,40 +5,57 @@
 //     source: char[],
 //     start: int,
 //     current: int,
+//     lenght: int,
 // }
 
 // [
-//     current: int
 //     [
 //         source: char[]
+//         current: int
+//     ]
+//     [
 //         start: int
+//         lenght: int
 //     ]
 // ]
-#define LEXER_T pair(int, pair)
+#define LEXER_T pair(pair, pair)
 
-LEXER_T lexer_new(
+LEXER_T lexer_ctor(
     char[] source,
     int start,
-    int current
+    int current,
+    int lenght
 ) is
-    int l__ctor = current;
-    char[] lr__ctor = source;
-    int rr__ctor = start;
-    pair(char[], int) r__ctor = newpair(lr__ctor, rr__ctor);
-    pair(int, pair) __ctor = newpair(l__ctor, r__ctor);
+    char[] ll__ctor = source;
+    int rl__ctor = current;
+    pair(char[], int) l__ctor = newpair(ll__ctor, rl__ctor);
+    int lr__ctor = start;
+    int rr__ctor = lenght;
+    pair(int, int) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(pair, pair) __ctor = newpair(l__ctor, r__ctor);
     return __ctor
 end
 
 #define LEXER_FN(__rtype, __fname, ...) \
     __rtype __fname(LEXER_T self __VA_ARGS__) is \
-    pair(int, pair) __self = self; \
-    int current = fst __self; \
-    pair(char[], int) __sndself = snd __self; \
-    char[] source = fst __sndself; \
-    int start = snd __sndself;
+    pair(pair, pair) __self = self; \
+    pair(char[], int) __fstself = fst __self; \
+    char[] source = fst __fstself; \
+    int current = snd __fstself; \
+    pair(int, int) __sndself = snd __self; \
+    int start = fst __sndself; \
+    int lenght = snd __sndself;
 
-#define LEXER_SET_SOURCE(__val) fst __sndself = __val; source = __val
-#define LEXER_SET_START(__val) snd __sndself = __val; start = __val
-#define LEXER_SET_CURRENT(__val) fst __self = __val; current = __val
+
+#define LEXER_REFRESH \
+    source = fst __fstself; \
+    current = snd __fstself; \
+    start = fst __sndself; \
+    lenght = snd __sndself
+
+#define LEXER_SET_SOURCE(__val) fst __fstself = __val; source = __val
+#define LEXER_SET_START(__val) fst __sndself = __val; start = __val
+#define LEXER_SET_CURRENT(__val) snd __fstself = __val; current = __val
+#define LEXER_SET_LENGHT(__val) snd __sndself = __val; lenght = __val
 
 #endif
