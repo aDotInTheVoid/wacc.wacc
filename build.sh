@@ -6,4 +6,9 @@ python3.10 py/gen.py
 
 cpp -undef -nostdinc wacc.wacc.in -o wacc.wacc
 
+if [[ ! -f ./tp ]]
+then
+    ./regen-tp
+fi
+
 ./tp ./wacc.wacc ./wacc.c
