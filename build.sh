@@ -8,7 +8,8 @@ cpp -undef -nostdinc wacc.wacc.in -o wacc.wacc
 
 if [[ ! -f ./tp ]]
 then
-    ./regen-tp
+    ./regen-tp.sh
 fi
 
 ./tp ./wacc.wacc ./wacc.c
+gcc wacc.c -o wacc
