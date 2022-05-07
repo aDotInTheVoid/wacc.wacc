@@ -2,6 +2,6 @@
 
 LEXER_FN(char, advance)
     char ret = source[current];
-    // TODO: Bump current
+    LEXER_SET_CURRENT(current + 1);
     return ret
 end

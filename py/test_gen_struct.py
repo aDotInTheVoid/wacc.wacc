@@ -16,11 +16,7 @@ def test_gen_init():
             ),
             "__obj",
         )
-        == """int __objl = fst __obj;
-int __objr = snd __obj;
-int a = __objl;
-int b = __objr;
-"""
+        == """int a = fst __obj;\nint b = snd __obj;\n"""
     )
 
     assert (
@@ -40,18 +36,13 @@ int b = __objr;
             ),
             "__obj",
         )
-        == """pair(int, pair) __objl = fst __obj;
-pair(string, char[]) __objr = snd __obj;
-int __objll = fst __objl;
-pair(int, bool) __objlr = snd __objl;
-int a = __objll;
-int __objlrl = fst __objlr;
-bool __objlrr = snd __objlr;
-int b = __objlrl;
-bool c = __objlrr;
-string __objrl = fst __objr;
-char[] __objrr = snd __objr;
-string d = __objrl;
-char[] e = __objrr;
+        == """pair(int, pair) __fstobj = fst __obj;
+int a = fst __fstobj;
+pair(int, bool) __sndfstobj = snd __fstobj;
+int b = fst __sndfstobj;
+bool c = snd __sndfstobj;
+pair(string, char[]) __sndobj = snd __obj;
+string d = fst __sndobj;
+char[] e = snd __sndobj;
 """
     )

@@ -1,5 +1,5 @@
 // struct lexer {
-//     source: string,
+//     source: char[],
 //     start: int,
 //     current: int,
 // }
@@ -7,31 +7,32 @@
 // [
 //     current: int
 //     [
-//         source: string
+//         source: char[]
 //         start: int
 //     ]
 // ]
 #define LEXER_T pair(int, pair)
 
 LEXER_T lexer_new(
-    string source,
+    char[] source,
     int start,
     int current
 ) is
     int l__ctor = current;
-    string lr__ctor = source;
+    char[] lr__ctor = source;
     int rr__ctor = start;
-    pair(string, int) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(char[], int) r__ctor = newpair(lr__ctor, rr__ctor);
     pair(int, pair) __ctor = newpair(l__ctor, r__ctor);
     return __ctor
 end
 
 #define LEXER_FN(__rtype, __fname) \
-    __rtype __fname(LEXER_T __obj) is \
-    int __objl = fst __obj; \
-    pair(string, int) __objr = snd __obj; \
-    int current = __objl; \
-    string __objrl = fst __objr; \
-    int __objrr = snd __objr; \
-    string source = __objrl; \
-    int start = __objrr;
+    __rtype __fname(LEXER_T __objlexer) is \
+    int current = fst __objlexer; \
+    pair(char[], int) __sndobjlexer = snd __objlexer; \
+    char[] source = fst __sndobjlexer; \
+    int start = snd __sndobjlexer;
+
+#define LEXER_SET_SOURCE(__val) fst __sndobjlexer = __val; source = __val
+#define LEXER_SET_START(__val) snd __sndobjlexer = __val; start = __val
+#define LEXER_SET_CURRENT(__val) fst __objlexer = __val; current = __val

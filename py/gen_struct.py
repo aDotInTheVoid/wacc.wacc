@@ -65,16 +65,20 @@ def gen_ctor(fielding, prefix) -> str:
         case StructField(name, type):
             return f"{type} {prefix} = {name};\n"
 
-
-def gen_init(fielding, prefix) -> str:
+# Returns the init of a struct from the pair, and a map of field names to RValues
+def gen_init(fielding, prefix):
     match fielding:
         case (l, r):
-            lp, rp = prefix + "l", prefix + "r"
-            ll = f"{nested_pair_name(l)} {lp} = fst {prefix};\n"
-            rr = f"{nested_pair_name(r)} {rp} = snd {prefix};\n"
-            return ll + rr + gen_init(l, lp) + gen_init(r, rp)
+            cname = "__" + prefix.replace(" ", "").replace("_", "")
+            if cname != prefix:
+                hereexpr = f"{nested_pair_name(fielding)} {cname} = {prefix};\n"
+            else:
+                hereexpr = ""
+            ltext, lmap = gen_init(l, f"fst {cname}")
+            rtext, rmap = gen_init(r, f"snd {cname}")
+            return hereexpr +  ltext + rtext, lmap | rmap
         case StructField(name, type):
-            return f"{type} {name} = {prefix};\n"
+            return f"{type} {name} = {prefix};\n", {name: prefix}
 
 
 def trail_slash(s: str):
@@ -83,6 +87,10 @@ def trail_slash(s: str):
 
 def gen_struct(s: Struct):
     with open(f"gen/{s.name}.wacc.in", "w") as f:
+        assert (
+            len(s.fields) > 1
+        ), "Can't have struct with 1 field, as need pair indirection for mutability"
+
         # Comment describing the struct, C version
         f.write(f"// struct {s.name} {{\n")
         for field in s.fields:
@@ -107,8 +115,17 @@ def gen_struct(s: Struct):
         f.write("end\n\n")
         # Functions which take the struct as an argument
         f.write(f"#define {s.name.upper()}_FN(__rtype, __fname) \\\n")
-        f.write(f"    __rtype __fname({type_name} __obj) is \\\n")
-        f.write(trail_slash(indent(gen_init(fielding, "__obj").strip())))
+        obj_name = f"__obj{s.name}"
+        f.write(f"    __rtype __fname({type_name} {obj_name}) is \\\n")
+        init, lvmap = gen_init(fielding, obj_name)
+        f.write(trail_slash(indent(init.strip())) + "\n\n")
+
+        # Setter macro for each field
+        for field in s.fields:
+            mname = f"{s.name}_set_{field.name}".upper()
+            # This double evaluates, but Wacc exprs have no side effects
+            # Setting the local and global is probably redundant, but Eh.
+            f.write(f"#define {mname}(__val) {lvmap[field.name]} = __val; {field.name} = __val\n")
 
 
 if __name__ == "__main__":
@@ -116,7 +133,7 @@ if __name__ == "__main__":
         Struct(
             "lexer",
             [
-                StructField("source", wtype.String()),
+                StructField("source", wtype.Array(wtype.Char())),
                 StructField("start", wtype.Int()),
                 StructField("current", wtype.Int()),
             ],
