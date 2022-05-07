@@ -1,5 +1,6 @@
 #ifndef GEN_LEXER_WACC_IN
 #define GEN_LEXER_WACC_IN
+
 // struct lexer {
 //     source: char[],
 //     start: int,
@@ -28,8 +29,8 @@ LEXER_T lexer_new(
     return __ctor
 end
 
-#define LEXER_FN(__rtype, __fname) \
-    __rtype __fname(LEXER_T self) is \
+#define LEXER_FN(__rtype, __fname, ...) \
+    __rtype __fname(LEXER_T self __VA_ARGS__) is \
     pair(int, pair) __self = self; \
     int current = fst __self; \
     pair(char[], int) __sndself = snd __self; \

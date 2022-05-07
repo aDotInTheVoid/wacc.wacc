@@ -1,5 +1,6 @@
 #ifndef GEN_TOKEN_WACC_IN
 #define GEN_TOKEN_WACC_IN
+
 // struct token {
 //     type: int,
 //     start: int,
@@ -28,8 +29,8 @@ TOKEN_T token_new(
     return __ctor
 end
 
-#define TOKEN_FN(__rtype, __fname) \
-    __rtype __fname(TOKEN_T self) is \
+#define TOKEN_FN(__rtype, __fname, ...) \
+    __rtype __fname(TOKEN_T self __VA_ARGS__) is \
     pair(int, pair) __self = self; \
     int length = fst __self; \
     pair(int, int) __sndself = snd __self; \

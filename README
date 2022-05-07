@@ -1,0 +1,14 @@
+
+
+NOTES ON WACC
+-------------
+
+char[] to string is allowed, but not the other way around, you you
+almost always want to use char[]
+
+EXTENSIONS
+----------
+
+<program> ::= <begin> <toplvldecl>* <stat> <end>
+<toplvldecl> ::= <func> | <extern>
+<extern> ::= "extern" <type> <ident> <param-list>

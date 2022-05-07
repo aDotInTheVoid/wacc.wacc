@@ -1,7 +1,17 @@
 begin
 
 #include "lexer.wacc.in"
+#include "io.wacc.in"
+#include "gen/utils.wacc.in"
 
-println "Hello, World!"
+pair(char[], int) src_len = call readAll();
+char[] src = fst src_len;
+int lenn = snd src_len;
+
+int i = 0;
+while i < lenn do 
+    print src[i];
+    i = i + 1
+done
 
 end

@@ -1,5 +1,5 @@
 import dataclasses
-from pprint import pformat
+from util import Generate, indent
 
 
 import wtype
@@ -17,10 +17,6 @@ class StructField:
 class Struct:
     name: str
     fields: list[StructField]
-
-
-def indent(s: str):
-    return "\n".join(f"    {line}" for line in s.split("\n"))
 
 
 def print_struct_tree(f):
@@ -87,16 +83,10 @@ def trail_slash(s: str):
 
 
 def gen_struct(s: Struct):
-    with open(f"gen/{s.name}.wacc.in", "w") as f:
+    with Generate(s.name) as f:
         assert (
             len(s.fields) > 1
         ), "Can't have struct with 1 field, as need pair indirection for mutability"
-
-        guard_name = f"gen_{s.name}_wacc_in".upper()
-
-        f.write(f"#ifndef {guard_name}\n")
-        f.write(f"#define {guard_name}\n")
-
         # Comment describing the struct, C version
         f.write(f"// struct {s.name} {{\n")
         for field in s.fields:
@@ -120,9 +110,9 @@ def gen_struct(s: Struct):
         f.write("return __ctor\n")
         f.write("end\n\n")
         # Functions which take the struct as an argument
-        f.write(f"#define {s.name.upper()}_FN(__rtype, __fname) \\\n")
+        f.write(f"#define {s.name.upper()}_FN(__rtype, __fname, ...) \\\n")
         obj_name = "self"  # f"__obj{s.name}"
-        f.write(f"    __rtype __fname({type_name} {obj_name}) is \\\n")
+        f.write(f"    __rtype __fname({type_name} {obj_name} __VA_ARGS__) is \\\n")
         init, lvmap = gen_init(fielding, obj_name)
         f.write(trail_slash(indent(init.strip())) + "\n\n")
 
@@ -134,8 +124,6 @@ def gen_struct(s: Struct):
             f.write(
                 f"#define {mname}(__val) {lvmap[field.name]} = __val; {field.name} = __val\n"
             )
-
-        f.write("\n#endif\n")
 
 
 def main():

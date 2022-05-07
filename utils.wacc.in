@@ -3,7 +3,7 @@
 
 #define XXXTODO exit 1
 
-#define ENDIF else bool __nop = false fi
+#define ENDIF else skip fi
 // TODO: This might not work with several 
 #define DISCARD bool __nop =
 

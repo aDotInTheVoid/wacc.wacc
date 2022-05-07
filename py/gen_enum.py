@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from util import Generate
 
 
 @dataclass
@@ -9,11 +10,7 @@ class Enum:
 
 
 def gen_enum(e: Enum, i: int):
-    with open(f"gen/{e.name}.wacc.in", "w") as f:
-        guard_name = f"gen_{e.name}_wacc_in".upper()
-        f.write(f"#ifndef {guard_name}\n")
-        f.write(f"#define {guard_name}\n")
-
+    with Generate(e.name) as f:
         name = e.name.upper()
         prefix = e.prefix.upper()
 
@@ -22,8 +19,6 @@ def gen_enum(e: Enum, i: int):
         for idx, opt in enumerate(e.opts):
             eno = i * 1000 + idx
             f.write(f"#define {prefix}_{opt.upper()} {eno}\n")
-
-        f.write("\n#endif\n")
 
 
 def main():

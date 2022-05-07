@@ -4,6 +4,7 @@
 #include "gen/lexer.wacc.in"
 #include "gen/token.wacc.in"
 #include "utils.wacc.in"
+#include "gen/token_type.wacc.in"
 
 LEXER_FN(char, advance)
     char ret = source[current];
@@ -45,8 +46,9 @@ LEXER_FN(bool, skipWhitespace)
     return false
 end
 
-LEXER_FN(TOKEN_T, makeToken)
-    XXXTODO
+LEXER_FN(TOKEN_T, makeToken,, TOKEN_TYPE ttype)
+    TOKEN_T r = call token_new(ttype, start, current - start);
+    return r
 end
 
 LEXER_FN(TOKEN_T, next_token)
@@ -56,7 +58,7 @@ LEXER_FN(TOKEN_T, next_token)
     bool isAtEnd = call isAtEnd(self);
     if isAtEnd then
         // todo: let fn macros take args
-        TOKEN_T r = call makeToken(self);
+        TOKEN_T r = call makeToken(self, TOKEN_EOF);
         return r
     ENDIF ;
 

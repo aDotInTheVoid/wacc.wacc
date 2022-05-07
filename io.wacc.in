@@ -1,0 +1,27 @@
+#ifndef IO_WACC_IN
+#define IO_WACC_IN
+
+#include "gen/utils.wacc.in"
+
+// Iurri extension;
+extern int getchar()
+
+pair(char[], int) readAll() is
+    char[] buffer = call calloc(1000);
+    // TODO: Realloc buffer
+    int i = 0;
+    bool run = true;
+    while (run) do
+        int c = call getchar();
+        if (c == -1) then
+            run = false
+        else
+            buffer[i] = chr c;
+            i = i + 1
+        fi
+    done ;
+    pair(char[], int) ret = newpair(buffer, i);
+    return ret
+end
+
+#endif
