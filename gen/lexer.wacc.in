@@ -1,3 +1,5 @@
+#ifndef GEN_LEXER_WACC_IN
+#define GEN_LEXER_WACC_IN
 // struct lexer {
 //     source: char[],
 //     start: int,
@@ -27,12 +29,15 @@ LEXER_T lexer_new(
 end
 
 #define LEXER_FN(__rtype, __fname) \
-    __rtype __fname(LEXER_T __objlexer) is \
-    int current = fst __objlexer; \
-    pair(char[], int) __sndobjlexer = snd __objlexer; \
-    char[] source = fst __sndobjlexer; \
-    int start = snd __sndobjlexer;
+    __rtype __fname(LEXER_T self) is \
+    pair(int, pair) __self = self; \
+    int current = fst __self; \
+    pair(char[], int) __sndself = snd __self; \
+    char[] source = fst __sndself; \
+    int start = snd __sndself;
 
-#define LEXER_SET_SOURCE(__val) fst __sndobjlexer = __val; source = __val
-#define LEXER_SET_START(__val) snd __sndobjlexer = __val; start = __val
-#define LEXER_SET_CURRENT(__val) fst __objlexer = __val; current = __val
+#define LEXER_SET_SOURCE(__val) fst __sndself = __val; source = __val
+#define LEXER_SET_START(__val) snd __sndself = __val; start = __val
+#define LEXER_SET_CURRENT(__val) fst __self = __val; current = __val
+
+#endif

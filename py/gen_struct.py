@@ -91,6 +91,11 @@ def gen_struct(s: Struct):
             len(s.fields) > 1
         ), "Can't have struct with 1 field, as need pair indirection for mutability"
 
+        guard_name = f"gen_{s.name}_wacc_in".upper()
+
+        f.write(f"#ifndef {guard_name}\n")
+        f.write(f"#define {guard_name}\n")
+
         # Comment describing the struct, C version
         f.write(f"// struct {s.name} {{\n")
         for field in s.fields:
@@ -115,7 +120,7 @@ def gen_struct(s: Struct):
         f.write("end\n\n")
         # Functions which take the struct as an argument
         f.write(f"#define {s.name.upper()}_FN(__rtype, __fname) \\\n")
-        obj_name = f"__obj{s.name}"
+        obj_name = "self" #f"__obj{s.name}"
         f.write(f"    __rtype __fname({type_name} {obj_name}) is \\\n")
         init, lvmap = gen_init(fielding, obj_name)
         f.write(trail_slash(indent(init.strip())) + "\n\n")
@@ -127,8 +132,12 @@ def gen_struct(s: Struct):
             # Setting the local and global is probably redundant, but Eh.
             f.write(f"#define {mname}(__val) {lvmap[field.name]} = __val; {field.name} = __val\n")
 
+        f.write("\n#endif\n")
 
-if __name__ == "__main__":
+        
+
+
+def main():
     for s in [
         Struct(
             "lexer",
@@ -137,6 +146,14 @@ if __name__ == "__main__":
                 StructField("start", wtype.Int()),
                 StructField("current", wtype.Int()),
             ],
+        ),
+        Struct(
+            "token",
+            [
+                StructField("type", wtype.Int()),
+                StructField("start", wtype.Int()),
+                StructField("length", wtype.Int()),
+            ]
         )
     ]:
         gen_struct(s)

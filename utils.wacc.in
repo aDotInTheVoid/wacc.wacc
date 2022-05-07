@@ -1,0 +1,10 @@
+#ifndef UITLS_WACC_IN
+#define UITLS_WACC_IN
+
+#define XXXTODO exit 1
+
+#define ENDIF else bool __nop = false fi
+// TODO: This might not work with several 
+#define DISCARD bool __nop =
+
+#endif

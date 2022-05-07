@@ -1,0 +1,43 @@
+#ifndef GEN_TOKEN_WACC_IN
+#define GEN_TOKEN_WACC_IN
+// struct token {
+//     type: int,
+//     start: int,
+//     length: int,
+// }
+
+// [
+//     length: int
+//     [
+//         type: int
+//         start: int
+//     ]
+// ]
+#define TOKEN_T pair(int, pair)
+
+TOKEN_T token_new(
+    int type,
+    int start,
+    int length
+) is
+    int l__ctor = length;
+    int lr__ctor = type;
+    int rr__ctor = start;
+    pair(int, int) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(int, pair) __ctor = newpair(l__ctor, r__ctor);
+    return __ctor
+end
+
+#define TOKEN_FN(__rtype, __fname) \
+    __rtype __fname(TOKEN_T self) is \
+    pair(int, pair) __self = self; \
+    int length = fst __self; \
+    pair(int, int) __sndself = snd __self; \
+    int type = fst __sndself; \
+    int start = snd __sndself;
+
+#define TOKEN_SET_TYPE(__val) fst __sndself = __val; type = __val
+#define TOKEN_SET_START(__val) snd __sndself = __val; start = __val
+#define TOKEN_SET_LENGTH(__val) fst __self = __val; length = __val
+
+#endif

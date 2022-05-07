@@ -1,7 +1,67 @@
+#ifndef LEXER_WACC_IN
+#define LEXER_WACC_IN
+
 #include "gen/lexer.wacc.in"
+#include "gen/token.wacc.in"
+#include "utils.wacc.in"
 
 LEXER_FN(char, advance)
     char ret = source[current];
     LEXER_SET_CURRENT(current + 1);
     return ret
 end
+
+LEXER_FN(char, peek)
+    return source[current]
+end
+
+LEXER_FN(bool, skipComment)
+    while true do
+        char c = call peek(self);
+        bool is_at_end = call isAtEnd(self);
+        if c == '\n' || is_at_end then
+            return false
+        ENDIF
+    done ;
+    return false
+end
+
+LEXER_FN(bool, isAtEnd)
+    return current >= len source
+end
+
+LEXER_FN(bool, skipWhitespace)
+    while true do
+        char c = call peek(self);
+        if c == ' ' || c == '\t' || c == '\n' || c == '\r' then
+            char _nop = call advance(self)
+        else if c == '#' then
+            DISCARD call skipComment(self)
+        else
+            return false
+        fi fi
+    done;
+    // Not used, but no void.
+    return false
+end
+
+LEXER_FN(TOKEN_T, makeToken)
+    XXXTODO
+end
+
+LEXER_FN(TOKEN_T, next_token)
+    DISCARD call skipWhitespace(self);
+    LEXER_SET_START(current);
+
+    bool isAtEnd = call isAtEnd(self);
+    if isAtEnd then
+        // todo: let fn macros take args
+        TOKEN_T r = call makeToken(self);
+        return r
+    ENDIF ;
+
+    XXXTODO
+end
+
+
+#endif
