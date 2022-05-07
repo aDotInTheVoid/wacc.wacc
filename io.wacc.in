@@ -3,7 +3,7 @@
 
 #include "gen/utils.wacc.in"
 
-// Iurri extension;
+// Iurii extension;
 extern int getchar()
 
 pair(char[], int) readAll() is
