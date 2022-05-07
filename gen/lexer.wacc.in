@@ -1,0 +1,27 @@
+// struct lexer {
+//     source: string,
+//     start: int,
+//     current: int,
+// }
+
+// [
+//     current: int
+//     [
+//         source: string
+//         start: int
+//     ]
+// ]
+#define LEXER_T pair(int, pair)
+
+LEXER_T lexer_new(
+    string source,
+    int start,
+    int current,
+) is
+    int l__ctor = current;
+    string lr__ctor = source;
+    int rr__ctor = start;
+    pair(string, int) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(int, pair) __ctor = newpair(l__ctor, r__ctor);
+    return __ctor
+end
