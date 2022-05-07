@@ -2,4 +2,6 @@ begin
 
 #include "lexer.wacc.in"
 
+println "Hello, World!"
+
 end

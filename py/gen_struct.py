@@ -68,8 +68,8 @@ def gen_struct(s: Struct):
         f.write(f"\n#define {type_name} {nested_pair_name(fielding)}\n\n")
 
         f.write(f"{type_name} {s.name}_new(\n")
-        for field in s.fields:
-            f.write(f"    {field.field} {field.name},\n")
+        for idx, field in enumerate(s.fields):
+            f.write(f"    {field.field} {field.name}" + (",\n" if idx!= len(s.fields)-1 else "\n"))
         f.write(") is\n")
         
         f.write(indent(gen_ctor(fielding, "__ctor")))

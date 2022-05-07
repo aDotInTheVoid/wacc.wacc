@@ -16,7 +16,7 @@
 LEXER_T lexer_new(
     string source,
     int start,
-    int current,
+    int current
 ) is
     int l__ctor = current;
     string lr__ctor = source;
