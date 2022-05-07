@@ -4,7 +4,7 @@ from wtype import Int, Bool, String, Char, Array
 
 def test_gen_init():
     assert (
-        gen_struct.gen_init(gen_struct.StructField("a", Int()), "__obj")
+        gen_struct.gen_init(gen_struct.StructField("a", Int()), "__obj")[0]
         == "int a = __obj;\n"
     )
 
@@ -15,7 +15,7 @@ def test_gen_init():
                 gen_struct.StructField("b", Int()),
             ),
             "__obj",
-        )
+        )[0]
         == """int a = fst __obj;\nint b = snd __obj;\n"""
     )
 
@@ -35,7 +35,7 @@ def test_gen_init():
                 ),
             ),
             "__obj",
-        )
+        )[0]
         == """pair(int, pair) __fstobj = fst __obj;
 int a = fst __fstobj;
 pair(int, bool) __sndfstobj = snd __fstobj;

@@ -65,6 +65,7 @@ def gen_ctor(fielding, prefix) -> str:
         case StructField(name, type):
             return f"{type} {prefix} = {name};\n"
 
+
 # Returns the init of a struct from the pair, and a map of field names to RValues
 def gen_init(fielding, prefix):
     match fielding:
@@ -76,7 +77,7 @@ def gen_init(fielding, prefix):
                 hereexpr = ""
             ltext, lmap = gen_init(l, f"fst {cname}")
             rtext, rmap = gen_init(r, f"snd {cname}")
-            return hereexpr +  ltext + rtext, lmap | rmap
+            return hereexpr + ltext + rtext, lmap | rmap
         case StructField(name, type):
             return f"{type} {name} = {prefix};\n", {name: prefix}
 
@@ -120,7 +121,7 @@ def gen_struct(s: Struct):
         f.write("end\n\n")
         # Functions which take the struct as an argument
         f.write(f"#define {s.name.upper()}_FN(__rtype, __fname) \\\n")
-        obj_name = "self" #f"__obj{s.name}"
+        obj_name = "self"  # f"__obj{s.name}"
         f.write(f"    __rtype __fname({type_name} {obj_name}) is \\\n")
         init, lvmap = gen_init(fielding, obj_name)
         f.write(trail_slash(indent(init.strip())) + "\n\n")
@@ -130,11 +131,11 @@ def gen_struct(s: Struct):
             mname = f"{s.name}_set_{field.name}".upper()
             # This double evaluates, but Wacc exprs have no side effects
             # Setting the local and global is probably redundant, but Eh.
-            f.write(f"#define {mname}(__val) {lvmap[field.name]} = __val; {field.name} = __val\n")
+            f.write(
+                f"#define {mname}(__val) {lvmap[field.name]} = __val; {field.name} = __val\n"
+            )
 
         f.write("\n#endif\n")
-
-        
 
 
 def main():
@@ -153,7 +154,7 @@ def main():
                 StructField("type", wtype.Int()),
                 StructField("start", wtype.Int()),
                 StructField("length", wtype.Int()),
-            ]
-        )
+            ],
+        ),
     ]:
         gen_struct(s)
