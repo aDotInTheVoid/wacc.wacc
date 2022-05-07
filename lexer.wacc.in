@@ -1,1 +1,7 @@
 #include "gen/lexer.wacc.in"
+
+LEXER_FN(char, advance)
+    char ret = source[current];
+    // TODO: Bump current
+    return ret
+end

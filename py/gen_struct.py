@@ -6,6 +6,7 @@ import wtype
 from wtype import Type
 from pairgen import pairgen
 
+
 @dataclasses.dataclass
 class StructField:
     name: str
@@ -17,31 +18,42 @@ class Struct:
     name: str
     fields: list[StructField]
 
+
 def indent(s: str):
     return "\n".join(f"    {line}" for line in s.split("\n"))
+
 
 def print_struct_tree(f):
     match f:
         case (l, r):
-            return "[\n" + indent(print_struct_tree(l)) + "\n" + indent(print_struct_tree(r)) + "\n]" 
+            return (
+                "[\n"
+                + indent(print_struct_tree(l))
+                + "\n"
+                + indent(print_struct_tree(r))
+                + "\n]"
+            )
         case StructField(name, type):
             return f"{name}: {type}"
+
 
 def comment(s: str):
     return "\n".join(f"// {line}" for line in s.split("\n"))
 
+
 def nested_pair_name(p):
     match p:
-        case ((_,_), (_,_)):
+        case ((_, _), (_, _)):
             return "pair(pair, pair)"
-        case ((_,_), r):
+        case ((_, _), r):
             return f"pair(pair, {r.field})"
-        case (l, (_,_)):
+        case (l, (_, _)):
             return f"pair({l.field}, pair)"
         case (l, r):
             return f"pair({l.field}, {r.field})"
         case s:
             return str(s.field)
+
 
 def gen_ctor(fielding, prefix) -> str:
     match fielding:
@@ -53,32 +65,51 @@ def gen_ctor(fielding, prefix) -> str:
         case StructField(name, type):
             return f"{type} {prefix} = {name};\n"
 
+
+def gen_init(fielding, prefix) -> str:
+    match fielding:
+        case (l, r):
+            lp, rp = prefix + "l", prefix + "r"
+            ll = f"{nested_pair_name(l)} {lp} = fst {prefix};\n"
+            rr = f"{nested_pair_name(r)} {rp} = snd {prefix};\n"
+            return ll + rr + gen_init(l, lp) + gen_init(r, rp)
+        case StructField(name, type):
+            return f"{type} {name} = {prefix};\n"
+
+
+def trail_slash(s: str):
+    return " \\\n".join(s.split("\n"))
+
+
 def gen_struct(s: Struct):
     with open(f"gen/{s.name}.wacc.in", "w") as f:
+        # Comment describing the struct, C version
         f.write(f"// struct {s.name} {{\n")
         for field in s.fields:
             f.write(f"//     {field.name}: {field.field},\n")
         f.write("// }\n\n")
-
+        # Comment describing the struct, nested pairs
         fielding = pairgen(s.fields)
         f.write(comment(print_struct_tree(fielding)))
-
+        # Macro defining the sctuct
         type_name = f"{s.name}_t".upper()
-
         f.write(f"\n#define {type_name} {nested_pair_name(fielding)}\n\n")
-
+        # Ctor for the struct
         f.write(f"{type_name} {s.name}_new(\n")
         for idx, field in enumerate(s.fields):
-            f.write(f"    {field.field} {field.name}" + (",\n" if idx!= len(s.fields)-1 else "\n"))
+            f.write(
+                f"    {field.field} {field.name}"
+                + (",\n" if idx != len(s.fields) - 1 else "\n")
+            )
         f.write(") is\n")
-        
         f.write(indent(gen_ctor(fielding, "__ctor")))
         f.write("return __ctor\n")
+        f.write("end\n\n")
+        # Functions which take the struct as an argument
+        f.write(f"#define {s.name.upper()}_FN(__rtype, __fname) \\\n")
+        f.write(f"    __rtype __fname({type_name} __obj) is \\\n")
+        f.write(trail_slash(indent(gen_init(fielding, "__obj").strip())))
 
-        f.write("end")
-
-        
-        
 
 if __name__ == "__main__":
     for s in [
