@@ -1,5 +1,5 @@
-#ifndef GEN_UTILS_WACC_IN
-#define GEN_UTILS_WACC_IN
+#ifndef GEN_ALLOC_WACC_IN
+#define GEN_ALLOC_WACC_IN
 
 char[] calloc(int size) is
     if size <= 90 then

@@ -9,22 +9,26 @@ class Enum:
     opts: list[str]
 
 
-def gen_bsearch(f: list[tuple[int, str]]):
+def gen_bsearch_tree(f):
     match f:
-        case [(idx, name)]:
-            return f'if __e == {idx} then return "{name}" else skip fi'
+        case [(key, value)]:
+            return ("=", key, value)
         case _:
             mid = len(f) // 2
             pivot = f[mid][0]
-            less = gen_bsearch(f[:mid])
-            greater = gen_bsearch(f[mid:])
-            return (
-                f"if __e < {pivot} then\n"
-                + indent(less)
-                + "\nelse\n"
-                + indent(greater)
-                + "\nfi"
-            )
+            less = gen_bsearch_tree(f[:mid])
+            greater = gen_bsearch_tree(f[mid:])
+            return ("<", pivot, less, greater)
+
+
+def gen_bsearch(tree):
+    match tree:
+        case ("=", key, value):
+            return f'if __e == {key} then return "{value}" ENDIF'
+        case ("<", pivot, less, greater):
+            return f"if __e < {pivot} then\n{indent(gen_bsearch(less))}\nelse\n{indent(gen_bsearch(greater))}\nfi"
+        case _:
+            raise Exception("invalid tree", tree)
 
 
 def gen_enum(e: Enum, i: int):
@@ -42,7 +46,7 @@ def gen_enum(e: Enum, i: int):
             f.write(f"#define {prefix}_{opt.upper()} {eno}\n")
 
         f.write(f"string {e.name}_str({name} __e) is\n")
-        f.write(indent(gen_bsearch(vals)))
+        f.write(indent(gen_bsearch(gen_bsearch_tree(vals))))
         f.write("    ; exit 1\n")
         f.write("end\n")
 

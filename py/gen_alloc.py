@@ -4,6 +4,7 @@ import itertools
 
 # pre: sorted(l)
 # return pivot, lesseq, greatereq
+# kinda funkey because we want the smallest element greater or equal to the pivot
 def gen_bsearch(l, rightmost=True):
     if len(l) == 2:
         if rightmost:
@@ -64,10 +65,10 @@ def gen_calloc(f):
     f.write("end\n")
 
 
-def gen_utils():
-    with Generate("utils") as f:
+def gen_alloc():
+    with Generate("alloc") as f:
         gen_calloc(f)
 
 
 def main():
-    gen_utils()
+    gen_alloc()

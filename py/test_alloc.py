@@ -1,4 +1,4 @@
-from gen_utils import gen_bsearch
+from gen_alloc import gen_bsearch
 
 
 def test_bsearch():

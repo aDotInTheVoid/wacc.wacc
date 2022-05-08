@@ -2,8 +2,6 @@ begin
 
 #include "lexer.wacc.in"
 #include "io.wacc.in"
-#include "gen/utils.wacc.in"
-
 
 // Main function
 DISCARD_INIT;
