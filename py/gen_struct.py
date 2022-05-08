@@ -1,5 +1,6 @@
 import dataclasses
 from util import Generate, indent
+from wtype import Array
 
 
 import wtype
@@ -77,15 +78,32 @@ def gen_init(fielding, prefix):
         case StructField(name, type):
             return f"{type} {name} = {prefix};\n", {name: prefix}
 
+
 def gen_refresh(fielding, prefix):
     match fielding:
         case (l, r):
             cname = "__" + prefix.replace(" ", "").replace("_", "")
             ltext = gen_refresh(l, f"fst {cname}")
             rtext = gen_refresh(r, f"snd {cname}")
-            return  ltext + rtext
+            return ltext + rtext
         case StructField(name, _):
             return f"{name} = {prefix};\n"
+
+
+def gen_dtor(fielding, prefix):
+    match fielding:
+        case (l, r):
+            lp, rp = "l" + prefix, "r" + prefix
+            ltext = f"{nested_pair_name(l)} {lp} = fst {prefix};\n"
+            rtext = f"{nested_pair_name(r)} {rp} = snd {prefix};\n"
+            free = f"free {prefix};\n"
+            return "".join([ltext, rtext, gen_dtor(l, lp), gen_dtor(r, rp), free])
+        # TODO: Handle nested arrays
+        # TODO: Does freeing a struct always free it's array?
+        case StructField(_, Array(_)):
+            return f"free {prefix};\n"
+        case _:
+            return ""
 
 
 def trail_slash(s: str):
@@ -98,6 +116,7 @@ def gen_struct(s: Struct):
             len(s.fields) > 1
         ), "Can't have struct with 1 field, as need pair indirection for mutability"
         # Comment describing the struct, C version
+        f.write('#include "../utils.wacc.in"\n\n')
         f.write(f"// struct {s.name} {{\n")
         for field in s.fields:
             f.write(f"//     {field.name}: {field.field},\n")
@@ -105,10 +124,12 @@ def gen_struct(s: Struct):
         # Comment describing the struct, nested pairs
         fielding = pairgen(s.fields)
         f.write(comment(print_struct_tree(fielding)))
-        # Macro defining the sctuct
+
+        # Typedef macro
         type_name = f"{s.name}_t".upper()
         f.write(f"\n#define {type_name} {nested_pair_name(fielding)}\n\n")
-        # Ctor for the struct
+
+        # Ctor
         f.write(f"{type_name} {s.name}_ctor(\n")
         for idx, field in enumerate(s.fields):
             f.write(
@@ -119,14 +140,19 @@ def gen_struct(s: Struct):
         f.write(indent(gen_ctor(fielding, "__ctor")))
         f.write("return __ctor\n")
         f.write("end\n\n")
-        # Functions which take the struct as an argument
+
+        f.write(f"VOID {s.name}_free({type_name} self) is\n")
+        f.write(indent(gen_dtor(fielding, "self")))
+        f.write("\nENDV\n\n")
+
+        # Macro for function definition
         f.write(f"#define {s.name.upper()}_FN(__rtype, __fname, ...) \\\n")
         obj_name = "self"  # f"__obj{s.name}"
         f.write(f"    __rtype __fname({type_name} {obj_name} __VA_ARGS__) is \\\n")
         init, lvmap = gen_init(fielding, obj_name)
         f.write(trail_slash(indent(init.strip())) + "\n\n")
 
-        # Refresh_macro
+        # Refresh macro
         f.write(f"\n#define {s.name.upper()}_REFRESH \\\n")
         # [:-1] to remove last semi
         f.write(trail_slash(indent(gen_refresh(fielding, obj_name).strip()[:-1])))

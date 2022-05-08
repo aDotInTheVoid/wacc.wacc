@@ -44,7 +44,7 @@ LEXER_FN(VOID, skipWhitespace)
         if c == ' ' || c == '\t' || c == '\n' || c == '\r' then
             char _nop = call advance(self)
         else if c == '#' then
-            DISCARD call skipComment(self)
+            DISCARD skipComment(self)
         else
             RETV
         fi fi
@@ -60,8 +60,7 @@ LEXER_T lexer_new(char[] source, int lenght) is
 end
 
 LEXER_FN(TOKEN_T, next_token)
-
-    DISCARD call skipWhitespace(self);
+    DISCARD skipWhitespace(self);
     
     LEXER_REFRESH;
 
@@ -99,7 +98,7 @@ LEXER_FN(TOKEN_T, identifier)
 end
 
 LEXER_FN(VOID, lexer_print_token,, TOKEN_T tok)
-    DISCARD call token_print_token(tok, source);
+    DISCARD token_print_token(tok, source);
 ENDV
 
 
@@ -111,7 +110,7 @@ TOKEN_FN(VOID, token_print_token,, char[] source)
     print " ";
     print kind;
     print " ";
-    DISCARD call printStr(source, start, length);
+    DISCARD printStr(source, start, length);
     println "";
 ENDV
 

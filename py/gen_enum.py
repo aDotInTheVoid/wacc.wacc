@@ -12,13 +12,19 @@ class Enum:
 def gen_bsearch(f: list[tuple[int, str]]):
     match f:
         case [(idx, name)]:
-            return f"if __e == {idx} then return \"{name}\" else skip fi"
+            return f'if __e == {idx} then return "{name}" else skip fi'
         case _:
-            mid = len(f)//2
+            mid = len(f) // 2
             pivot = f[mid][0]
             less = gen_bsearch(f[:mid])
             greater = gen_bsearch(f[mid:])
-            return f"if __e < {pivot} then\n" + indent(less) + "\nelse\n" + indent(greater) + "\nfi"
+            return (
+                f"if __e < {pivot} then\n"
+                + indent(less)
+                + "\nelse\n"
+                + indent(greater)
+                + "\nfi"
+            )
 
 
 def gen_enum(e: Enum, i: int):

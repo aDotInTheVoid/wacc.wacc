@@ -11,9 +11,11 @@
 #define RETV return false
 #define ENDV RETV end
 
-#define DISCARD bool __nop =
+#define DISCARD bool __nop = call
+#define DISCARD_ __nop = call
+#define DISCARD_INIT bool __nop = false
 
-#define RETVRN(type, expr) type __ret = expr; return __ret
+#define RETVRN(type, ...) type __ret = __VA_ARGS__; return __ret
 
 bool isAlpha(char c) is
     // TODO: Is this right for wacc?

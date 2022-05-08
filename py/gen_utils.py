@@ -26,7 +26,7 @@ def gen_bsearch(l, rightmost=True):
 def list_of(n):
     match n:
         case int(n):
-            return "c = [" + ",".join("' '" for _ in range(n)) + "]"
+            return "RETVRN(char[], [" + ",".join("' '" for _ in range(n)) + "])"
         case None:
             return "exit 1"
 
@@ -34,14 +34,20 @@ def list_of(n):
 def gen_calloc_tree(tree):
     match tree:
         case (piv, leq, gt):
-            return f"if size <= {piv} then\n" + indent(gen_calloc_tree(leq)) + "\nelse\n" + indent(gen_calloc_tree(gt)) + "\nfi" 
+            return (
+                f"if size <= {piv} then\n"
+                + indent(gen_calloc_tree(leq))
+                + "\nelse\n"
+                + indent(gen_calloc_tree(gt))
+                + "\nfi"
+            )
         case n:
             return list_of(n)
 
 
 def gen_calloc(f):
     f.write("char[] calloc(int size) is\n")
-    f.write("    char[] c = [];\n")
+    f.write("")
 
     tree = list(
         itertools.chain(
@@ -52,9 +58,9 @@ def gen_calloc(f):
         )
     )
 
-    f.write(gen_calloc_tree(gen_bsearch(tree)))
+    f.write(indent(gen_calloc_tree(gen_bsearch(tree))))
 
-    f.write("    ;return c\n")
+    f.write("\n")
     f.write("end\n")
 
 

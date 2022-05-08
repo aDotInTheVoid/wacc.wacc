@@ -4,20 +4,27 @@ begin
 #include "io.wacc.in"
 #include "gen/utils.wacc.in"
 
-pair(char[], int) src_len = call readAll();
 
+// Main function
+DISCARD_INIT;
+
+pair(char[], int) src_len = call readAll();
 char[] src = fst src_len;
 int lenn = snd src_len;
 
 LEXER_T lexer = call lexer_new(src, lenn);
 
-bool run = true;
 
+bool run = true;
 while run do
     TOKEN_T t = call next_token(lexer);
-    DISCARD call lexer_print_token(lexer, t);
+    DISCARD_ lexer_print_token(lexer, t);
     TOKEN_TYPE tt = call token_type(t);
-    run = tt != TOKEN_EOF
-done
+    run = tt != TOKEN_EOF;
+    DISCARD_ token_free(t)
+done ;
+
+DISCARD_ lexer_free(lexer);
+free src_len
 
 end

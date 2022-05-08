@@ -12,4 +12,4 @@ then
 fi
 
 ./tp ./wacc.wacc ./wacc.c
-gcc wacc.c -o wacc
+gcc wacc.c -g -o wacc
