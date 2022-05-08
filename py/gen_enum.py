@@ -1,5 +1,7 @@
 from dataclasses import dataclass
+import pprint
 from util import Generate, indent
+from gen_trie import KEYWORDS, PUNCT
 
 
 @dataclass
@@ -52,54 +54,13 @@ def gen_enum(e: Enum, i: int):
 
 
 def main():
-    for idx, e in enumerate(
-        [
-            Enum(
-                "token_type",
-                "token",
-                [
-                    "LEFT_PAREN",
-                    "RIGHT_PAREN",
-                    "LEFT_BRACE",
-                    "RIGHT_BRACE",
-                    "COMMA",
-                    "DOT",
-                    "MINUS",
-                    "PLUS",
-                    "SEMICOLON",
-                    "SLASH",
-                    "STAR",
-                    "BANG",
-                    "BANG_EQUAL",
-                    "EQUAL",
-                    "EQUAL_EQUAL",
-                    "GREATER",
-                    "GREATER_EQUAL",
-                    "LESS",
-                    "LESS_EQUAL",
-                    "IDENTIFIER",
-                    "STRING",
-                    "NUMBER",
-                    "AND",
-                    "CLASS",
-                    "ELSE",
-                    "FALSE",
-                    "FOR",
-                    "FUN",
-                    "IF",
-                    "NIL",
-                    "OR",
-                    "PRINT",
-                    "RETURN",
-                    "SUPER",
-                    "THIS",
-                    "TRUE",
-                    "VAR",
-                    "WHILE",
-                    "ERROR",
-                    "EOF",
-                ],
-            )
-        ]
-    ):
+    # TODO: Str lit and char lit
+    token_names = ["identifier", "number", "eof"]
+    for i in KEYWORDS:
+        token_names.append(i)
+    for _, i in PUNCT:
+        token_names.append(i)
+    assert len(token_names) == len(set(token_names))
+
+    for idx, e in enumerate([Enum("token_type", "token", token_names)]):
         gen_enum(e, idx)

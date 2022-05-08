@@ -70,7 +70,5 @@ def gen_alloc():
         gen_calloc(f)
 
 
-
-
 def main():
     gen_alloc()

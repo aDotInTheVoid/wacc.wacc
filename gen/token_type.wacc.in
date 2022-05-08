@@ -6,198 +6,278 @@
 
 #define TOKEN_TYPE int
 
-#define TOKEN_LEFT_PAREN 0
-#define TOKEN_RIGHT_PAREN 1
-#define TOKEN_LEFT_BRACE 2
-#define TOKEN_RIGHT_BRACE 3
-#define TOKEN_COMMA 4
-#define TOKEN_DOT 5
-#define TOKEN_MINUS 6
-#define TOKEN_PLUS 7
-#define TOKEN_SEMICOLON 8
-#define TOKEN_SLASH 9
-#define TOKEN_STAR 10
-#define TOKEN_BANG 11
-#define TOKEN_BANG_EQUAL 12
-#define TOKEN_EQUAL 13
-#define TOKEN_EQUAL_EQUAL 14
-#define TOKEN_GREATER 15
-#define TOKEN_GREATER_EQUAL 16
-#define TOKEN_LESS 17
-#define TOKEN_LESS_EQUAL 18
-#define TOKEN_IDENTIFIER 19
-#define TOKEN_STRING 20
-#define TOKEN_NUMBER 21
-#define TOKEN_AND 22
-#define TOKEN_CLASS 23
-#define TOKEN_ELSE 24
-#define TOKEN_FALSE 25
-#define TOKEN_FOR 26
-#define TOKEN_FUN 27
-#define TOKEN_IF 28
-#define TOKEN_NIL 29
-#define TOKEN_OR 30
-#define TOKEN_PRINT 31
-#define TOKEN_RETURN 32
-#define TOKEN_SUPER 33
-#define TOKEN_THIS 34
-#define TOKEN_TRUE 35
-#define TOKEN_VAR 36
-#define TOKEN_WHILE 37
-#define TOKEN_ERROR 38
-#define TOKEN_EOF 39
+#define TOKEN_IDENTIFIER 0
+#define TOKEN_NUMBER 1
+#define TOKEN_EOF 2
+#define TOKEN_BEGIN 3
+#define TOKEN_BOOL 4
+#define TOKEN_CALL 5
+#define TOKEN_CHAR 6
+#define TOKEN_CHR 7
+#define TOKEN_DO 8
+#define TOKEN_DONE 9
+#define TOKEN_ELSE 10
+#define TOKEN_END 11
+#define TOKEN_EXIT 12
+#define TOKEN_FALSE 13
+#define TOKEN_FI 14
+#define TOKEN_FREE 15
+#define TOKEN_FST 16
+#define TOKEN_IF 17
+#define TOKEN_INT 18
+#define TOKEN_IS 19
+#define TOKEN_LEN 20
+#define TOKEN_NEWPAIR 21
+#define TOKEN_NULL 22
+#define TOKEN_ORD 23
+#define TOKEN_PAIR 24
+#define TOKEN_PRINT 25
+#define TOKEN_PRINTLN 26
+#define TOKEN_READ 27
+#define TOKEN_RETURN 28
+#define TOKEN_SKIP 29
+#define TOKEN_SND 30
+#define TOKEN_STRING 31
+#define TOKEN_THEN 32
+#define TOKEN_TRUE 33
+#define TOKEN_WHILE 34
+#define TOKEN_LPAREN 35
+#define TOKEN_RPAREN 36
+#define TOKEN_ASSIGN 37
+#define TOKEN_SEMI 38
+#define TOKEN_COMMA 39
+#define TOKEN_LSQUARE 40
+#define TOKEN_RSQUARE 41
+#define TOKEN_NOT 42
+#define TOKEN_MINUS 43
+#define TOKEN_TIMES 44
+#define TOKEN_DIV 45
+#define TOKEN_MOD 46
+#define TOKEN_PLUS 47
+#define TOKEN_GT 48
+#define TOKEN_GE 49
+#define TOKEN_LT 50
+#define TOKEN_LE 51
+#define TOKEN_EQ 52
+#define TOKEN_NE 53
+#define TOKEN_AND 54
+#define TOKEN_OR 55
 string token_type_str(TOKEN_TYPE __e) is
-    if __e < 20 then
-        if __e < 10 then
-            if __e < 5 then
-                if __e < 2 then
+    if __e < 28 then
+        if __e < 14 then
+            if __e < 7 then
+                if __e < 3 then
                     if __e < 1 then
-                        if __e == 0 then return "LEFT_PAREN" ENDIF
+                        if __e == 0 then return "identifier" ENDIF
                     else
-                        if __e == 1 then return "RIGHT_PAREN" ENDIF
+                        if __e < 2 then
+                            if __e == 1 then return "number" ENDIF
+                        else
+                            if __e == 2 then return "eof" ENDIF
+                        fi
                     fi
                 else
-                    if __e < 3 then
-                        if __e == 2 then return "LEFT_BRACE" ENDIF
-                    else
+                    if __e < 5 then
                         if __e < 4 then
-                            if __e == 3 then return "RIGHT_BRACE" ENDIF
+                            if __e == 3 then return "begin" ENDIF
                         else
-                            if __e == 4 then return "COMMA" ENDIF
+                            if __e == 4 then return "bool" ENDIF
+                        fi
+                    else
+                        if __e < 6 then
+                            if __e == 5 then return "call" ENDIF
+                        else
+                            if __e == 6 then return "char" ENDIF
                         fi
                     fi
                 fi
             else
-                if __e < 7 then
-                    if __e < 6 then
-                        if __e == 5 then return "DOT" ENDIF
-                    else
-                        if __e == 6 then return "MINUS" ENDIF
-                    fi
-                else
+                if __e < 10 then
                     if __e < 8 then
-                        if __e == 7 then return "PLUS" ENDIF
+                        if __e == 7 then return "chr" ENDIF
                     else
                         if __e < 9 then
-                            if __e == 8 then return "SEMICOLON" ENDIF
+                            if __e == 8 then return "do" ENDIF
                         else
-                            if __e == 9 then return "SLASH" ENDIF
+                            if __e == 9 then return "done" ENDIF
+                        fi
+                    fi
+                else
+                    if __e < 12 then
+                        if __e < 11 then
+                            if __e == 10 then return "else" ENDIF
+                        else
+                            if __e == 11 then return "end" ENDIF
+                        fi
+                    else
+                        if __e < 13 then
+                            if __e == 12 then return "exit" ENDIF
+                        else
+                            if __e == 13 then return "false" ENDIF
                         fi
                     fi
                 fi
             fi
         else
-            if __e < 15 then
-                if __e < 12 then
-                    if __e < 11 then
-                        if __e == 10 then return "STAR" ENDIF
+            if __e < 21 then
+                if __e < 17 then
+                    if __e < 15 then
+                        if __e == 14 then return "fi" ENDIF
                     else
-                        if __e == 11 then return "BANG" ENDIF
+                        if __e < 16 then
+                            if __e == 15 then return "free" ENDIF
+                        else
+                            if __e == 16 then return "fst" ENDIF
+                        fi
                     fi
                 else
-                    if __e < 13 then
-                        if __e == 12 then return "BANG_EQUAL" ENDIF
-                    else
-                        if __e < 14 then
-                            if __e == 13 then return "EQUAL" ENDIF
+                    if __e < 19 then
+                        if __e < 18 then
+                            if __e == 17 then return "if" ENDIF
                         else
-                            if __e == 14 then return "EQUAL_EQUAL" ENDIF
+                            if __e == 18 then return "int" ENDIF
+                        fi
+                    else
+                        if __e < 20 then
+                            if __e == 19 then return "is" ENDIF
+                        else
+                            if __e == 20 then return "len" ENDIF
                         fi
                     fi
                 fi
             else
-                if __e < 17 then
-                    if __e < 16 then
-                        if __e == 15 then return "GREATER" ENDIF
+                if __e < 24 then
+                    if __e < 22 then
+                        if __e == 21 then return "newpair" ENDIF
                     else
-                        if __e == 16 then return "GREATER_EQUAL" ENDIF
+                        if __e < 23 then
+                            if __e == 22 then return "null" ENDIF
+                        else
+                            if __e == 23 then return "ord" ENDIF
+                        fi
                     fi
                 else
-                    if __e < 18 then
-                        if __e == 17 then return "LESS" ENDIF
-                    else
-                        if __e < 19 then
-                            if __e == 18 then return "LESS_EQUAL" ENDIF
+                    if __e < 26 then
+                        if __e < 25 then
+                            if __e == 24 then return "pair" ENDIF
                         else
-                            if __e == 19 then return "IDENTIFIER" ENDIF
+                            if __e == 25 then return "print" ENDIF
+                        fi
+                    else
+                        if __e < 27 then
+                            if __e == 26 then return "println" ENDIF
+                        else
+                            if __e == 27 then return "read" ENDIF
                         fi
                     fi
                 fi
             fi
         fi
     else
-        if __e < 30 then
-            if __e < 25 then
-                if __e < 22 then
-                    if __e < 21 then
-                        if __e == 20 then return "STRING" ENDIF
+        if __e < 42 then
+            if __e < 35 then
+                if __e < 31 then
+                    if __e < 29 then
+                        if __e == 28 then return "return" ENDIF
                     else
-                        if __e == 21 then return "NUMBER" ENDIF
+                        if __e < 30 then
+                            if __e == 29 then return "skip" ENDIF
+                        else
+                            if __e == 30 then return "snd" ENDIF
+                        fi
                     fi
                 else
-                    if __e < 23 then
-                        if __e == 22 then return "AND" ENDIF
-                    else
-                        if __e < 24 then
-                            if __e == 23 then return "CLASS" ENDIF
+                    if __e < 33 then
+                        if __e < 32 then
+                            if __e == 31 then return "string" ENDIF
                         else
-                            if __e == 24 then return "ELSE" ENDIF
+                            if __e == 32 then return "then" ENDIF
+                        fi
+                    else
+                        if __e < 34 then
+                            if __e == 33 then return "true" ENDIF
+                        else
+                            if __e == 34 then return "while" ENDIF
                         fi
                     fi
                 fi
             else
-                if __e < 27 then
-                    if __e < 26 then
-                        if __e == 25 then return "FALSE" ENDIF
+                if __e < 38 then
+                    if __e < 36 then
+                        if __e == 35 then return "lparen" ENDIF
                     else
-                        if __e == 26 then return "FOR" ENDIF
+                        if __e < 37 then
+                            if __e == 36 then return "rparen" ENDIF
+                        else
+                            if __e == 37 then return "assign" ENDIF
+                        fi
                     fi
                 else
-                    if __e < 28 then
-                        if __e == 27 then return "FUN" ENDIF
-                    else
-                        if __e < 29 then
-                            if __e == 28 then return "IF" ENDIF
+                    if __e < 40 then
+                        if __e < 39 then
+                            if __e == 38 then return "semi" ENDIF
                         else
-                            if __e == 29 then return "NIL" ENDIF
+                            if __e == 39 then return "comma" ENDIF
+                        fi
+                    else
+                        if __e < 41 then
+                            if __e == 40 then return "lsquare" ENDIF
+                        else
+                            if __e == 41 then return "rsquare" ENDIF
                         fi
                     fi
                 fi
             fi
         else
-            if __e < 35 then
-                if __e < 32 then
-                    if __e < 31 then
-                        if __e == 30 then return "OR" ENDIF
+            if __e < 49 then
+                if __e < 45 then
+                    if __e < 43 then
+                        if __e == 42 then return "not" ENDIF
                     else
-                        if __e == 31 then return "PRINT" ENDIF
+                        if __e < 44 then
+                            if __e == 43 then return "minus" ENDIF
+                        else
+                            if __e == 44 then return "times" ENDIF
+                        fi
                     fi
                 else
-                    if __e < 33 then
-                        if __e == 32 then return "RETURN" ENDIF
-                    else
-                        if __e < 34 then
-                            if __e == 33 then return "SUPER" ENDIF
+                    if __e < 47 then
+                        if __e < 46 then
+                            if __e == 45 then return "div" ENDIF
                         else
-                            if __e == 34 then return "THIS" ENDIF
+                            if __e == 46 then return "mod" ENDIF
+                        fi
+                    else
+                        if __e < 48 then
+                            if __e == 47 then return "plus" ENDIF
+                        else
+                            if __e == 48 then return "gt" ENDIF
                         fi
                     fi
                 fi
             else
-                if __e < 37 then
-                    if __e < 36 then
-                        if __e == 35 then return "TRUE" ENDIF
+                if __e < 52 then
+                    if __e < 50 then
+                        if __e == 49 then return "ge" ENDIF
                     else
-                        if __e == 36 then return "VAR" ENDIF
+                        if __e < 51 then
+                            if __e == 50 then return "lt" ENDIF
+                        else
+                            if __e == 51 then return "le" ENDIF
+                        fi
                     fi
                 else
-                    if __e < 38 then
-                        if __e == 37 then return "WHILE" ENDIF
-                    else
-                        if __e < 39 then
-                            if __e == 38 then return "ERROR" ENDIF
+                    if __e < 54 then
+                        if __e < 53 then
+                            if __e == 52 then return "eq" ENDIF
                         else
-                            if __e == 39 then return "EOF" ENDIF
+                            if __e == 53 then return "ne" ENDIF
+                        fi
+                    else
+                        if __e < 55 then
+                            if __e == 54 then return "and" ENDIF
+                        else
+                            if __e == 55 then return "or" ENDIF
                         fi
                     fi
                 fi

@@ -7,7 +7,7 @@ class Generate:
         self.guard = f"GEN_{self.name.upper()}_WACC_IN"
         self.file.write(f"#ifndef {self.guard}\n")
         self.file.write(f"#define {self.guard}\n\n")
-        self.file.write("#include \"../src/utils.wacc.in\"\n\n")
+        self.file.write('#include "../src/utils.wacc.in"\n\n')
         return self
 
     def write(self, s):
