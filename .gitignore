@@ -1,8 +1,3 @@
 __pycache__
 .pytest_cache
-# Bootstrap compiller
-tp
-# Compiller pipeline
-wacc.wacc
-wacc.c
-wacc
+_build

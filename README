@@ -1,5 +1,5 @@
-NOTES ON WACC
--------------
+NOTES ON WRITING WACC
+---------------------
 
 char[] to string is allowed, but not the other way around, you you
 almost always want to use char[]
@@ -7,13 +7,32 @@ almost always want to use char[]
 RELEVANT DOCS
 -------------
 
-preprocessor: https://gcc.gnu.org/onlinedocs/cpp/index.html
-bootstrap compiller: https://github.com/RiscInside/WACC-to-C
+preprocessor:
+    https://gcc.gnu.org/onlinedocs/cpp/index.html
+bootstrap compiller: 
+    https://github.com/RiscInside/WACC-to-C
+spec (incomplete):
+    https://gitlab.doc.ic.ac.uk/lab2122_spring/wacc_examples/-/raw/master/WACCLangSpec.pdf?inline=false
+
+FOLDER STRUCTURE
+----------------
+
+- src: Hand written WACC source code
+- gen: Generated WACC code
+- py: Python code to generate WACC code
+- gram: EBNF grammar files, used for reference.
 
 EXTENSIONS
 ----------
 
-<program> ::= <begin> <toplvldecl>* <stat> <end>
-<toplvldecl> ::= <func> | <extern>
-<extern> ::= "extern" <type> <ident> <param-list>
+The goal of this project is to be written in as close to "vanilla" as possible.
+It does not make use of extensions for structs, or more conventiant expressions.
+Instead, these are achived with code generation in python, and extensive use of
+preprocessor macros.
 
+However, to read the a file, it is nessesary to use an extension, as vanilla WACC
+does not support reading strings, and reading chars requires a newline. Currently
+this is done with the "extern" extension [0]. Even so, we only use getchar(3), so 
+it should be easy to port to different IO extensions.
+
+[0]: https://github.com/RiscInside/WACC-to-C#extern-extension
