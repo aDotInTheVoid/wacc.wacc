@@ -1,3 +1,5 @@
+from util import Generate, indent
+
 PUNCT = [
     ("(", "lparen"),
     (")", "rparen"),
@@ -78,91 +80,116 @@ def same_up_to(words):
     return None
 
 
+def _deltas():
+    yield 0
+    i = 1
+    while True:
+        yield i
+        yield -i
+        i = i + 1
+
+
 def pick_mid_counds(diffs: list[str]) -> int:
     assert len(set(diffs)) > 1
     best_mid = len(diffs) // 2
 
-    delta = [0, 1, -1, 2, -2, 3, -3]  # TODO: Expand
-    for d in delta:
+    for d in _deltas():
         mid = best_mid + d
         lo_boundry = diffs[mid - 1]
         hi_boundry = diffs[mid]
         if lo_boundry != hi_boundry:
             return mid
-    raise Exception("Could not find midpoint")
+    raise Exception(f"Could not find midpoint of {diffs}")
 
 
 # (idx, char, low, high): if s[idx] <= char, then low, else high
 # string: if s == string then KW(string), else s
-# (char, eq, neq): if s[0] == char then eq  else neq
-# (int, eq, neq): if len(s) == int then eq else neq
-def gen_trie(words):
+# (int, eq, neq): if len(s) <= int then eq else neq
+# (int, those) if len(s) == int then those else None
+# TODO: Some of these len checks are redundant, if we know the rang
+def build_trie(words):
+    words = sorted(words)
+    words = sorted(words, key=len)
+    return _build_trie(words)
+
+
+def _all_same_len(words):
+    l0 = len(words[0])
+    for w in words[1:]:
+        if len(w) != l0:
+            return False
+    return True
+
+
+# pre: words is sorted by length, then lexicographically
+def _build_trie(words):
     if len(words) == 1:
         return words[0]
-    unique_to = same_up_to(words)
-    if unique_to is None:
-        # Degenerate case, eg "do", and "done"
-        assert len(words) == 2  # Not fully general, but should be good enough
-        return _trie_degen(words[0], words[1])
-    diffs = [w[unique_to] for w in words]
-    mid = pick_mid_counds(diffs)
-    return _gen_trie_split(words, mid)
-
-
-def search(word, trie):
-    match trie:
-        case (int(idx), str(char), low, high):
-            if word[idx] <= char:
-                return search(word, low)
-            else:
-                return search(word, high)
-        case str(s):
-            if word == s:
-                return s
-            else:
-                return None
-        case (str(char), eq, neq):
-            if word[0] == char:
-                return search(word, eq)
-            else:
-                return search(word, neq)
-        case (int(l), eq, neq):
-            if len(word) == l:
-                return search(word, eq)
-            else:
-                return search(word, neq)
-        case _:
-            raise Exception(f"Unknown trie node: {trie}")
-
-
-def _trie_degen(a, b):
-    assert a.startswith(b) or b.startswith(a)
-    assert a != b
-    return (len(a), a, b)
-
-
-def _gen_trie_split(words, mid):
+    elif len(words) == 0:
+        raise Exception("Empty list")
+    elif _all_same_len(words):
+        return len(words[0]), _build_trie_alpha(words)
+    mid = pick_mid_counds([len(i) for i in words])
     lows = words[:mid]
     highs = words[mid:]
+    pivot = len(lows[-1])
+    return (pivot, _build_trie(lows), _build_trie(highs))
 
-    assert len(lows) >= 1
-    assert len(highs) >= 1
 
-    low_max = lows[-1]
-    high_min = highs[0]
+# pre: words sorted lexographically, all same lenght
+def _build_trie_alpha(words):
+    if len(words) == 1:
+        return words[0]
 
-    check_idx = first_diff(low_max, high_min)
-    if check_idx is None:
-        # degenerate case, eg "do", and "done"
-        first = low_max[0]
-        normals = lows[:-1] + highs[1:]
+    check_idx = same_up_to(words)
+    mid = pick_mid_counds([w[check_idx] for w in words])
 
-        for i in normals:
-            assert i[0] != first  # Not garenteed, so this won't always work
-        if normals:
-            return (first, _trie_degen(low_max, high_min), gen_trie(normals))
-        else:
-            return _trie_degen(low_max, high_min)
+    lows = words[:mid]
+    highs = words[mid:]
+    check_char = lows[-1][check_idx]
 
-    check_char = low_max[check_idx]
-    return (check_idx, check_char, gen_trie(lows), gen_trie(highs))
+    return (check_idx, check_char, _build_trie_alpha(lows), _build_trie_alpha(highs))
+
+
+def gen_trie_code(trie, vals):
+    match trie:
+        case (int(l), leq, gt):
+            leqtext = gen_trie_code(leq, vals)
+            gttext = gen_trie_code(gt, vals)
+            return f"if lenn <= {l} then\n{indent(leqtext)}\nelse\n{indent(gttext)}\nfi"
+        case (int(l), when):
+            whentext = gen_trie_code(when, vals)
+            return f"if lenn == {l} then\n{indent(whentext)}\nENDIF"
+        case (int(l), str(expected), leq, gt):
+            leqtext = gen_trie_code(leq, vals)
+            gttext = gen_trie_code(gt, vals)
+            return f"if str[start + {l}] == '{expected}' then\n{indent(leqtext)}\nelse\n{indent(gttext)}\nfi"
+        case str(s):
+            return f'bool eq = call streq(str, start, len, "{s}");\nif eq then return {vals[s]} ENDIF'
+
+
+def gen_trie(name, includes, ret_ty, vals, default):
+    with Generate(name) as f:
+        for i in includes:
+            f.write(f"#include <{i}.wacc.in>\n")
+        f.write("\n")
+
+        f.write(f"{ret_ty} {name}(char[] str, int start, int lenn) is\n")
+
+        keynames = list(vals.keys())
+        trie = build_trie(keynames)
+
+        f.write(indent(gen_trie_code(trie, vals)))
+
+        f.write(f"    return {default}\n")
+        f.write("end\n")
+
+
+def main():
+    gen_trie(
+        name="identifier_kind",
+        includes=["token_type"],
+        ret_ty="TOKEN_TYPE",
+        vals={k: f"TOKEN_{k.upper()}" for k in KEYWORDS},
+        default="TOKEN_IDENTIFIER",
+    )
