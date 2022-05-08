@@ -23,7 +23,9 @@ LEXER_FN(VOID, skipComment)
         bool is_at_end = call isAtEnd(self);
         if c == '\n' || is_at_end then
             RETV
-        ENDIF
+        else
+	    char _nop = call advance(self)
+	fi
     done ;
 ENDV
 
