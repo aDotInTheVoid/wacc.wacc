@@ -3,7 +3,7 @@
 
 #include "../src/utils.wacc.in"
 
-#include <token_type.wacc.in>
+#include "token_type.wacc.in"
 
 TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
     if lenn <= 3 then
@@ -11,18 +11,26 @@ TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
             if lenn == 2 then
                 if str[start + 0] == 'f' then
                     if str[start + 0] == 'd' then
-                        bool eq = call streq(str, start, len, "do");
+                        char[] exp = ['d', 'o'];
+                        bool eq =  call streq(str, start, lenn, exp);
+                        free exp;
                         if eq then return TOKEN_DO ENDIF
                     else
-                        bool eq = call streq(str, start, len, "fi");
+                        char[] exp = ['f', 'i'];
+                        bool eq =  call streq(str, start, lenn, exp);
+                        free exp;
                         if eq then return TOKEN_FI ENDIF
                     fi
                 else
                     if str[start + 1] == 'f' then
-                        bool eq = call streq(str, start, len, "if");
+                        char[] exp = ['i', 'f'];
+                        bool eq =  call streq(str, start, lenn, exp);
+                        free exp;
                         if eq then return TOKEN_IF ENDIF
                     else
-                        bool eq = call streq(str, start, len, "is");
+                        char[] exp = ['i', 's'];
+                        bool eq =  call streq(str, start, lenn, exp);
+                        free exp;
                         if eq then return TOKEN_IS ENDIF
                     fi
                 fi
@@ -31,32 +39,46 @@ TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
             if lenn == 3 then
                 if str[start + 0] == 'f' then
                     if str[start + 0] == 'c' then
-                        bool eq = call streq(str, start, len, "chr");
+                        char[] exp = ['c', 'h', 'r'];
+                        bool eq =  call streq(str, start, lenn, exp);
+                        free exp;
                         if eq then return TOKEN_CHR ENDIF
                     else
                         if str[start + 0] == 'e' then
-                            bool eq = call streq(str, start, len, "end");
+                            char[] exp = ['e', 'n', 'd'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_END ENDIF
                         else
-                            bool eq = call streq(str, start, len, "fst");
+                            char[] exp = ['f', 's', 't'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_FST ENDIF
                         fi
                     fi
                 else
                     if str[start + 0] == 'l' then
                         if str[start + 0] == 'i' then
-                            bool eq = call streq(str, start, len, "int");
+                            char[] exp = ['i', 'n', 't'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_INT ENDIF
                         else
-                            bool eq = call streq(str, start, len, "len");
+                            char[] exp = ['l', 'e', 'n'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_LEN ENDIF
                         fi
                     else
                         if str[start + 0] == 'o' then
-                            bool eq = call streq(str, start, len, "ord");
+                            char[] exp = ['o', 'r', 'd'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_ORD ENDIF
                         else
-                            bool eq = call streq(str, start, len, "snd");
+                            char[] exp = ['s', 'n', 'd'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_SND ENDIF
                         fi
                     fi
@@ -69,27 +91,39 @@ TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
                 if str[start + 0] == 'e' then
                     if str[start + 0] == 'c' then
                         if str[start + 0] == 'b' then
-                            bool eq = call streq(str, start, len, "bool");
+                            char[] exp = ['b', 'o', 'o', 'l'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_BOOL ENDIF
                         else
                             if str[start + 1] == 'a' then
-                                bool eq = call streq(str, start, len, "call");
+                                char[] exp = ['c', 'a', 'l', 'l'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_CALL ENDIF
                             else
-                                bool eq = call streq(str, start, len, "char");
+                                char[] exp = ['c', 'h', 'a', 'r'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_CHAR ENDIF
                             fi
                         fi
                     else
                         if str[start + 0] == 'd' then
-                            bool eq = call streq(str, start, len, "done");
+                            char[] exp = ['d', 'o', 'n', 'e'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_DONE ENDIF
                         else
                             if str[start + 1] == 'l' then
-                                bool eq = call streq(str, start, len, "else");
+                                char[] exp = ['e', 'l', 's', 'e'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_ELSE ENDIF
                             else
-                                bool eq = call streq(str, start, len, "exit");
+                                char[] exp = ['e', 'x', 'i', 't'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_EXIT ENDIF
                             fi
                         fi
@@ -97,32 +131,46 @@ TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
                 else
                     if str[start + 0] == 'p' then
                         if str[start + 0] == 'f' then
-                            bool eq = call streq(str, start, len, "free");
+                            char[] exp = ['f', 'r', 'e', 'e'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_FREE ENDIF
                         else
                             if str[start + 0] == 'n' then
-                                bool eq = call streq(str, start, len, "null");
+                                char[] exp = ['n', 'u', 'l', 'l'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_NULL ENDIF
                             else
-                                bool eq = call streq(str, start, len, "pair");
+                                char[] exp = ['p', 'a', 'i', 'r'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_PAIR ENDIF
                             fi
                         fi
                     else
                         if str[start + 0] == 's' then
                             if str[start + 0] == 'r' then
-                                bool eq = call streq(str, start, len, "read");
+                                char[] exp = ['r', 'e', 'a', 'd'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_READ ENDIF
                             else
-                                bool eq = call streq(str, start, len, "skip");
+                                char[] exp = ['s', 'k', 'i', 'p'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_SKIP ENDIF
                             fi
                         else
                             if str[start + 1] == 'h' then
-                                bool eq = call streq(str, start, len, "then");
+                                char[] exp = ['t', 'h', 'e', 'n'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_THEN ENDIF
                             else
-                                bool eq = call streq(str, start, len, "true");
+                                char[] exp = ['t', 'r', 'u', 'e'];
+                                bool eq =  call streq(str, start, lenn, exp);
+                                free exp;
                                 if eq then return TOKEN_TRUE ENDIF
                             fi
                         fi
@@ -134,18 +182,26 @@ TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
                 if lenn == 5 then
                     if str[start + 0] == 'f' then
                         if str[start + 0] == 'b' then
-                            bool eq = call streq(str, start, len, "begin");
+                            char[] exp = ['b', 'e', 'g', 'i', 'n'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_BEGIN ENDIF
                         else
-                            bool eq = call streq(str, start, len, "false");
+                            char[] exp = ['f', 'a', 'l', 's', 'e'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_FALSE ENDIF
                         fi
                     else
                         if str[start + 0] == 'p' then
-                            bool eq = call streq(str, start, len, "print");
+                            char[] exp = ['p', 'r', 'i', 'n', 't'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_PRINT ENDIF
                         else
-                            bool eq = call streq(str, start, len, "while");
+                            char[] exp = ['w', 'h', 'i', 'l', 'e'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_WHILE ENDIF
                         fi
                     fi
@@ -154,27 +210,36 @@ TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
                 if lenn <= 6 then
                     if lenn == 6 then
                         if str[start + 0] == 'r' then
-                            bool eq = call streq(str, start, len, "return");
+                            char[] exp = ['r', 'e', 't', 'u', 'r', 'n'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_RETURN ENDIF
                         else
-                            bool eq = call streq(str, start, len, "string");
+                            char[] exp = ['s', 't', 'r', 'i', 'n', 'g'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_STRING ENDIF
                         fi
                     ENDIF
                 else
                     if lenn == 7 then
                         if str[start + 0] == 'n' then
-                            bool eq = call streq(str, start, len, "newpair");
+                            char[] exp = ['n', 'e', 'w', 'p', 'a', 'i', 'r'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_NEWPAIR ENDIF
                         else
-                            bool eq = call streq(str, start, len, "println");
+                            char[] exp = ['p', 'r', 'i', 'n', 't', 'l', 'n'];
+                            bool eq =  call streq(str, start, lenn, exp);
+                            free exp;
                             if eq then return TOKEN_PRINTLN ENDIF
                         fi
                     ENDIF
                 fi
             fi
         fi
-    fi    return TOKEN_IDENTIFIER
+    fi ;
+    return TOKEN_IDENTIFIER
 end
 
 #endif

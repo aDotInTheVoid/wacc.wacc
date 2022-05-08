@@ -4,7 +4,9 @@
 #include "../gen/lexer.wacc.in"
 #include "../gen/token_type.wacc.in"
 #include "../gen/token.wacc.in"
+#include "../gen/identifier_kind.wacc.in"
 #include "utils.wacc.in"
+#include "string.wacc.in"
 
 
 LEXER_FN(char, advance)
@@ -100,8 +102,9 @@ LEXER_FN(TOKEN_T, identifier)
             run = false
         fi
     done;
-    // TODO: Detect token type
-    RETVRN(TOKEN_T, call makeToken(self, TOKEN_IDENTIFIER))
+    LEXER_REFRESH;
+    TOKEN_TYPE ttype = call identifier_kind(source, start, current - start);
+    RETVRN(TOKEN_T, call makeToken(self, ttype))
 end
 
 LEXER_FN(TOKEN_T, number)

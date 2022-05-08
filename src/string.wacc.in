@@ -1,0 +1,16 @@
+#ifndef STRING_WACC_IN
+#define STRING_WACC_IN
+
+bool streq(char[] dyn, int start, int lenn, char[] static) is
+    int i = 0;
+    while i < lenn do
+        if dyn[start + i] != static[i] then
+            return false
+        else
+            i = i + 1
+        fi
+    done ;
+    return true
+end
+
+#endif
