@@ -63,6 +63,18 @@ LEXER_T lexer_new(char[] source, int lenght) is
     RETVRN(LEXER_T, call lexer_ctor(source, 0, 0, lenght))
 end
 
+LEXER_FN(bool, match,, char expected)
+    bool isAtEnd = call isAtEnd(self);
+    if isAtEnd then
+        return false
+    ENDIF ;
+    if source[current] != expected then
+        return false
+    ENDIF ;
+    LEXER_SET_CURRENT(current + 1);
+    return true
+end
+
 LEXER_FN(TOKEN_T, next_token)
     DISCARD skipWhitespace(self);
     
@@ -98,7 +110,14 @@ LEXER_FN(TOKEN_T, next_token)
             if c <= '\"' then
                 if c <= '!' then
                     // Starts with !
-                    RET_IF('!', TOKEN_NOT)
+                    if c == '!' then
+                        bool isEq = call match(self, '=');
+                        if isEq then
+                            RETVRN(TOKEN_T, call makeToken(self, TOKEN_NE))
+                        else
+                            RETVRN(TOKEN_T, call makeToken(self, TOKEN_NOT))
+                        fi
+                    ENDIF
                 else
                     // Starts with "
                     // TODO: Lex string
@@ -110,7 +129,10 @@ LEXER_FN(TOKEN_T, next_token)
                 if c <= '%' then
                     RET_IF('%', TOKEN_MOD)
                 else
-                    XXXTODO // TODO: lex &&
+                    if c == '&' then 
+                        c = call advance(self);
+                        RET_IF('&', TOKEN_AND)
+                    ENDIF
                 fi
             fi
         else
@@ -155,8 +177,14 @@ LEXER_FN(TOKEN_T, next_token)
                     if c <= ';' then
                         RET_IF(';', TOKEN_SEMI)
                     else
-                        // TODO < or <=
-                        RET_IF('<', TOKEN_LT)
+                        if c == '<' then
+                            bool isEq = call match(self, '=');
+                            if isEq then
+                                RETVRN(TOKEN_T, call makeToken(self, TOKEN_LE))
+                            else
+                                RETVRN(TOKEN_T, call makeToken(self, TOKEN_LT))
+                            fi
+                        ENDIF
                     fi
                 fi
             fi
@@ -164,9 +192,23 @@ LEXER_FN(TOKEN_T, next_token)
             // =   ==   >,   >=   [   ]   ||
             if c <= '>' then
                 if c <= '=' then
-                    RET_IF('=', TOKEN_ASSIGN) // TODO: = or ==
+                    if c == '=' then
+                        bool isEq = call match(self, '=');
+                        if isEq then
+                            RETVRN(TOKEN_T, call makeToken(self, TOKEN_EQ))
+                        else
+                            RETVRN(TOKEN_T, call makeToken(self, TOKEN_ASSIGN))
+                        fi
+                    ENDIF 
                 else
-                    RET_IF('>', TOKEN_GT) // TODO: > or >=
+                    if c == '>' then
+                        bool isEq = call match(self, '=');
+                        if isEq then
+                            RETVRN(TOKEN_T, call makeToken(self, TOKEN_GE))
+                        else
+                            RETVRN(TOKEN_T, call makeToken(self, TOKEN_GT))
+                        fi
+                    ENDIF
                 fi
             else
                 if c <= '[' then
@@ -175,8 +217,10 @@ LEXER_FN(TOKEN_T, next_token)
                     if c <= ']' then
                         RET_IF(']', TOKEN_RSQUARE)
                     else
-                        // TODO: Peak ||
-                        XXXTODO
+                        if c <= '|' then
+                            c = call advance(self);
+                            RET_IF('|', TOKEN_OR)
+                        ENDIF
                     fi
                 fi
             fi
