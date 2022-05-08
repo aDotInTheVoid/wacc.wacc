@@ -1,10 +1,14 @@
-
-
 NOTES ON WACC
 -------------
 
 char[] to string is allowed, but not the other way around, you you
 almost always want to use char[]
+
+RELEVANT DOCS
+-------------
+
+preprocessor: https://gcc.gnu.org/onlinedocs/cpp/index.html
+bootstrap compiller: https://github.com/RiscInside/WACC-to-C
 
 EXTENSIONS
 ----------
@@ -12,3 +16,4 @@ EXTENSIONS
 <program> ::= <begin> <toplvldecl>* <stat> <end>
 <toplvldecl> ::= <func> | <extern>
 <extern> ::= "extern" <type> <ident> <param-list>
+

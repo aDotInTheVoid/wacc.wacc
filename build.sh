@@ -4,12 +4,13 @@ cd "$(dirname "$0")"
 
 python3.10 py/gen.py
 
-cpp -undef -nostdinc wacc.wacc.in -o wacc.wacc
+mkdir -p _build
+cpp -undef -nostdinc src/wacc.wacc.in -o _build/wacc.wacc
 
-if [[ ! -f ./tp ]]
+if [[ ! -f ./_build/tp ]]
 then
     ./regen-tp.sh
 fi
 
-./tp ./wacc.wacc ./wacc.c
-gcc wacc.c -g -o wacc
+./_build/tp ./_build/wacc.wacc ./_build/wacc.c
+gcc ./_build/wacc.c -g -o ./_build/wacc

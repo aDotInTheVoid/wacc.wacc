@@ -116,7 +116,7 @@ def gen_struct(s: Struct):
             len(s.fields) > 1
         ), "Can't have struct with 1 field, as need pair indirection for mutability"
         # Comment describing the struct, C version
-        f.write('#include "../utils.wacc.in"\n\n')
+        f.write('#include "../src/utils.wacc.in"\n\n')
         f.write(f"// struct {s.name} {{\n")
         for field in s.fields:
             f.write(f"//     {field.name}: {field.field},\n")

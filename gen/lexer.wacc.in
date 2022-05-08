@@ -1,7 +1,7 @@
 #ifndef GEN_LEXER_WACC_IN
 #define GEN_LEXER_WACC_IN
 
-#include "../utils.wacc.in"
+#include "../src/utils.wacc.in"
 
 // struct lexer {
 //     source: char[],

@@ -1,10 +1,10 @@
 #ifndef LEXER_WACC_IN
 #define LEXER_WACC_IN
 
-#include "gen/lexer.wacc.in"
-#include "gen/token.wacc.in"
+#include "../gen/lexer.wacc.in"
+#include "../gen/token_type.wacc.in"
+#include "../gen/token.wacc.in"
 #include "utils.wacc.in"
-#include "gen/token_type.wacc.in"
 
 
 LEXER_FN(char, advance)
