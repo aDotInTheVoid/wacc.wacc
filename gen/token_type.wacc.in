@@ -1,6 +1,8 @@
 #ifndef GEN_TOKEN_TYPE_WACC_IN
 #define GEN_TOKEN_TYPE_WACC_IN
 
+#include "../src/utils.wacc.in"
+
 
 #define TOKEN_TYPE int
 

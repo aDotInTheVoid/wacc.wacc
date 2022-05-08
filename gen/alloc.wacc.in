@@ -1,6 +1,8 @@
 #ifndef GEN_ALLOC_WACC_IN
 #define GEN_ALLOC_WACC_IN
 
+#include "../src/utils.wacc.in"
+
 char[] calloc(int size) is
     if size <= 90 then
         if size <= 9 then

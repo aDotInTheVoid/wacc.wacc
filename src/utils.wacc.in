@@ -1,10 +1,11 @@
 #ifndef UITLS_WACC_IN
 #define UITLS_WACC_IN
 
+// This can't include any other files, as everything else depends on it.
+
 #define XXXTODO exit 1
 
 #define ENDIF else skip fi
-// TODO: This might not work with several 
 
 // Tools funtion that semanticly returns unit
 #define VOID bool
