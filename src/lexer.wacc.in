@@ -79,6 +79,10 @@ LEXER_FN(TOKEN_T, next_token)
     if b then
         RETVRN(TOKEN_T, call identifier(self))
     ENDIF ;
+    b = call isDigit(c);
+    if b then
+        RETVRN(TOKEN_T, call number(self))
+    ENDIF ;
 
     XXXTODO
 end
@@ -88,15 +92,30 @@ LEXER_FN(TOKEN_T, identifier)
 
     while run do
         char c = call peek(self);
-        bool b = call isAlpha(c);
-        if !b then
+        bool isAlpha = call isAlpha(c);
+        bool isDigit = call isDigit(c);
+        if isAlpha || isDigit then
+            char _nop = call advance(self)
+        else
             run = false
-        else 
-            // TODO: check digit
-            char _dis = call advance(self)
         fi
     done;
+    // TODO: Detect token type
     RETVRN(TOKEN_T, call makeToken(self, TOKEN_IDENTIFIER))
+end
+
+LEXER_FN(TOKEN_T, number)
+    bool run = true;
+    while run do
+        char c = call peek(self);
+        bool isDigit = call isDigit(c);
+        if isDigit then
+            char _nop = call advance(self)
+        else
+            run = false
+        fi
+    done ;
+    RETVRN(TOKEN_T, call makeToken(self, TOKEN_NUMBER))
 end
 
 LEXER_FN(VOID, lexer_print_token,, TOKEN_T tok)

@@ -19,8 +19,11 @@
 #define RETVRN(type, ...) type __ret = __VA_ARGS__; return __ret
 
 bool isAlpha(char c) is
-    // TODO: Is this right for wacc?
   return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'
+end
+
+bool isDigit(char c) is
+	return c >= '0' && c <= '9'
 end
 
 #endif
