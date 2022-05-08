@@ -2,6 +2,7 @@
 #define IO_WACC_IN
 
 #include "gen/utils.wacc.in"
+#include "utils.wacc.in"
 
 // Iurii extension;
 extern int getchar()
@@ -20,17 +21,15 @@ pair(char[], int) readAll() is
             i = i + 1
         fi
     done ;
-    pair(char[], int) ret = newpair(buffer, i);
-    return ret
+    RETVRN(pair(char[], int), newpair(buffer, i))
 end
 
-bool printStr(char[] str, int start, int lenn) is
+VOID printStr(char[] str, int start, int lenn) is
     int i = 0;
     while (i < lenn) do
         print str[start + i];
         i = i + 1
     done ;
-    return false
-end
+ENDV
 
 #endif

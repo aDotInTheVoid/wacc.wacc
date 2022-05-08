@@ -5,14 +5,19 @@
 
 #define ENDIF else skip fi
 // TODO: This might not work with several 
+
+// Tools funtion that semanticly returns unit
+#define VOID bool
+#define RETV return false
+#define ENDV RETV end
+
 #define DISCARD bool __nop =
+
+#define RETVRN(type, expr) type __ret = expr; return __ret
 
 bool isAlpha(char c) is
     // TODO: Is this right for wacc?
   return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'
 end
-
-// TODO: return false end               macro
-// TODO type f = call(...) return f     macro
 
 #endif

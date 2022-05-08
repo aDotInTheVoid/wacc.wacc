@@ -6,6 +6,7 @@
 #include "utils.wacc.in"
 #include "gen/token_type.wacc.in"
 
+
 LEXER_FN(char, advance)
     char ret = source[current];
     LEXER_SET_CURRENT(current + 1);
@@ -16,28 +17,27 @@ LEXER_FN(char, peek)
     return source[current]
 end
 
-LEXER_FN(bool, skipComment)
+LEXER_FN(VOID, skipComment)
     while true do
         char c = call peek(self);
         bool is_at_end = call isAtEnd(self);
         if c == '\n' || is_at_end then
-            return false
+            RETV
         ENDIF
     done ;
-    return false
-end
+ENDV
 
 LEXER_FN(bool, isAtEnd)
     return current >= lenght
 end
 
-LEXER_FN(bool, skipWhitespace)
+LEXER_FN(VOID, skipWhitespace)
     while true do
         // CLOX doen't need this because it's null terminated, but we arn't
         // (now)
         bool isAtEnd = call isAtEnd(self);
         if isAtEnd then
-            return false
+            RETV
         ENDIF ;
 
         char c = call peek(self);
@@ -46,21 +46,17 @@ LEXER_FN(bool, skipWhitespace)
         else if c == '#' then
             DISCARD call skipComment(self)
         else
-            return false
+            RETV
         fi fi
     done;
-    // Not used, but no void.
-    return false
-end
+ENDV
 
 LEXER_FN(TOKEN_T, makeToken,, TOKEN_TYPE ttype)
-    TOKEN_T r = call token_ctor(ttype, start, current - start);
-    return r
+    RETVRN(TOKEN_T, call token_ctor(ttype, start, current - start))
 end
 
 LEXER_T lexer_new(char[] source, int lenght) is
-    LEXER_T self = call lexer_ctor(source, 0, 0, lenght);
-    return self
+    RETVRN(LEXER_T, call lexer_ctor(source, 0, 0, lenght))
 end
 
 LEXER_FN(TOKEN_T, next_token)
@@ -73,17 +69,14 @@ LEXER_FN(TOKEN_T, next_token)
 
     bool isAtEnd = call isAtEnd(self);
     if isAtEnd then
-        // todo: let fn macros take args
-        TOKEN_T r = call makeToken(self, TOKEN_EOF);
-        return r
+        RETVRN(TOKEN_T, call makeToken(self, TOKEN_EOF))
     ENDIF ;
 
     char c = call advance(self);
     // LEX_REFRESH??
     bool b = call isAlpha(c);
     if b then
-        TOKEN_T t = call identifier(self);
-        return t
+        RETVRN(TOKEN_T, call identifier(self))
     ENDIF ;
 
     XXXTODO
@@ -102,17 +95,15 @@ LEXER_FN(TOKEN_T, identifier)
             char _dis = call advance(self)
         fi
     done;
-    TOKEN_T r = call makeToken(self, TOKEN_IDENTIFIER);
-    return r
+    RETVRN(TOKEN_T, call makeToken(self, TOKEN_IDENTIFIER))
 end
 
-LEXER_FN(bool, lexer_print_token,, TOKEN_T tok)
+LEXER_FN(VOID, lexer_print_token,, TOKEN_T tok)
     DISCARD call token_print_token(tok, source);
-    return false
-end
+ENDV
 
 
-TOKEN_FN(bool, token_print_token,, char[] source)
+TOKEN_FN(VOID, token_print_token,, char[] source)
     print start;
     print " ";
     print length;
@@ -122,8 +113,7 @@ TOKEN_FN(bool, token_print_token,, char[] source)
     print " ";
     DISCARD call printStr(source, start, length);
     println "";
-    return false
-end
+ENDV
 
 TOKEN_FN(TOKEN_TYPE, token_type)
     return type
