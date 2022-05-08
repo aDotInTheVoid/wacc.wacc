@@ -22,6 +22,8 @@ PUNCT = [
     ("!=", "ne"),
     ("&&", "and"),
     ("||", "or"),
+    # ('"', "strquote"),
+    # ("'", "charquote"),
 ]
 
 KEYWORDS = [
@@ -197,10 +199,15 @@ def main():
         vals={k: f"TOKEN_{k.upper()}" for k in KEYWORDS},
         default="TOKEN_IDENTIFIER",
     )
-    gen_trie(
-        name="punct_kind",
-        includes=["token_type"],
-        ret_ty="TOKEN_TYPE",
-        vals={k[0]: v for k, v in PUNCT},
-        default="XXXTODO",
-    )
+    # Dont delete
+    # gen_trie(
+    #     name="punct_kind",
+    #     includes=["token_type"],
+    #     ret_ty="TOKEN_TYPE",
+    #     vals={k[0]: "'v'" for k, v in PUNCT}
+    #     | {
+    #         "'": "char",
+    #         '"': "string",
+    #     },
+    #     default="XXXTODO",
+    # )

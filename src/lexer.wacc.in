@@ -86,7 +86,106 @@ LEXER_FN(TOKEN_T, next_token)
         RETVRN(TOKEN_T, call number(self))
     ENDIF ;
 
-    XXXTODO
+    // based on gen_trie, but massaged
+    // !   !=   "   %   &&   '   (   )   *   +   ,   -   /   ;   <   <=   =   ==   >,   >=   [   ]   ||
+    #define RET_IF(c__, tt__) if c == c__ then                                          \
+                                            RETVRN(TOKEN_T, call makeToken(self, tt__)) \
+                                          ENDIF 
+    if c <= '+' then
+        // !   !=   "   %   &&   '   (   )   *   +
+        if c <= '&' then
+            //  !   !=   "   %   &&
+            if c <= '\"' then
+                if c <= '!' then
+                    // Starts with !
+                    RET_IF('!', TOKEN_NOT)
+                else
+                    // Starts with "
+                    // TODO: Lex string
+                    if c == '\'' then
+                        XXXTODO
+                    ENDIF
+                fi
+            else
+                if c <= '%' then
+                    RET_IF('%', TOKEN_MOD)
+                else
+                    XXXTODO // TODO: lex &&
+                fi
+            fi
+        else
+            // '   (   )   *   +
+            if c <= '(' then
+                if c <= '\'' then
+                    // Starts with '
+                    if c == '\'' then
+                        XXXTODO // TODO: lex char
+                    ENDIF
+                else
+                    // Starts with (
+                    RET_IF('(', TOKEN_LPAREN)
+                fi
+            else
+                if c <= ')' then
+                    RET_IF(')', TOKEN_RPAREN)
+                else
+                    if c <= '*' then
+                        RET_IF('*', TOKEN_TIMES)
+                    else
+                        RET_IF('+', TOKEN_PLUS)
+                    fi
+                fi
+            fi
+        fi
+    else
+        // ,   -   /   ;   <   <=   =   ==   >,   >=   [   ]   ||
+        if c <= '<' then
+            // ,   -   /   ;   <   <=
+            if c <= '-' then
+                if c <= ',' then
+                    // Starts with ,
+                    RET_IF(',', TOKEN_COMMA)
+                else
+                    RET_IF('-', TOKEN_MINUS)
+                fi
+            else
+                if c <= '/' then
+                    RET_IF('/', TOKEN_DIV)
+                else
+                    if c <= ';' then
+                        RET_IF(';', TOKEN_SEMI)
+                    else
+                        // TODO < or <=
+                        RET_IF('<', TOKEN_LT)
+                    fi
+                fi
+            fi
+        else
+            // =   ==   >,   >=   [   ]   ||
+            if c <= '>' then
+                if c <= '=' then
+                    RET_IF('=', TOKEN_ASSIGN) // TODO: = or ==
+                else
+                    RET_IF('>', TOKEN_GT) // TODO: > or >=
+                fi
+            else
+                if c <= '[' then
+                    RET_IF('[', TOKEN_LSQUARE)
+                else
+                    if c <= ']' then
+                        RET_IF(']', TOKEN_RSQUARE)
+                    else
+                        // TODO: Peak ||
+                        XXXTODO
+                    fi
+                fi
+            fi
+        fi
+    fi ;
+    #undef RET_IF
+
+    println "Lexer error" ; // TODO: Maybe be better
+    exit 1
 end
 
 LEXER_FN(TOKEN_T, identifier)
