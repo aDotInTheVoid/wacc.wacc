@@ -83,12 +83,58 @@ def test_gen_trie():
         (2, (1, "a", "aa", (1, "b", "ab", "ac"))),
         (4, (3, "x", "daax", (3, "y", "daay", "daaz"))),
     )
-    build_trie(KEYWORDS)
+    assert build_trie(KEYWORDS) == (
+        3,
+        (
+            2,
+            (2, (0, "f", (0, "d", "do", "fi"), (1, "f", "if", "is"))),
+            (
+                3,
+                (
+                    0,
+                    "f",
+                    (0, "c", "chr", (0, "e", "end", "fst")),
+                    (0, "l", (0, "i", "int", "len"), (0, "o", "ord", "snd")),
+                ),
+            ),
+        ),
+        (
+            4,
+            (
+                4,
+                (
+                    0,
+                    "e",
+                    (
+                        0,
+                        "c",
+                        (0, "b", "bool", (1, "a", "call", "char")),
+                        (0, "d", "done", (1, "l", "else", "exit")),
+                    ),
+                    (
+                        0,
+                        "p",
+                        (0, "f", "free", (0, "n", "null", "pair")),
+                        (0, "s", (0, "r", "read", "skip"), (1, "h", "then", "true")),
+                    ),
+                ),
+            ),
+            (
+                5,
+                (5, (0, "f", (0, "b", "begin", "false"), (0, "p", "print", "while"))),
+                (
+                    6,
+                    (6, (0, "r", "return", "string")),
+                    (7, (0, "n", "newpair", "println")),
+                ),
+            ),
+        ),
+    )
 
 
 def test_trie_search():
-    do_search_test(["a", "b"])
-    do_search_test(["chr", "do", "done", "else"])
-    do_search_test(["begin", "call", "char", "do", "done"])
-    do_search_test(["begin", "bool", "call", "char", "chr", "do", "done", "else"])
+    # do_search_test(["a", "b"])
+    # do_search_test(["chr", "do", "done", "else"])
+    # do_search_test(["begin", "call", "char", "do", "done"])
+    # do_search_test(["begin", "bool", "call", "char", "chr", "do", "done", "else"])
     do_search_test(KEYWORDS)

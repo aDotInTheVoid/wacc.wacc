@@ -163,7 +163,7 @@ def gen_trie_code(trie, vals):
         case (int(l), str(expected), leq, gt):
             leqtext = gen_trie_code(leq, vals)
             gttext = gen_trie_code(gt, vals)
-            return f"if str[start + {l}] == '{expected}' then\n{indent(leqtext)}\nelse\n{indent(gttext)}\nfi"
+            return f"if str[start + {l}] <= '{expected}' then\n{indent(leqtext)}\nelse\n{indent(gttext)}\nfi"
         case str(s):
             l1 = "char[] exp = [" + ", ".join(f"'{c}'" for c in s) + "]"
             l2 = "bool eq =  call streq(str, start, lenn, exp)"
@@ -196,4 +196,11 @@ def main():
         ret_ty="TOKEN_TYPE",
         vals={k: f"TOKEN_{k.upper()}" for k in KEYWORDS},
         default="TOKEN_IDENTIFIER",
+    )
+    gen_trie(
+        name="punct_kind",
+        includes=["token_type"],
+        ret_ty="TOKEN_TYPE",
+        vals={k[0]: v for k, v in PUNCT},
+        default="XXXTODO",
     )
