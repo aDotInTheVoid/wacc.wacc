@@ -29,12 +29,9 @@ $(test): $(timestamp) $(go_src)
 $(objdir)/wacc.wacc: $(wacc_src)
 	cpp -undef -nostdinc src/wacc.wacc.in -o $@
 $(objdir)/wacc.c: $(tp) $(objdir)/wacc.wacc
-	$(tp) $(objdir)/wacc.wacc $@
+	CGEN_LINE_CONTROL=1 $(tp) $(objdir)/wacc.wacc $@
 $(objdir)/wacc: $(objdir)/wacc.c
 	gcc -g -o $@ $<
-
-
-
 tools: $(kgt) $(tp) $(test)
 
 .PHONY: debug
@@ -51,3 +48,6 @@ debug:
 clean:
 	rm -rf $(objdir)
 
+.PHONY: test
+test: $(test)
+	$(test)

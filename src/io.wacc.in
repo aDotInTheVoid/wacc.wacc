@@ -21,7 +21,7 @@ pair(char[], int) readAll() is
         else
             if i == maxLen then 
                 println "Input file too big";
-                exit 1
+                FAIL
             ENDIF ;
 
             buffer[i] = chr c;

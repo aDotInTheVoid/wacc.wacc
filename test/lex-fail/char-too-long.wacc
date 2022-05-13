@@ -1,0 +1,5 @@
+begin
+
+char a = 'hello';
+
+end

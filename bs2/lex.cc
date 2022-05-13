@@ -33,6 +33,10 @@ Token Lexer::next_token() {
     return make_token(match('=') ? TokenType::Eq : TokenType::Assign);
   case ';':
     return make_token(TokenType::Semi);
+  case ',':
+    return make_token(TokenType::Comma);
+  case '+':
+    return make_token(TokenType::Plus);
   case '[':
     return make_token(TokenType::Lsquare);
   case ']':
@@ -185,13 +189,16 @@ Token Lexer::char_lit() {
   switch (c) {
   case '\'': // invalid
   case '"':
+    fprintf(stderr, "Unexpected character in char lit: %c\n", c);
     std::exit(EXIT_FAILURE);
   case '\\':
     escape_sequence();
   }
   c = advance();
-  if (c != '\'')
+  if (c != '\'') {
+    fprintf(stderr, "Expected ' after char lit\n");
     std::exit(EXIT_FAILURE);
+  }
   return make_token(TokenType::Char);
 }
 

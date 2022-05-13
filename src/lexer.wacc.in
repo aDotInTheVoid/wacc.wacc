@@ -10,6 +10,12 @@
 
 
 LEXER_FN(char, advance)
+    bool b = call isAtEnd(self);
+    if b then
+        print "Unexpected EOF";
+        FAIL
+    ENDIF ;
+
     char ret = source[current];
     LEXER_SET_CURRENT(current + 1);
     return ret
@@ -119,10 +125,8 @@ LEXER_FN(TOKEN_T, next_token)
                         fi
                     ENDIF
                 else
-                    // Starts with "
-                    // TODO: Lex string
-                    if c == '\'' then
-                        XXXTODO
+                    if c == '\"' then
+                        RETVRN(TOKEN_T, call stringLit(self))
                     ENDIF
                 fi
             else
@@ -141,7 +145,7 @@ LEXER_FN(TOKEN_T, next_token)
                 if c <= '\'' then
                     // Starts with '
                     if c == '\'' then
-                        XXXTODO // TODO: lex char
+                        RETVRN(TOKEN_T, call charLit(self))
                     ENDIF
                 else
                     // Starts with (
@@ -229,7 +233,7 @@ LEXER_FN(TOKEN_T, next_token)
     #undef RET_IF
 
     println "Lexer error" ; // TODO: Maybe be better
-    exit 1
+    FAIL
 end
 
 LEXER_FN(TOKEN_T, identifier)
@@ -264,6 +268,48 @@ LEXER_FN(TOKEN_T, number)
     RETVRN(TOKEN_T, call makeToken(self, TOKEN_NUMBER))
 end
 
+LEXER_FN(TOKEN_T, stringLit)
+    bool iae = call isAtEnd(self);
+    while !iae do
+        char c = call advance(self);
+        if c == '\"' then 
+            RETVRN(TOKEN_T, call makeToken(self, TOKEN_STRING))
+        ENDIF ;
+        if c == '\\' then
+            DISCARD escape_sequence(self)
+        ENDIF ;
+        if c == '\'' then
+            FAIL
+        ENDIF ;
+
+        iae = call isAtEnd(self)
+    done ;
+    FAIL
+end
+
+LEXER_FN(TOKEN_T, charLit)
+    bool b = call isAtEnd(self);
+    if b then
+        FAIL
+    ENDIF ;
+    char c = call advance(self);
+    if c == '\'' || c == '\"' then
+        FAIL
+    ENDIF ;
+    if c == '\\' then
+        DISCARD escape_sequence(self)
+    ENDIF ;
+    c = call advance(self);
+    if c != '\'' then
+        FAIL
+    ENDIF ;
+    RETVRN(TOKEN_T, call makeToken(self, TOKEN_STRING))
+end
+
+LEXER_FN(VOID, escape_sequence)
+    XXXTODO
+end
+
 LEXER_FN(VOID, lexer_print_token,, TOKEN_T tok)
     DISCARD token_print_token(tok, source);
 ENDV
@@ -284,5 +330,6 @@ ENDV
 TOKEN_FN(TOKEN_TYPE, token_type)
     return type
 end
+
 
 #endif

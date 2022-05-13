@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
   std::stringstream ss;
 
   // Read the file into a string.
-  if (argc == 1 || std::strcmp(argv[1], "-") != 0) {
+  if (argc == 1 || std::strcmp(argv[1], "-") == 0) {
     char c;
     while ((c = std::getchar()) != EOF) {
       source.push_back(c);

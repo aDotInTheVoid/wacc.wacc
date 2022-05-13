@@ -79,6 +79,8 @@ NOTES ON WRITING WACC
 char[] to string is allowed, but not the other way around, you you
 almost always want to use char[]
 
+else if is allowed, but requires fi, so doesn't help rightward drift.
+
 RELEVANT DOCS
 -------------
 

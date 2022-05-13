@@ -5,12 +5,14 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/aDotInTheVoid/wacc.wacc/test/runner"
 )
 
 var bs2 string
+var wacc string
 
 type runResult int
 
@@ -23,6 +25,10 @@ type runData struct {
 	Path     string
 	Compiler string
 	Result   runResult
+	Stdin    string
+	Stderr   string
+	Stdout   string
+	ExitCode int
 }
 
 func main() {
@@ -35,6 +41,7 @@ func main() {
 	done := make(chan struct{})
 
 	filepath.Walk("lex-pass", walkWrap(bs2LexPass, c, &wg))
+	filepath.Walk("lex-pass", walkWrap(waccLexPass, c, &wg))
 
 	// Wait for all the tests to finish
 	// Must go this after all runs
@@ -52,28 +59,60 @@ loop:
 		case r := <-c:
 			if r.Result == runResultFail {
 				nFail++
-				fmt.Print("FAIL ")
+				fmt.Println("FAIL", filepath.Base(r.Compiler), " ", r.Path)
+				fmt.Print(r.visual())
 			} else {
 				nPass++
-				fmt.Print("PASS ")
+				fmt.Println("PASS", filepath.Base(r.Compiler), " ", r.Path)
 			}
-			fmt.Println(filepath.Base(r.Compiler), " ", r.Path)
 		case <-done:
 			break loop
 		}
 	}
 
 	log.Printf("%d passed, %d failed", nPass, nFail)
+	if nFail != 0 {
+		println("======== FAILED =========")
+		os.Exit(1)
+	}
 }
 
 type TestOverallRunner func(path string) runData
 
 func bs2LexPass(path string) runData {
 	output := runner.RunOutputGet(bs2, path)
+	var status runResult
 	if output.Status != 0 {
-		return runData{path, bs2, runResultFail}
+		status = runResultFail
 	} else {
-		return runData{path, bs2, runResultPass}
+		status = runResultPass
+	}
+	return runData{
+		Path:     path,
+		Compiler: bs2,
+		Result:   status,
+		Stdin:    path,
+		Stderr:   output.Stderr,
+		Stdout:   output.Stdout,
+		ExitCode: output.Status,
+	}
+}
+func waccLexPass(path string) runData {
+	output := runner.RunOutputGet(wacc, path)
+	var status runResult
+	if output.Status != 0 {
+		status = runResultFail
+	} else {
+		status = runResultPass
+	}
+	return runData{
+		Path:     path,
+		Compiler: wacc,
+		Result:   status,
+		Stdin:    path,
+		Stderr:   output.Stderr,
+		Stdout:   output.Stdout,
+		ExitCode: output.Status,
 	}
 }
 
@@ -129,6 +168,7 @@ func gotoTestDir() {
 }
 
 func findCompillers() {
+	// bs2
 	if !dirExists("../bs2") {
 		log.Fatal("Failed to find bs2 directory")
 	}
@@ -137,4 +177,33 @@ func findCompillers() {
 	}
 	runner.RunBuild("../bs2", "ninja", "-C", "_build/test")
 	bs2 = "../bs2/_build/test/bs2"
+
+	// wacc
+	runner.RunBuild("..", "make", "_build/wacc")
+	wacc = "../_build/wacc"
+}
+
+func (r *runData) visual() string {
+	var b strings.Builder
+	b.WriteString("Command ")
+	b.WriteString(r.Compiler)
+	b.WriteString(" < ")
+	b.WriteString(r.Path)
+	b.WriteString(" exited with code ")
+	b.WriteString(fmt.Sprintf("%d", r.ExitCode))
+	if r.Stdout != "" {
+		b.WriteString("\n--- stdout ---------------------------------------\n")
+		b.WriteString(strings.TrimSpace(r.Stdout))
+		b.WriteString("\n----------------------------------------------------\n")
+	} else {
+		b.WriteString("\nstdout: none\n")
+	}
+	if r.Stderr != "" {
+		b.WriteString("\n--- stderr ---------------------------------------\n")
+		b.WriteString(strings.TrimSpace(r.Stderr))
+		b.WriteString("\n----------------------------------------------------\n")
+	} else {
+		b.WriteString("\nstderr: none\n")
+	}
+	return b.String()
 }

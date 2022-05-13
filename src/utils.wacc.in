@@ -3,7 +3,7 @@
 
 // This can't include any other files, as everything else depends on it.
 
-#define XXXTODO exit 1
+
 
 #define ENDIF else skip fi
 
@@ -25,5 +25,17 @@ end
 bool isDigit(char c) is
 	return c >= '0' && c <= '9'
 end
+
+#define XXXTODO VOID __exit = call wacc_fail(__FILE__, __LINE__, "Unimplemented"); exit 1
+#define FAIL    VOID __exit = call wacc_fail(__FILE__, __LINE__, "Error"); exit 1
+
+VOID wacc_fail(string file, int line, string reason) is 
+  print file;
+  print ":";
+  print line;
+  print " ";
+  print reason;
+  println "";
+ENDV
 
 #endif
