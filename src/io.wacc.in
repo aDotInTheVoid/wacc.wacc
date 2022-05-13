@@ -8,6 +8,8 @@
 extern int getchar()
 
 pair(char[], int) readAll() is
+    int maxLen = 1000;
+
     char[] buffer = call calloc(1000);
     // TODO: Realloc buffer
     int i = 0;
@@ -17,6 +19,11 @@ pair(char[], int) readAll() is
         if (c == -1) then
             run = false
         else
+            if i == maxLen then 
+                println "Input file too big";
+                exit 1
+            ENDIF ;
+
             buffer[i] = chr c;
             i = i + 1
         fi
