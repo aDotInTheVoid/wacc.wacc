@@ -1,3 +1,5 @@
 __pycache__
 .pytest_cache
 _build
+.vscode
+!.vscode/*.json

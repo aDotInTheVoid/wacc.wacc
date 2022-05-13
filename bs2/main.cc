@@ -5,6 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+#include "codegen.hh"
+#include "codegen/xml/xml.hh"
 #include "lex.hh"
 
 int main(int argc, char **argv) {
@@ -29,9 +31,14 @@ int main(int argc, char **argv) {
   }
 
   Lexer lexer(source);
-  Token t;
-  do {
-    t = lexer.next_token();
-    t.debug(std::cout);
-  } while (t.type_ != TokenType::Eof);
+  // IF LEXDUMP
+  // Token t;
+  // do {
+  //   t = lexer.next_token();
+  //   t.debug(std::cout);
+  // } while (t.type_ != TokenType::Eof);
+  auto c = XmlCodegen();
+
+  auto end = c.finish();
+  std::cout << end;
 }

@@ -1,5 +1,5 @@
-#ifndef WACC_CPP_LEX_HH
-#define WACC_CPP_LEX_HH
+#ifndef BS2_LEX_HH
+#define BS2_LEX_HH
 
 #include <cstddef>
 #include <ostream>
