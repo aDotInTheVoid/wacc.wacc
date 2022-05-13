@@ -8,15 +8,15 @@
 #define ENDIF else skip fi
 
 // Tools funtion that semanticly returns unit
-#define VOID bool
-#define RETV return false
+#define VOID pair(bool[][][], int[][][][])
+#define RETV return null
 #define ENDV RETV end
 
-#define DISCARD bool __nop = call
+#define DISCARD VOID __nop = call
 #define DISCARD_ __nop = call
-#define DISCARD_INIT bool __nop = false
+#define DISCARD_INIT VOID __nop = null
 
-#define RETVRN(type, ...) type __ret = __VA_ARGS__; return __ret
+#define RETVRN(__type, ...) __type __ret = __VA_ARGS__; return __ret
 
 bool isAlpha(char c) is
   return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'
