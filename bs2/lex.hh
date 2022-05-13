@@ -5,8 +5,6 @@
 #include <ostream>
 #include <string>
 
-struct Lexer;
-
 enum class TokenType {
   Identifier,
   Number,
@@ -72,7 +70,7 @@ struct Token {
   size_t start_; // Byte offset
   // TODO: Line number
 
-  void debug(std::ostream &, Lexer const &);
+  void debug(std::ostream &);
 };
 
 struct Lexer {
@@ -95,6 +93,9 @@ struct Lexer {
   Token number();
   bool match(char);
   char peak();
+  Token char_lit();
+  Token string_lit();
+  void escape_sequence();
 };
 
 const char *token_type_str(TokenType);

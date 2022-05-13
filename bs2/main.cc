@@ -31,6 +31,6 @@ int main(int argc, char **argv) {
   Lexer lexer(source);
   Token t;
   while ((t = lexer.next_token()).type_ != TokenType::Eof) {
-    t.debug(std::cout, lexer);
+    t.debug(std::cout);
   }
 }

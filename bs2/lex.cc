@@ -21,6 +21,10 @@ Token Lexer::next_token() {
     return number();
 
   switch (c) {
+  case '\'':
+    return char_lit();
+  case '"':
+    return string_lit();
   case '(':
     return make_token(TokenType::Lparen);
   case ')':
@@ -99,8 +103,134 @@ void Lexer::skip_whitespace() {
 Token Lexer::identifier() {
   while (is_alpha(peak()))
     advance();
-  // TODO: Correct type
-  return make_token(TokenType::Identifier);
+  auto t = make_token(TokenType::Identifier);
+  auto new_type = TokenType::Identifier;
+
+  // Not that efficent, but it works
+  if (t.value_ == "begin")
+    new_type = TokenType::Begin;
+  else if (t.value_ == "bool")
+    new_type = TokenType::Bool;
+  else if (t.value_ == "call")
+    new_type = TokenType::Call;
+  else if (t.value_ == "char")
+    new_type = TokenType::Char;
+  else if (t.value_ == "chr")
+    new_type = TokenType::Chr;
+  else if (t.value_ == "do")
+    new_type = TokenType::Do;
+  else if (t.value_ == "done")
+    new_type = TokenType::Done;
+  else if (t.value_ == "else")
+    new_type = TokenType::Else;
+  else if (t.value_ == "end")
+    new_type = TokenType::End;
+  else if (t.value_ == "exit")
+    new_type = TokenType::Exit;
+  else if (t.value_ == "false")
+    new_type = TokenType::False;
+  else if (t.value_ == "fi")
+    new_type = TokenType::Fi;
+  else if (t.value_ == "free")
+    new_type = TokenType::Free;
+  else if (t.value_ == "fst")
+    new_type = TokenType::Fst;
+  else if (t.value_ == "if")
+    new_type = TokenType::If;
+  else if (t.value_ == "int")
+    new_type = TokenType::Int;
+  else if (t.value_ == "is")
+    new_type = TokenType::Is;
+  else if (t.value_ == "len")
+    new_type = TokenType::Len;
+  else if (t.value_ == "newpair")
+    new_type = TokenType::Newpair;
+  else if (t.value_ == "null")
+    new_type = TokenType::Null;
+  else if (t.value_ == "ord")
+    new_type = TokenType::Ord;
+  else if (t.value_ == "pair")
+    new_type = TokenType::Pair;
+  else if (t.value_ == "print")
+    new_type = TokenType::Print;
+  else if (t.value_ == "println")
+    new_type = TokenType::Println;
+  else if (t.value_ == "read")
+    new_type = TokenType::Read;
+  else if (t.value_ == "return")
+    new_type = TokenType::Return;
+  else if (t.value_ == "skip")
+    new_type = TokenType::Skip;
+  else if (t.value_ == "snd")
+    new_type = TokenType::Snd;
+  else if (t.value_ == "string")
+    new_type = TokenType::String;
+  else if (t.value_ == "then")
+    new_type = TokenType::Then;
+  else if (t.value_ == "true")
+    new_type = TokenType::True;
+  else if (t.value_ == "while")
+    new_type = TokenType::While;
+
+  t.type_ = new_type;
+  return t;
+}
+
+Token Lexer::char_lit() {
+  if (is_at_end()) {
+    fprintf(stderr, "Unexpected end of input in char lit\n");
+    std::exit(EXIT_FAILURE);
+  }
+  char c = advance();
+  switch (c) {
+  case '\'': // invalid
+  case '"':
+    std::exit(EXIT_FAILURE);
+  case '\\':
+    escape_sequence();
+  }
+  c = advance();
+  if (c != '\'')
+    std::exit(EXIT_FAILURE);
+  return make_token(TokenType::Char);
+}
+
+Token Lexer::string_lit() {
+  while (!is_at_end()) {
+    char c = advance();
+    switch (c) {
+    case '"':
+      return make_token(TokenType::String);
+    case '\'': {
+      fprintf(stderr, "Error: Must escape ' in string literal\n");
+      std::exit(EXIT_FAILURE);
+    }
+    case '\\': {
+      escape_sequence();
+    }
+    }
+  }
+  fprintf(stderr, "Unexpected end of file: Unclosed string literal\n");
+  std::exit(EXIT_FAILURE);
+}
+
+void Lexer::escape_sequence() {
+  char c = advance();
+  // todo: check is_at_end
+  switch (c) {
+  case '0':
+  case 'b':
+  case 't':
+  case 'n':
+  case 'f':
+  case 'r':
+  case '"':
+  case '\'':
+  case '\\':
+    break;
+  default:
+    fprintf(stderr, "Error: Unknown escape sequence: \\%c\n", c);
+  }
 }
 
 Token Lexer::number() {
@@ -114,7 +244,7 @@ void Lexer::skip_comment() {
     ;
 }
 
-void Token::debug(std::ostream &o, Lexer const &l) {
+void Token::debug(std::ostream &o) {
   o << start_ << " " << value_.size() << " " << token_type_str(type_) << " "
     << value_ << std::endl;
 }

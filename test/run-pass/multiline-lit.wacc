@@ -1,0 +1,16 @@
+begin
+
+char c = '
+';
+
+string s = "
+
+";
+
+print 'a';
+print c;
+print 'b';
+print s;
+print 'c'
+
+end
