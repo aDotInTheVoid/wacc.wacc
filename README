@@ -1,3 +1,78 @@
+SINGLE PASS TO X64
+------------------
+
+Due to wacc's lack of support for aggregate types, the compiller
+is written in a single pass structure. No AST is build, but assembly
+is emited as the program is parsed.
+
+The lexer is based on the one described in "Crafting Interpritrs"
+by Robert Nystrom.
+
+http://www.edm2.com/index.php/Small-C
+https://compilers.iecc.com/crenshaw/
+https://keleshev.com/one-pass-compiler-primer
+http://t3x.org/t3x/comp.html
+http://t3x.org/t3x/book.html: "single-pass, in-memory compiler"
+https://gist.github.com/cellularmitosis/1f55f9679f064bcff02905acb44ca510#tutorials
+https://austinhenley.com/blog/teenytinycompiler1.html
+https://github.com/lotabout/Let-s-build-a-compiler
+
+IO
+--
+
+Wacc has no primitives to do any io. The "read" statement can't read a
+string or char[], and when reading a char, it requires a newline. Therefor
+we use an extension allowing calling libc functions. However to keep this 
+more portable between bootstrap compillers, the source is read from stdin,
+and only via getchar. This IO is encapsulated, allowing it to be easily
+replaced on compillers implementing custom getchar like mecanisms.
+
+For output, we use the standard print statement, meaning the output assemble
+is printed to stdout.
+
+CODE GENERATION
+---------------
+
+Large ammount of the code are generated to suport a poor imitation of structs
+build on pairs. Additional code is generated for binary search trees. 
+
+PREPROCESSOR
+------------
+
+Wacc.wacc makes extensive use of the preprocessor (cpp). This is done to allow
+the source to be split across multiple files, and to allow the extensive use of
+macro such as:
+
+- RETVRN(ty, rhs): Allows returning any <assign-rhs>, not just an <expr>
+- ENDIF: Allows if statements without else statements.
+- VOID/ENDV: Allows functions that return no arguments
+- <type>_FN(return_ty, name (,, <args)?): Allows functions that take a
+    struct in a clean way.
+
+
+LACK OF TYPE SAFETY
+-------------------
+
+wacc.wacc will in many cases not do type checks required by the
+wacc spec. It will successfully compille all compliant programs,
+but may also compile non compliant ones. Fortunatly, this strategy
+has been employed successfully by other compillers.
+
+> C has traditionally been permissive in
+> checking whether an expression is used in
+> a conext appropriate to its type. A
+> complete list of exam ples would be long,
+> but two of the most im ortant should
+> illustrate sufficiently. The types of formal
+> arguments of functions are in general not
+> known, and in any case are not checked
+> by the compiler against the actual
+> arguments at each call.
+
+  - 8.2.2 Type safety, The C Programming Language
+    Dr Dobbs Vol 5, Number 45.
+
+
 NOTES ON WRITING WACC
 ---------------------
 
@@ -30,9 +105,9 @@ It does not make use of extensions for structs, or more conventiant expressions.
 Instead, these are achived with code generation in python, and extensive use of
 preprocessor macros.
 
-However, to read the a file, it is nessesary to use an extension, as vanilla WACC
-does not support reading strings, and reading chars requires a newline. Currently
-this is done with the "extern" extension [0]. Even so, we only use getchar(3), so 
-it should be easy to port to different IO extensions.
+SUPPORTED BOOTSTRAPPING COMPILLERS
+----------------------------------
 
-[0]: https://github.com/RiscInside/WACC-to-C#extern-extension
+- https://github.com/RiscInside/WACC-to-C
+
+This will be expaned in the future.
