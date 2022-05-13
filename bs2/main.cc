@@ -8,6 +8,7 @@
 #include "codegen.hh"
 #include "codegen/xml/xml.hh"
 #include "lex.hh"
+#include "parser.hh"
 
 int main(int argc, char **argv) {
   if (argc != 1 && argc != 2) {
@@ -38,6 +39,8 @@ int main(int argc, char **argv) {
   //   t.debug(std::cout);
   // } while (t.type_ != TokenType::Eof);
   auto c = XmlCodegen();
+
+  auto p = Parser{lexer, &c};
 
   auto end = c.finish();
   std::cout << end;

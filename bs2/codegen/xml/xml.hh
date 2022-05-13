@@ -9,8 +9,11 @@ const size_t indent_width = 2;
 struct XmlCodegen : Codegen {
   size_t indent = 0;
   XmlCodegen() { open("unit"); }
-
   std::string finish();
+
+  // Parser hooks
+  void startmain();
+  void endmain();
 
   // Internal
   void line(std::string_view l);

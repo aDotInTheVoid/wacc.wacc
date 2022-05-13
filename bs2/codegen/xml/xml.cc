@@ -26,3 +26,6 @@ void XmlCodegen::open(const char *name) {
   line(fmt::format("<{}>", name));
   indent += indent_width;
 }
+
+void XmlCodegen::startmain() { open("main"); }
+void XmlCodegen::endmain() { close("main"); }
