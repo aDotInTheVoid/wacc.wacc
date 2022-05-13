@@ -13,6 +13,9 @@ test := $(tooldir)/test
 gen/%.wacc.in: $(py_src)
 	python3.10 py/gen.py
 
+all: $(objdir)/wacc
+
+
 $(timestamp):
 	@mkdir -p $(objdir)
 	@mkdir -p $(tooldir)
@@ -51,3 +54,7 @@ clean:
 .PHONY: test
 test: $(test)
 	$(test)
+
+.PHONY: bless
+bless:
+	$(MAKE) test WACC_UPDATE=1

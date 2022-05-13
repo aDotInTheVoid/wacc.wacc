@@ -303,7 +303,7 @@ LEXER_FN(TOKEN_T, charLit)
     if c != '\'' then
         FAIL
     ENDIF ;
-    RETVRN(TOKEN_T, call makeToken(self, TOKEN_STRING))
+    RETVRN(TOKEN_T, call makeToken(self, TOKEN_CHAR))
 end
 
 LEXER_FN(VOID, escape_sequence)

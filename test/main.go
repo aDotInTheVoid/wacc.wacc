@@ -14,6 +14,9 @@ import (
 var bs2 string
 var wacc string
 
+var update = os.Getenv("WACC_UPDATE") == "1"
+var refComp = bs2
+
 type runResult int
 
 const (
@@ -52,6 +55,7 @@ func main() {
 
 	nPass := 0
 	nFail := 0
+	status := ""
 
 loop:
 	for {
@@ -59,12 +63,12 @@ loop:
 		case r := <-c:
 			if r.Result == runResultFail {
 				nFail++
-				fmt.Println("FAIL", filepath.Base(r.Compiler), " ", r.Path)
-				fmt.Print(r.visual())
+				status = "FAIL"
 			} else {
 				nPass++
-				fmt.Println("PASS", filepath.Base(r.Compiler), " ", r.Path)
+				status = "PASS"
 			}
+			fmt.Printf("%s: %5s %s\n", status, filepath.Base(r.Compiler), r.Path)
 		case <-done:
 			break loop
 		}
@@ -87,6 +91,18 @@ func bs2LexPass(path string) runData {
 	} else {
 		status = runResultPass
 	}
+	// TODO: Encode that bs2 is the reference compiler
+	if update {
+		os.WriteFile(stdoutFile(path), []byte(output.Stdout), 0644)
+	} else {
+		c, err := os.ReadFile(stdoutFile(path))
+		runner.Must(err)
+		if string(c) != output.Stdout {
+			status = runResultFail
+			// TODO: Better message
+		}
+	}
+
 	return runData{
 		Path:     path,
 		Compiler: bs2,
@@ -98,12 +114,23 @@ func bs2LexPass(path string) runData {
 	}
 }
 func waccLexPass(path string) runData {
+
 	output := runner.RunOutputGet(wacc, path)
 	var status runResult
 	if output.Status != 0 {
 		status = runResultFail
 	} else {
 		status = runResultPass
+	}
+	if !update {
+
+		c, err := os.ReadFile(stdoutFile(path))
+		runner.Must(err)
+		if string(c) != output.Stdout {
+			status = runResultFail
+			// TODO: Better message
+			panic("Expectesd ```" + string(c) + "``` got ```" + output.Stdout + "```")
+		}
 	}
 	return runData{
 		Path:     path,
@@ -206,4 +233,9 @@ func (r *runData) visual() string {
 		b.WriteString("\nstderr: none\n")
 	}
 	return b.String()
+}
+
+func stdoutFile(path string) string {
+	ext := filepath.Ext(path)
+	return path[:len(path)-len(ext)] + ".stdout"
 }
