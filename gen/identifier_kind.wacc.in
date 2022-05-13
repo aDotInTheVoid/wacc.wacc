@@ -5,6 +5,40 @@
 
 #include "token_type.wacc.in"
 
+// match str[start..start+lenn] {
+//     "begin" => TOKEN_BEGIN
+//     "bool" => TOKEN_BOOL
+//     "call" => TOKEN_CALL
+//     "char" => TOKEN_CHAR
+//     "chr" => TOKEN_CHR
+//     "do" => TOKEN_DO
+//     "done" => TOKEN_DONE
+//     "else" => TOKEN_ELSE
+//     "end" => TOKEN_END
+//     "exit" => TOKEN_EXIT
+//     "false" => TOKEN_FALSE
+//     "fi" => TOKEN_FI
+//     "free" => TOKEN_FREE
+//     "fst" => TOKEN_FST
+//     "if" => TOKEN_IF
+//     "int" => TOKEN_INT
+//     "is" => TOKEN_IS
+//     "len" => TOKEN_LEN
+//     "newpair" => TOKEN_NEWPAIR
+//     "null" => TOKEN_NULL
+//     "ord" => TOKEN_ORD
+//     "pair" => TOKEN_PAIR
+//     "print" => TOKEN_PRINT
+//     "println" => TOKEN_PRINTLN
+//     "read" => TOKEN_READ
+//     "return" => TOKEN_RETURN
+//     "skip" => TOKEN_SKIP
+//     "snd" => TOKEN_SND
+//     "string" => TOKEN_STRING
+//     "then" => TOKEN_THEN
+//     "true" => TOKEN_TRUE
+//     "while" => TOKEN_WHILE
+// }
 TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
     if lenn <= 3 then
         if lenn <= 2 then

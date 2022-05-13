@@ -1,14 +1,22 @@
-from util import Generate, indent
+import pprint
+from util import Generate, comment, indent
 import itertools
 
 
 # pre: sorted(l)
 # return pivot, lesseq, greatereq
 # kinda funkey because we want the smallest element greater or equal to the pivot
-def gen_bsearch(l, rightmost=True):
+def gen_bsearch(l):
+    assert len(l) == len(set(l))
+    assert l == sorted(l)
+    return _gen_bsearch(l, True)
+
+
+def _gen_bsearch(l, rightmost):
+
     if len(l) == 2:
         if rightmost:
-            return l[1], gen_bsearch(l, False), None
+            return l[1], _gen_bsearch(l, False), None
         else:
             return l[0], l[0], l[1]
     elif len(l) == 1:
@@ -21,7 +29,7 @@ def gen_bsearch(l, rightmost=True):
     pivot = l[mid]
     less = l[: mid + 1]
     greater = l[mid + 1 :]
-    return pivot, gen_bsearch(less, False), gen_bsearch(greater, rightmost)
+    return pivot, _gen_bsearch(less, False), _gen_bsearch(greater, rightmost)
 
 
 def list_of(n):
@@ -46,20 +54,26 @@ def gen_calloc_tree(tree):
             return list_of(n)
 
 
-def gen_calloc(f):
-    f.write("char[] calloc(int size) is\n")
-    f.write("")
-
-    tree = list(
-        itertools.chain(
+LENS_NEST = list(
+    map(
+        list,
+        [
             range(10),
             range(10, 100, 10),
             range(100, 1000, 100),
             range(1000, 10000, 1000),
-        )
+        ],
     )
+)
 
-    f.write(indent(gen_calloc_tree(gen_bsearch(tree))))
+LENS = list(itertools.chain(*LENS_NEST))
+
+
+def gen_calloc(f):
+    f.write("char[] calloc(int size) is\n")
+    f.write("")
+
+    f.write(indent(gen_calloc_tree(gen_bsearch(LENS))))
 
     f.write("\n")
     f.write("end\n")
@@ -67,6 +81,17 @@ def gen_calloc(f):
 
 def gen_alloc():
     with Generate("alloc") as f:
+        # TODO: Write comment
+        f.write(
+            comment("Allocates an array of chars with at least the lenght requested")
+            + "\n"
+        )
+        f.write(
+            comment(f"Fails if the requested size is largen than {max(LENS)}") + "\n"
+        )
+        f.write("\n" + comment("Availible sizes: ") + "\n")
+        f.write(comment(pprint.pformat(LENS_NEST)) + "\n")
+
         gen_calloc(f)
 
 

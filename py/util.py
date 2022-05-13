@@ -20,3 +20,7 @@ class Generate:
 
 def indent(s: str):
     return "\n".join(f"    {line}" for line in s.split("\n"))
+
+
+def comment(s: str):
+    return "\n".join(f"// {line}" for line in s.split("\n"))

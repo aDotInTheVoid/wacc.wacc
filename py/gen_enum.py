@@ -35,6 +35,14 @@ def gen_bsearch(tree):
 
 def gen_enum(e: Enum, i: int):
     with Generate(e.name) as f:
+        enogen = lambda x: i * 1000 + x
+
+        # TODO: Comment
+        f.write(f"// enum {e.name} (base={i}) {{\n")
+        for idx, opt in enumerate(e.opts):
+            f.write(f"//     {opt} = {enogen(idx)},\n")
+        f.write(f"// }}\n")
+
         name = e.name.upper()
         prefix = e.prefix.upper()
 
@@ -43,7 +51,7 @@ def gen_enum(e: Enum, i: int):
         vals = []
 
         for idx, opt in enumerate(e.opts):
-            eno = i * 1000 + idx
+            eno = enogen(idx)
             vals.append((eno, opt))
             f.write(f"#define {prefix}_{opt.upper()} {eno}\n")
 

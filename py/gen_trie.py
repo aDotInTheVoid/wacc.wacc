@@ -176,9 +176,15 @@ def gen_trie_code(trie, vals):
 
 def gen_trie(name, includes, ret_ty, vals, default):
     with Generate(name) as f:
+
         for i in includes:
             f.write(f'#include "{i}.wacc.in"\n')
         f.write("\n")
+
+        f.write(f"// match str[start..start+lenn] {{\n")
+        for k, v in vals.items():
+            f.write(f'//     "{k}" => {v}\n')
+        f.write(f"// }}\n")
 
         f.write(f"{ret_ty} {name}(char[] str, int start, int lenn) is\n")
 

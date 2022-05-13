@@ -1,5 +1,5 @@
 import dataclasses
-from util import Generate, indent
+from util import Generate, indent, comment
 from wtype import Array
 
 
@@ -32,10 +32,6 @@ def print_struct_tree(f):
             )
         case StructField(name, type):
             return f"{name}: {type}"
-
-
-def comment(s: str):
-    return "\n".join(f"// {line}" for line in s.split("\n"))
 
 
 def nested_pair_name(p):
