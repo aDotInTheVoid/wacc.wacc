@@ -7,35 +7,45 @@
 //     type: int,
 //     start: int,
 //     length: int,
+//     source: char[],
 // }
 
 // [
-//     length: int
 //     [
 //         type: int
+//         length: int
+//     ]
+//     [
 //         start: int
+//         source: char[]
 //     ]
 // ]
-#define TOKEN_T pair(int, pair)
+#define TOKEN_T pair(pair, pair)
 
 TOKEN_T token_ctor(
     int type,
     int start,
-    int length
+    int length,
+    char[] source
 ) is
-    int l__ctor = length;
-    int lr__ctor = type;
-    int rr__ctor = start;
-    pair(int, int) r__ctor = newpair(lr__ctor, rr__ctor);
-    pair(int, pair) __ctor = newpair(l__ctor, r__ctor);
+    int ll__ctor = type;
+    int rl__ctor = length;
+    pair(int, int) l__ctor = newpair(ll__ctor, rl__ctor);
+    int lr__ctor = start;
+    char[] rr__ctor = source;
+    pair(int, char[]) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(pair, pair) __ctor = newpair(l__ctor, r__ctor);
     return __ctor
 end
 
-VOID token_free(TOKEN_T self) is
-    int lself = fst self;
-    pair(int, int) rself = snd self;
+VOID token_dtor(TOKEN_T self) is
+    pair(int, int) lself = fst self;
+    pair(int, char[]) rself = snd self;
+    int llself = fst lself;
+    int rlself = snd lself;
+    free lself;
     int lrself = fst rself;
-    int rrself = snd rself;
+    char[] rrself = snd rself;
     free rself;
     free self;
     
@@ -43,20 +53,24 @@ ENDV
 
 #define TOKEN_FN(__rtype, __fname, ...) \
     __rtype __fname(TOKEN_T self __VA_ARGS__) is \
-    pair(int, pair) __self = self; \
-    int length = fst __self; \
-    pair(int, int) __sndself = snd __self; \
-    int type = fst __sndself; \
-    int start = snd __sndself;
+    pair(pair, pair) __self = self; \
+    pair(int, int) __fstself = fst __self; \
+    int type = fst __fstself; \
+    int length = snd __fstself; \
+    pair(int, char[]) __sndself = snd __self; \
+    int start = fst __sndself; \
+    char[] source = snd __sndself;
 
 
 #define TOKEN_REFRESH \
-    length = fst __self; \
-    type = fst __sndself; \
-    start = snd __sndself
+    type = fst __fstself; \
+    length = snd __fstself; \
+    start = fst __sndself; \
+    source = snd __sndself
 
-#define TOKEN_SET_TYPE(__val) fst __sndself = __val; type = __val
-#define TOKEN_SET_START(__val) snd __sndself = __val; start = __val
-#define TOKEN_SET_LENGTH(__val) fst __self = __val; length = __val
+#define TOKEN_SET_TYPE(__val) fst __fstself = __val; type = __val
+#define TOKEN_SET_START(__val) fst __sndself = __val; start = __val
+#define TOKEN_SET_LENGTH(__val) snd __fstself = __val; length = __val
+#define TOKEN_SET_SOURCE(__val) snd __sndself = __val; source = __val
 
 #endif

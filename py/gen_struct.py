@@ -96,8 +96,8 @@ def gen_dtor(fielding, prefix):
             return "".join([ltext, rtext, gen_dtor(l, lp), gen_dtor(r, rp), free])
         # TODO: Handle nested arrays
         # TODO: Does freeing a struct always free it's array?
-        case StructField(_, Array(_)):
-            return f"free {prefix};\n"
+        # case StructField(_, Array(_)):
+        #     return f"free {prefix};\n"
         case _:
             return ""
 
@@ -136,7 +136,7 @@ def gen_struct(s: Struct):
         f.write("return __ctor\n")
         f.write("end\n\n")
 
-        f.write(f"VOID {s.name}_free({type_name} self) is\n")
+        f.write(f"VOID {s.name}_dtor({type_name} self) is\n")
         f.write(indent(gen_dtor(fielding, "self")))
         f.write("\nENDV\n\n")
 
@@ -168,10 +168,11 @@ def main():
         Struct(
             "lexer",
             [
-                StructField("source", wtype.Array(wtype.Char())),
+                StructField("source", wtype.Array(wtype.Array(wtype.Char()))),
+                StructField("sentinal", wtype.Array(wtype.Char())),
                 StructField("start", wtype.Int()),
                 StructField("current", wtype.Int()),
-                StructField("lenght", wtype.Int()),
+                StructField("logical_line", wtype.Int()),
             ],
         ),
         Struct(
@@ -180,6 +181,7 @@ def main():
                 StructField("type", wtype.Int()),
                 StructField("start", wtype.Int()),
                 StructField("length", wtype.Int()),
+                StructField("source", wtype.Array(wtype.Char())),
             ],
         ),
     ]:
