@@ -3,7 +3,7 @@ from util import Generate, comment
 NUM_LINES = 30_000
 NUM_CHARS = 600
 
-ONE_LINE = "[]"
+ONE_LINE = "l"
 ONE_CHAR = "' '"
 
 
@@ -16,13 +16,12 @@ def int_div(x, y):
 
 def main():
     with Generate("line_alloc") as f:
+        f.write(comment(f"{NUM_LINES} lines, {NUM_CHARS} chars per line") + "\n")
         #
         # Line allocator
         #
-
-        f.write(comment("Line allocator"))
-        f.write(comment(f"{NUM_LINES} lines, {NUM_CHARS} chars per line"))
-        f.write(f"char[] alloc_line() is\n")
+        f.write(comment("Line allocator") + "\n\n")
+        f.write(f"\nchar[] alloc_line() is\n")
         f.write(f"char[] r = [\n")
 
         len_per_char = len(ONE_CHAR) + 1  # +1 for the comma
@@ -41,8 +40,9 @@ def main():
         #
         # Lines allocator
         #
-        f.write(comment("Lines allocator"))
+        f.write(comment("Lines allocator") + "\n\n")
         f.write("char[][] alloc_lines() is\n")
+        f.write("char[] l = [];\n")
         f.write("char[][] r = [\n")
 
         len_per_line = len(ONE_LINE) + 1  # +1 for the comma
