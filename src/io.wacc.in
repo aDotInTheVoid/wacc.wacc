@@ -38,7 +38,9 @@ char[][] read_all(char[] sentinal) is
                 ENDIF ;
                 if inStrChr && c == ord '\\' then
                     inEscape = !inEscape
-                ENDIF
+                else
+                    inEscape = false
+                fi
             fi
         fi ;
         INC(linePos)
