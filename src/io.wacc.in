@@ -1,7 +1,6 @@
 #ifndef IO_WACC_IN
 #define IO_WACC_IN
 
-#include "../gen/alloc.wacc.in"
 #include "utils.wacc.in"
 
 // Iurii extension;
