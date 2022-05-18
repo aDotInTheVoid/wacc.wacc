@@ -1,0 +1,934 @@
+
+begin
+bool isAlpha(char c) is
+  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_'
+end
+bool isDigit(char c) is
+ return c >= '0' && c <= '9'
+end
+pair(bool[][][], int[][][][]) wacc_fail(string file, int line, string reason) is
+  print file;
+  print ":";
+  print line;
+  print " ";
+  print reason;
+  println "";
+return null end
+pair(pair, pair) lexer_ctor(
+    char[][] source,
+    char[] sentinal,
+    int start,
+    int current,
+    int logical_line
+) is
+    int ll__ctor = logical_line;
+    int rl__ctor = current;
+    pair(int, int) l__ctor = newpair(ll__ctor, rl__ctor);
+    char[] lr__ctor = sentinal;
+    char[][] lrr__ctor = source;
+    int rrr__ctor = start;
+    pair(char[][], int) rr__ctor = newpair(lrr__ctor, rrr__ctor);
+    pair(char[], pair) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(pair, pair) __ctor = newpair(l__ctor, r__ctor);
+    return __ctor
+end
+pair(bool[][][], int[][][][]) lexer_dtor(pair(pair, pair) self) is
+    pair(int, int) lself = fst self;
+    pair(char[], pair) rself = snd self;
+    int llself = fst lself;
+    int rlself = snd lself;
+    free lself;
+    char[] lrself = fst rself;
+    pair(char[][], int) rrself = snd rself;
+    char[][] lrrself = fst rrself;
+    int rrrself = snd rrself;
+    free rrself;
+    free rself;
+    free self;
+return null end
+string token_type_str(int __e) is
+    if __e < 28 then
+        if __e < 14 then
+            if __e < 7 then
+                if __e < 3 then
+                    if __e < 1 then
+                        if __e == 0 then return "identifier" else skip fi
+                    else
+                        if __e < 2 then
+                            if __e == 1 then return "number" else skip fi
+                        else
+                            if __e == 2 then return "eof" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 5 then
+                        if __e < 4 then
+                            if __e == 3 then return "begin" else skip fi
+                        else
+                            if __e == 4 then return "bool" else skip fi
+                        fi
+                    else
+                        if __e < 6 then
+                            if __e == 5 then return "call" else skip fi
+                        else
+                            if __e == 6 then return "char" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 10 then
+                    if __e < 8 then
+                        if __e == 7 then return "chr" else skip fi
+                    else
+                        if __e < 9 then
+                            if __e == 8 then return "do" else skip fi
+                        else
+                            if __e == 9 then return "done" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 12 then
+                        if __e < 11 then
+                            if __e == 10 then return "else" else skip fi
+                        else
+                            if __e == 11 then return "end" else skip fi
+                        fi
+                    else
+                        if __e < 13 then
+                            if __e == 12 then return "exit" else skip fi
+                        else
+                            if __e == 13 then return "false" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        else
+            if __e < 21 then
+                if __e < 17 then
+                    if __e < 15 then
+                        if __e == 14 then return "fi" else skip fi
+                    else
+                        if __e < 16 then
+                            if __e == 15 then return "free" else skip fi
+                        else
+                            if __e == 16 then return "fst" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 19 then
+                        if __e < 18 then
+                            if __e == 17 then return "if" else skip fi
+                        else
+                            if __e == 18 then return "int" else skip fi
+                        fi
+                    else
+                        if __e < 20 then
+                            if __e == 19 then return "is" else skip fi
+                        else
+                            if __e == 20 then return "len" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 24 then
+                    if __e < 22 then
+                        if __e == 21 then return "newpair" else skip fi
+                    else
+                        if __e < 23 then
+                            if __e == 22 then return "null" else skip fi
+                        else
+                            if __e == 23 then return "ord" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 26 then
+                        if __e < 25 then
+                            if __e == 24 then return "pair" else skip fi
+                        else
+                            if __e == 25 then return "print" else skip fi
+                        fi
+                    else
+                        if __e < 27 then
+                            if __e == 26 then return "println" else skip fi
+                        else
+                            if __e == 27 then return "read" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        fi
+    else
+        if __e < 42 then
+            if __e < 35 then
+                if __e < 31 then
+                    if __e < 29 then
+                        if __e == 28 then return "return" else skip fi
+                    else
+                        if __e < 30 then
+                            if __e == 29 then return "skip" else skip fi
+                        else
+                            if __e == 30 then return "snd" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 33 then
+                        if __e < 32 then
+                            if __e == 31 then return "string" else skip fi
+                        else
+                            if __e == 32 then return "then" else skip fi
+                        fi
+                    else
+                        if __e < 34 then
+                            if __e == 33 then return "true" else skip fi
+                        else
+                            if __e == 34 then return "while" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 38 then
+                    if __e < 36 then
+                        if __e == 35 then return "lparen" else skip fi
+                    else
+                        if __e < 37 then
+                            if __e == 36 then return "rparen" else skip fi
+                        else
+                            if __e == 37 then return "assign" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 40 then
+                        if __e < 39 then
+                            if __e == 38 then return "semi" else skip fi
+                        else
+                            if __e == 39 then return "comma" else skip fi
+                        fi
+                    else
+                        if __e < 41 then
+                            if __e == 40 then return "lsquare" else skip fi
+                        else
+                            if __e == 41 then return "rsquare" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        else
+            if __e < 49 then
+                if __e < 45 then
+                    if __e < 43 then
+                        if __e == 42 then return "not" else skip fi
+                    else
+                        if __e < 44 then
+                            if __e == 43 then return "minus" else skip fi
+                        else
+                            if __e == 44 then return "times" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 47 then
+                        if __e < 46 then
+                            if __e == 45 then return "div" else skip fi
+                        else
+                            if __e == 46 then return "mod" else skip fi
+                        fi
+                    else
+                        if __e < 48 then
+                            if __e == 47 then return "plus" else skip fi
+                        else
+                            if __e == 48 then return "gt" else skip fi
+                        fi
+                    fi
+                fi
+            else
+                if __e < 52 then
+                    if __e < 50 then
+                        if __e == 49 then return "ge" else skip fi
+                    else
+                        if __e < 51 then
+                            if __e == 50 then return "lt" else skip fi
+                        else
+                            if __e == 51 then return "le" else skip fi
+                        fi
+                    fi
+                else
+                    if __e < 54 then
+                        if __e < 53 then
+                            if __e == 52 then return "eq" else skip fi
+                        else
+                            if __e == 53 then return "ne" else skip fi
+                        fi
+                    else
+                        if __e < 55 then
+                            if __e == 54 then return "and" else skip fi
+                        else
+                            if __e == 55 then return "or" else skip fi
+                        fi
+                    fi
+                fi
+            fi
+        fi
+    fi ; exit 1
+end
+pair(pair, pair) token_ctor(
+    int type,
+    int start,
+    int length,
+    char[] source
+) is
+    int ll__ctor = type;
+    int rl__ctor = length;
+    pair(int, int) l__ctor = newpair(ll__ctor, rl__ctor);
+    int lr__ctor = start;
+    char[] rr__ctor = source;
+    pair(int, char[]) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(pair, pair) __ctor = newpair(l__ctor, r__ctor);
+    return __ctor
+end
+pair(bool[][][], int[][][][]) token_dtor(pair(pair, pair) self) is
+    pair(int, int) lself = fst self;
+    pair(int, char[]) rself = snd self;
+    int llself = fst lself;
+    int rlself = snd lself;
+    free lself;
+    int lrself = fst rself;
+    char[] rrself = snd rself;
+    free rself;
+    free self;
+return null end
+int identifier_kind(char[] str, int start, int lenn) is
+    if lenn <= 3 then
+        if lenn <= 2 then
+            if lenn == 2 then
+                if str[start + 0] <= 'f' then
+                    if str[start + 0] <= 'd' then
+                        char[] exp = ['d', 'o'];
+                        bool eq = call streq(str, start, lenn, exp);
+                        free exp;
+                        if eq then return 8 else skip fi
+                    else
+                        char[] exp = ['f', 'i'];
+                        bool eq = call streq(str, start, lenn, exp);
+                        free exp;
+                        if eq then return 14 else skip fi
+                    fi
+                else
+                    if str[start + 1] <= 'f' then
+                        char[] exp = ['i', 'f'];
+                        bool eq = call streq(str, start, lenn, exp);
+                        free exp;
+                        if eq then return 17 else skip fi
+                    else
+                        char[] exp = ['i', 's'];
+                        bool eq = call streq(str, start, lenn, exp);
+                        free exp;
+                        if eq then return 19 else skip fi
+                    fi
+                fi
+            else skip fi
+        else
+            if lenn == 3 then
+                if str[start + 0] <= 'f' then
+                    if str[start + 0] <= 'c' then
+                        char[] exp = ['c', 'h', 'r'];
+                        bool eq = call streq(str, start, lenn, exp);
+                        free exp;
+                        if eq then return 7 else skip fi
+                    else
+                        if str[start + 0] <= 'e' then
+                            char[] exp = ['e', 'n', 'd'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 11 else skip fi
+                        else
+                            char[] exp = ['f', 's', 't'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 16 else skip fi
+                        fi
+                    fi
+                else
+                    if str[start + 0] <= 'l' then
+                        if str[start + 0] <= 'i' then
+                            char[] exp = ['i', 'n', 't'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 18 else skip fi
+                        else
+                            char[] exp = ['l', 'e', 'n'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 20 else skip fi
+                        fi
+                    else
+                        if str[start + 0] <= 'o' then
+                            char[] exp = ['o', 'r', 'd'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 23 else skip fi
+                        else
+                            char[] exp = ['s', 'n', 'd'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 30 else skip fi
+                        fi
+                    fi
+                fi
+            else skip fi
+        fi
+    else
+        if lenn <= 4 then
+            if lenn == 4 then
+                if str[start + 0] <= 'e' then
+                    if str[start + 0] <= 'c' then
+                        if str[start + 0] <= 'b' then
+                            char[] exp = ['b', 'o', 'o', 'l'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 4 else skip fi
+                        else
+                            if str[start + 1] <= 'a' then
+                                char[] exp = ['c', 'a', 'l', 'l'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 5 else skip fi
+                            else
+                                char[] exp = ['c', 'h', 'a', 'r'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 6 else skip fi
+                            fi
+                        fi
+                    else
+                        if str[start + 0] <= 'd' then
+                            char[] exp = ['d', 'o', 'n', 'e'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 9 else skip fi
+                        else
+                            if str[start + 1] <= 'l' then
+                                char[] exp = ['e', 'l', 's', 'e'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 10 else skip fi
+                            else
+                                char[] exp = ['e', 'x', 'i', 't'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 12 else skip fi
+                            fi
+                        fi
+                    fi
+                else
+                    if str[start + 0] <= 'p' then
+                        if str[start + 0] <= 'f' then
+                            char[] exp = ['f', 'r', 'e', 'e'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 15 else skip fi
+                        else
+                            if str[start + 0] <= 'n' then
+                                char[] exp = ['n', 'u', 'l', 'l'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 22 else skip fi
+                            else
+                                char[] exp = ['p', 'a', 'i', 'r'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 24 else skip fi
+                            fi
+                        fi
+                    else
+                        if str[start + 0] <= 's' then
+                            if str[start + 0] <= 'r' then
+                                char[] exp = ['r', 'e', 'a', 'd'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 27 else skip fi
+                            else
+                                char[] exp = ['s', 'k', 'i', 'p'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 29 else skip fi
+                            fi
+                        else
+                            if str[start + 1] <= 'h' then
+                                char[] exp = ['t', 'h', 'e', 'n'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 32 else skip fi
+                            else
+                                char[] exp = ['t', 'r', 'u', 'e'];
+                                bool eq = call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return 33 else skip fi
+                            fi
+                        fi
+                    fi
+                fi
+            else skip fi
+        else
+            if lenn <= 5 then
+                if lenn == 5 then
+                    if str[start + 0] <= 'f' then
+                        if str[start + 0] <= 'b' then
+                            char[] exp = ['b', 'e', 'g', 'i', 'n'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 3 else skip fi
+                        else
+                            char[] exp = ['f', 'a', 'l', 's', 'e'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 13 else skip fi
+                        fi
+                    else
+                        if str[start + 0] <= 'p' then
+                            char[] exp = ['p', 'r', 'i', 'n', 't'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 25 else skip fi
+                        else
+                            char[] exp = ['w', 'h', 'i', 'l', 'e'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 34 else skip fi
+                        fi
+                    fi
+                else skip fi
+            else
+                if lenn <= 6 then
+                    if lenn == 6 then
+                        if str[start + 0] <= 'r' then
+                            char[] exp = ['r', 'e', 't', 'u', 'r', 'n'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 28 else skip fi
+                        else
+                            char[] exp = ['s', 't', 'r', 'i', 'n', 'g'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 31 else skip fi
+                        fi
+                    else skip fi
+                else
+                    if lenn == 7 then
+                        if str[start + 0] <= 'n' then
+                            char[] exp = ['n', 'e', 'w', 'p', 'a', 'i', 'r'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 21 else skip fi
+                        else
+                            char[] exp = ['p', 'r', 'i', 'n', 't', 'l', 'n'];
+                            bool eq = call streq(str, start, lenn, exp);
+                            free exp;
+                            if eq then return 26 else skip fi
+                        fi
+                    else skip fi
+                fi
+            fi
+        fi
+    fi ;
+    return 0
+end
+bool streq(char[] dyn, int start, int lenn, char[] static) is
+    int i = 0;
+    while i < lenn do
+        if dyn[start + i] != static[i] then
+            return false
+        else
+            i = i + 1
+        fi
+    done ;
+    return true
+end
+char advance(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    bool b = call isAtEnd(self);
+    if b then
+        print "Unexpected EOF";
+        pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 19, "Error"); exit 1
+    else skip fi ;
+    char ret = call peek(self);
+    snd __fstself = current + 1; current = current + 1;
+    if current >= len source[logical_line] then
+        fst __fstself = logical_line+1; logical_line = logical_line+1;
+        snd __fstself = 0; current = 0
+    else skip fi ;
+    return ret
+end
+char peek(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    bool b = call isAtEnd(self);
+    if b then
+        println "Unexpected EOF";
+        pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 37, "Error"); exit 1
+    else skip fi ;
+    if len source[logical_line]==0 then
+        return '\n'
+    else
+        return source[logical_line][current]
+    fi
+end
+pair(bool[][][], int[][][][]) skipComment(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    while true do
+        char c = call peek(self);
+        bool is_at_end = call isAtEnd(self);
+        if c == '\n' || is_at_end then
+            return null
+        else
+     char _nop = call advance(self)
+ fi
+    done ;
+return null end
+bool isAtEnd(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    return source[logical_line] == sentinal
+end
+pair(bool[][][], int[][][][]) skipWhitespace(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    while true do
+        bool isAtEnd = call isAtEnd(self);
+        if isAtEnd then
+            return null
+        else skip fi ;
+        pair(bool[][][], int[][][][]) __nop = call lexer_print(self);
+        char c = call peek(self);
+        if c == ' ' || c == '\t' || c == '\n' || c == '\r' then
+            char _nop = call advance(self)
+        else if c == '#' then
+            pair(bool[][][], int[][][][]) __nop = call skipComment(self)
+        else
+            return null
+        fi fi
+    done;
+return null end
+pair(pair, pair) makeToken(pair(pair, pair) self , int ttype) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    pair(pair, pair) __ret = call token_ctor(ttype, start, current - start, source[logical_line]); return __ret
+end
+pair(pair, pair) lexer_new(char[][] source, char[] sentinal) is
+    pair(pair, pair) __ret = call lexer_ctor(source, sentinal, 0, 0, 0); return __ret
+end
+bool match(pair(pair, pair) self , char expected) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    bool isAtEnd = call isAtEnd(self);
+    if isAtEnd then
+        return false
+    else skip fi ;
+    char c = call peek(self);
+    if c != expected then
+        return false
+    else skip fi ;
+    snd __fstself = current + 1; current = current + 1;
+    return true
+end
+pair(pair, pair) next_token(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    pair(bool[][][], int[][][][]) __nop = call skipWhitespace(self);
+    logical_line = fst __fstself; current = snd __fstself; sentinal = fst __sndself; source = fst __sndsndself; start = snd __sndsndself;
+    snd __sndsndself = current; start = current;
+    bool isAtEnd = call isAtEnd(self);
+    if isAtEnd then
+        pair(pair, pair) __ret = call makeToken(self, 2); return __ret
+    else skip fi ;
+    char c = call advance(self);
+    bool b = call isAlpha(c);
+    if b then
+        pair(pair, pair) __ret = call identifier(self); return __ret
+    else skip fi ;
+    b = call isDigit(c);
+    if b then
+        pair(pair, pair) __ret = call number(self); return __ret
+    else skip fi ;
+    if c <= '+' then
+        if c <= '&' then
+            if c <= '\"' then
+                if c <= '!' then
+                    if c == '!' then
+                        bool isEq = call match(self, '=');
+                        if isEq then
+                            pair(pair, pair) __ret = call makeToken(self, 53); return __ret
+                        else
+                            pair(pair, pair) __ret = call makeToken(self, 42); return __ret
+                        fi
+                    else skip fi
+                else
+                    if c == '\"' then
+                        pair(pair, pair) __ret = call stringLit(self); return __ret
+                    else skip fi
+                fi
+            else
+                if c <= '%' then
+                    if c == '%' then pair(pair, pair) __ret = call makeToken(self, 46); return __ret else skip fi
+                else
+                    if c == '&' then
+                        c = call advance(self);
+                        if c == '&' then pair(pair, pair) __ret = call makeToken(self, 54); return __ret else skip fi
+                    else skip fi
+                fi
+            fi
+        else
+            if c <= '(' then
+                if c <= '\'' then
+                    if c == '\'' then
+                        pair(pair, pair) __ret = call charLit(self); return __ret
+                    else skip fi
+                else
+                    if c == '(' then pair(pair, pair) __ret = call makeToken(self, 35); return __ret else skip fi
+                fi
+            else
+                if c <= ')' then
+                    if c == ')' then pair(pair, pair) __ret = call makeToken(self, 36); return __ret else skip fi
+                else
+                    if c <= '*' then
+                        if c == '*' then pair(pair, pair) __ret = call makeToken(self, 44); return __ret else skip fi
+                    else
+                        if c == '+' then pair(pair, pair) __ret = call makeToken(self, 47); return __ret else skip fi
+                    fi
+                fi
+            fi
+        fi
+    else
+        if c <= '<' then
+            if c <= '-' then
+                if c <= ',' then
+                    if c == ',' then pair(pair, pair) __ret = call makeToken(self, 39); return __ret else skip fi
+                else
+                    if c == '-' then pair(pair, pair) __ret = call makeToken(self, 43); return __ret else skip fi
+                fi
+            else
+                if c <= '/' then
+                    if c == '/' then pair(pair, pair) __ret = call makeToken(self, 45); return __ret else skip fi
+                else
+                    if c <= ';' then
+                        if c == ';' then pair(pair, pair) __ret = call makeToken(self, 38); return __ret else skip fi
+                    else
+                        if c == '<' then
+                            bool isEq = call match(self, '=');
+                            if isEq then
+                                pair(pair, pair) __ret = call makeToken(self, 51); return __ret
+                            else
+                                pair(pair, pair) __ret = call makeToken(self, 50); return __ret
+                            fi
+                        else skip fi
+                    fi
+                fi
+            fi
+        else
+            if c <= '>' then
+                if c <= '=' then
+                    if c == '=' then
+                        bool isEq = call match(self, '=');
+                        if isEq then
+                            pair(pair, pair) __ret = call makeToken(self, 52); return __ret
+                        else
+                            pair(pair, pair) __ret = call makeToken(self, 37); return __ret
+                        fi
+                    else skip fi
+                else
+                    if c == '>' then
+                        bool isEq = call match(self, '=');
+                        if isEq then
+                            pair(pair, pair) __ret = call makeToken(self, 49); return __ret
+                        else
+                            pair(pair, pair) __ret = call makeToken(self, 48); return __ret
+                        fi
+                    else skip fi
+                fi
+            else
+                if c <= '[' then
+                    if c == '[' then pair(pair, pair) __ret = call makeToken(self, 40); return __ret else skip fi
+                else
+                    if c <= ']' then
+                        if c == ']' then pair(pair, pair) __ret = call makeToken(self, 41); return __ret else skip fi
+                    else
+                        if c <= '|' then
+                            c = call advance(self);
+                            if c == '|' then pair(pair, pair) __ret = call makeToken(self, 55); return __ret else skip fi
+                        else skip fi
+                    fi
+                fi
+            fi
+        fi
+    fi ;
+    println "Lexer error" ;
+    print "char = \'";
+    print c;
+    print "\' (ascii ";
+    print ord c;
+    println ")" ;
+    pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 262, "Error"); exit 1
+end
+pair(pair, pair) identifier(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    bool run = true;
+    while run do
+        char c = call peek(self);
+        bool isAlpha = call isAlpha(c);
+        bool isDigit = call isDigit(c);
+        if isAlpha || isDigit then
+            char _nop = call advance(self)
+        else
+            run = false
+        fi
+    done;
+    logical_line = fst __fstself; current = snd __fstself; sentinal = fst __sndself; source = fst __sndsndself; start = snd __sndsndself;
+    int ttype = call identifier_kind(source[logical_line], start, current - start);
+    pair(pair, pair) __ret = call makeToken(self, ttype); return __ret
+end
+pair(pair, pair) number(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    bool run = true;
+    while run do
+        char c = call peek(self);
+        bool isDigit = call isDigit(c);
+        if isDigit then
+            char _nop = call advance(self)
+        else
+            run = false
+        fi
+    done ;
+    pair(pair, pair) __ret = call makeToken(self, 1); return __ret
+end
+pair(pair, pair) stringLit(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    bool iae = call isAtEnd(self);
+    while !iae do
+        char c = call advance(self);
+        if c == '\"' then
+            pair(pair, pair) __ret = call makeToken(self, 31); return __ret
+        else skip fi ;
+        if c == '\\' then
+            pair(bool[][][], int[][][][]) __nop = call escape_sequence(self)
+        else skip fi ;
+        if c == '\'' then
+            pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 308, "Error"); exit 1
+        else skip fi ;
+        iae = call isAtEnd(self)
+    done ;
+    pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 313, "Error"); exit 1
+end
+pair(pair, pair) charLit(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    bool b = call isAtEnd(self);
+    if b then
+        pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 319, "Error"); exit 1
+    else skip fi ;
+    char c = call advance(self);
+    if c == '\'' || c == '\"' then
+        pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 323, "Error"); exit 1
+    else skip fi ;
+    if c == '\\' then
+        pair(bool[][][], int[][][][]) __nop = call escape_sequence(self)
+    else skip fi ;
+    c = call advance(self);
+    if c != '\'' then
+        pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 330, "Error"); exit 1
+    else skip fi ;
+    pair(pair, pair) __ret = call makeToken(self, 6); return __ret
+end
+pair(bool[][][], int[][][][]) escape_sequence(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    pair(bool[][][], int[][][][]) __exit = call wacc_fail("src/lexer.wacc.in", 336, "Unimplemented"); exit 1
+end
+pair(bool[][][], int[][][][]) print_token(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int type = fst __fstself; int length = snd __fstself; pair(int, char[]) __sndself = snd __self; int start = fst __sndself; char[] source = snd __sndself;
+    print start;
+    print " ";
+    print length;
+    string kind = call token_type_str(type);
+    print " ";
+    print kind;
+    print " ";
+    pair(bool[][][], int[][][][]) __nop = call printStr(source, start, length);
+    println "";
+return null end
+int token_type(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int type = fst __fstself; int length = snd __fstself; pair(int, char[]) __sndself = snd __self; int start = fst __sndself; char[] source = snd __sndself;
+    return type
+end
+char[] alloc_line() is
+char[] r = [
+' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',
+' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '
+];
+return r
+end
+char[][] alloc_lines() is
+char[] l = [];
+char[][] r = [
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,
+l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l,l
+];
+return r
+end
+extern int getchar()
+char[][] read_all(char[] sentinal) is
+    char[][] lines = call alloc_lines();
+    int linesPos = 0;
+    int linePos = 0;
+    bool running = true;
+    bool inStrChr = false;
+    bool inEscape = false;
+    while running do
+        int c = call getchar();
+        if c == -1 then
+            running = false
+        else
+            if c == ord '\n' then
+                if inStrChr then
+                    lines[linesPos][linePos] = chr c
+                else
+                    linesPos = linesPos + 1;
+                    linePos = 0
+                fi
+            else
+                if len lines[linesPos] == 0 then
+                    lines[linesPos] = call alloc_line()
+                else skip fi ;
+                lines[linesPos][linePos] = chr c;
+                if (c == ord '\'' || c == ord '\"') && !inEscape then
+                    inStrChr = !inStrChr
+                else skip fi ;
+                if inStrChr && c == ord '\\' then
+                    inEscape = !inEscape
+                else skip fi
+            fi
+        fi ;
+        linePos = linePos + 1
+    done ;
+    lines[linesPos+1] = sentinal;
+    return lines
+end
+pair(bool[][][], int[][][][]) printStr(char[] str, int start, int lenn) is
+    int i = 0;
+    while (i < lenn) do
+        print str[start + i];
+        i = i + 1
+    done ;
+return null end
+pair(bool[][][], int[][][][]) lexer_print(pair(pair, pair) self ) is pair(pair, pair) __self = self; pair(int, int) __fstself = fst __self; int logical_line = fst __fstself; int current = snd __fstself; pair(char[], pair) __sndself = snd __self; char[] sentinal = fst __sndself; pair(char[][], int) __sndsndself = snd __sndself; char[][] source = fst __sndsndself; int start = snd __sndsndself;
+    print "Lexer{current: ";
+    print current;
+    print ", start: ";
+    print start;
+    print ", logical_line: ";
+    print logical_line;
+    println "}";
+return null end
+pair(bool[][][], int[][][][]) __nop = null;
+char[] end_of_input = [];
+char[][] input = call read_all(end_of_input);
+pair(pair, pair) lexer = call lexer_new(input, end_of_input);
+bool run = true;
+while run do
+    pair(pair, pair) t = call next_token(lexer);
+    __nop = call print_token(t);
+    int tt = call token_type(t);
+    run = tt != 2;
+    __nop = call lexer_print(lexer)
+done ;
+skip
+end

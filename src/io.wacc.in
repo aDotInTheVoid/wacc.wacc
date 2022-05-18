@@ -7,8 +7,8 @@
 // Iurii extension;
 extern int getchar()
 
-char[][] read_all(char[] sentinal) is
-    char[][] lines = call alloc_lines();
+char[][] read_all(char[] end_sentinal, char[] blank_sentinal) is
+    char[][] lines = call alloc_lines(blank_sentinal);
     int linesPos = 0;
     int linePos = 0;
     bool running = true;
@@ -26,7 +26,7 @@ char[][] read_all(char[] sentinal) is
                     lines[linesPos][linePos] = chr c
                 else
                     linesPos = linesPos + 1;
-                    linePos = 0
+                    linePos = -1 // Because we increment it at end of loop.
                 fi
             else
                 if len lines[linesPos] == 0 then
@@ -43,11 +43,10 @@ char[][] read_all(char[] sentinal) is
                 fi
             fi
         fi ;
-        INC(linePos)
+        linePos =  linePos + 1
     done ;
 
-    // Maybe add sentinal
-    lines[linesPos+1] = sentinal;
+    lines[linesPos+1] = end_sentinal;
 
     return lines
 end

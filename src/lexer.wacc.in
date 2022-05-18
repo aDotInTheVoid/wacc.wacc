@@ -45,13 +45,15 @@ end
 
 LEXER_FN(VOID, skipComment)
     while true do
-        char c = call peek(self);
         bool is_at_end = call isAtEnd(self);
-        if c == '\n' || is_at_end then
+        if is_at_end then 
+            RETV 
+        ENDIF ;
+        char c = call peek(self);
+        if c == '\n' then
             RETV
-        else
+        ENDIF ;
 	    char _nop = call advance(self)
-	fi
     done ;
 ENDV
 
@@ -67,8 +69,6 @@ LEXER_FN(VOID, skipWhitespace)
         if isAtEnd then
             RETV
         ENDIF ;
-
-        DISCARD lexer_print(self);
 
         char c = call peek(self);
         if c == ' ' || c == '\t' || c == '\n' || c == '\r' then
@@ -333,8 +333,26 @@ LEXER_FN(TOKEN_T, charLit)
 end
 
 LEXER_FN(VOID, escape_sequence)
-    XXXTODO
-end
+    char c = call advance(self);
+    bool b = call isAtEnd(self);
+    if b then
+        FAIL
+    ENDIF ;
+    if c == '0'
+        || c == 'b'
+        || c == 't'
+        || c == 'n'
+        || c == 'f'
+        || c == 'r'
+        || c == '\"'
+        || c == '\''
+        || c == '\\'
+    then skip else
+        print "Invalid escape sequence: ";
+        println c;
+        FAIL
+    fi;
+ENDV
 
 
 TOKEN_FN(VOID, print_token)

@@ -40,9 +40,10 @@ def main():
         #
         # Lines allocator
         #
-        f.write(comment("Lines allocator") + "\n\n")
-        f.write("char[][] alloc_lines() is\n")
-        f.write("char[] l = [];\n")
+        f.write(
+            comment("Lines allocator. l is the empty (non final) sentinal") + "\n\n"
+        )
+        f.write("char[][] alloc_lines(char[] l) is\n")
         f.write("char[][] r = [\n")
 
         len_per_line = len(ONE_LINE) + 1  # +1 for the comma
