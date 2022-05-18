@@ -1,0 +1,154 @@
+\input texinfo
+@setfilename wacc.info
+@settitle Wacc.wacc
+@documentencoding UTF-8
+
+@titlepage
+@title Wacc.wacc
+@subtitle A self hosting Wacc compiller
+@author Nixon Enraght-Moony
+@end titlepage
+
+
+@summarycontents
+@contents
+
+@node Top
+@top wacc.wacc
+
+@node overview-wacc
+@chapter An overview of the Wacc
+
+If your reading this, you probably already framiliar with the Wacc language.
+Hence this will not be a introduction to the language, nor a formal specification.
+Instead it is an overview of relavent pieces to building a self hosting wacc compiler.
+For a formal specification of the language, see 
+@url{https://gitlab.doc.ic.ac.uk/lab2122_spring/wacc_examples/-/raw/master/WACCLangSpec.pdf, the spec}
+and @url{https://gitlab.doc.ic.ac.uk/lab2122_spring/wacc_examples, the examples repo}.
+
+
+@itemize
+@item Incomplete Specification
+
+The Specification given for Wacc is incomplete. @url{https://gitlab.doc.ic.ac.uk/rd3918/wacc_examples/-/raw/master/The%20WACC%20Language%20Specification/WACCLangSpec.pdf, this version} 
+is what @xref{wacc-to-c} links too, but in time my own verion will be made.
+
+@item Bad strings
+
+Wacc has very limited string support. They can do
+@itemize
+@item @code{print} and @code{println} them
+@item Be constructed by a litteral.
+@end itemize
+
+Thats all! So the only use for strings is fixed strings for output.
+Most of the ``string'' handling code must use @code{char[]}
+
+@end itemize
+
+@node extensions
+@section Extensions
+A key part of the ``Wacc Experience'' @registeredsymbol{} is designing and implementing extensions to the language.
+Wacc.wacc attempts to not make use of these, mainly to prove a point, but also to make it easier to implement, at the
+cost of making it harder to implement.
+
+One exception is the ``extern'' extension, which allows calling arbitrary C functions (provided their ABI can be expressed
+in the unextended wacc type system). This is nessisary for reading input (@xref{input}). However to keep this 
+modular, to allow for alternate IO extensions to be used to bootstrap, only @url{https://www.gnu.org/software/libc/manual/html_node/Character-Input.html#index-getchar, getchar}
+is used. It is declaired as @code{extern int getchar()}, and we assume @code{EOF} is -1 and C's @code{int} is the same
+as wacc's @code{int} (32 bits each), which is true on most modern systems.
+
+Their are many extensions that I would like to use, but havn't, as they would increase the work to implement them,
+and would make this less of a ``self hosting wacc compiller'', and more of a ``self hosting wacc++ compiler'', even
+though it could be more accutatly described as a ``self hosting wacc with extern compiller''.
+
+@itemize
+@item Arbitrary Expressions: Don't have special items in <assign-rhs>.
+@item Switch statements
+@item Agragate types
+@item C style enums / C++ enum classes
+@item Rust style enums
+@item IO Library
+@item Module system
+@item More flexible if statement (eg if without else, else if without several fi's)
+@item Dynamic array allocation
+@item Garbage Collection
+@item String and array slices
+@item Built in generic higher level types (Go's slice and map)
+@end itemize
+
+@node limitations
+@chapter Limitations
+
+Due the the idiosyncracies of WACC, and the fact that writing something that works at all
+is hard enough, wacc.wacc has several limitations over a ``fully complient'' Wacc compiler.
+
+@node lack-of-checks
+@section Lack of checks.
+
+Wacc.wacc will assume that the input is valid an not check it. This includes, but is not
+limited to
+
+@itemize
+@item Functions existing
+@item Function arity
+@item Function argument types
+@item Function return types.
+@end itemize
+
+@node input-file-size
+@section Input file size
+
+Wacc.wacc can handle at most @math{L} ``logical lines'' of input, where each logical line
+has has at most @math{C} characters. For more info @xref{input}.
+
+These parametes are easily changed with the @code{NUM_LINES} and @code{NUM_CHARS} constants,
+in @code{py/gen_line_alloc.py}. Currenty they are @code{NUM_LINES = 3_000} and @code{NUM_CHARS = 400}.
+As the compiller is written, these will be increased to handle the larger input. I can't imagine anyone
+writing a program larger than the compiler, but if you do please let me know!
+
+Longer input that this will do something, possible undefined.
+
+@node build-system
+@chapter The build system
+
+@node bs2
+@chapter BS2: A Expiramental compiller
+
+@node wacc-to-c
+@chapter Wacc-To-C: A Bootstrap compiller
+
+@node lexing
+@chapter Lexing
+
+Other than reading input, lexing is relativly trivial. The lexer is based
+on the @url{https://craftinginterpreters.com/scanning-on-demand.html, clox scanner},
+by Bob Nystrom.
+
+@node input
+@section Reading input
+
+Reading input in wacc is suprisingly hard. The only build in way is the @code{read}, and it only
+supports integer and character IO. Additionaly these only read after a newline is entered, and
+their is no way to detect an EOF, making it (AFAIKT) unsuitable for reading input. Therefor
+getchar(3) is used. @xref{extensions} for how this is done.
+
+The next chalenge is to read all of stdin. The problem with this is that to allocate a char buffer
+to read @math{n} charecters, you need to allocate @math{4n} bytes (@code{' ',}). This is a problem for the
+compiler self hosting, as the buffer wouldnt be large enough to read the bytes that create the buffer.
+
+Therefor, instead of reading stdin to @code{char[]}, it is read to @code{char[][]}, where each line has
+its own buffer allocated. Becauase array literals are secretly @code{malloc}s, we can have one literal
+for the list of lines, and one literal for a single line, which is shared amound lines.
+
+However, we still want each token to only be on one line buffer. Most of the time using
+One line buffer per real line is fine, but not for multi-line string and char literal.
+Therefor `io::read_all` keeps track of if it is in a string (including escapes), and only switches to a new
+line buffer on a new line not in a string/char lit. This is the cause of ``logical lines'' in @ref{input-file-size}.
+
+Finaly memory management is a little tricky. `io::read_all` takes 2 sentinal charecter arrays, both
+of which should be empty. 1 is the default empty line, and the other is just used to indicate the end
+of input. This allows freeing all non empty line buffers, as they are unique, and then freeing 
+the 2 sentinals.
+
+@bye
