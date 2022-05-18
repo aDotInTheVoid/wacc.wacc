@@ -1,7 +1,7 @@
 from util import Generate, comment
 
-NUM_LINES = 30_000
-NUM_CHARS = 600
+NUM_LINES = 3_000
+NUM_CHARS = 400
 
 ONE_LINE = "l"
 ONE_CHAR = "' '"
