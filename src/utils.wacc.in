@@ -3,9 +3,9 @@
 
 // This can't include any other files, as everything else depends on it.
 
-
-
 #define ENDIF else skip fi
+
+#define INC(x) x = x + 1
 
 // Tools funtion that semanticly returns unit
 #define VOID pair(bool[][][], int[][][][])

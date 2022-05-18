@@ -3,26 +3,35 @@ begin
 #include "lexer.wacc.in"
 #include "io.wacc.in"
 
-// Main function
+LEXER_FN(VOID, lexer_print)
+    print "Lexer{current: ";
+    print current;
+    print ", start: ";
+    print start;
+    print ", logical_line: ";
+    print logical_line;
+    println "}";
+ENDV
+
+// ============= Main function ==============
 DISCARD_INIT;
 
-pair(char[], int) src_len = call readAll();
-char[] src = fst src_len;
-int lenn = snd src_len;
+char[] end_of_input = [];
+char[][] input = call read_all(end_of_input);
 
-LEXER_T lexer = call lexer_new(src, lenn);
-
+LEXER_T lexer = call lexer_new(input, end_of_input);
 
 bool run = true;
 while run do
     TOKEN_T t = call next_token(lexer);
-    DISCARD_ lexer_print_token(lexer, t);
+    DISCARD_ print_token(t);
     TOKEN_TYPE tt = call token_type(t);
     run = tt != TOKEN_EOF;
-    DISCARD_ token_free(t)
+    DISCARD_ lexer_print(lexer)
+    // DISCARD_ token_free(t)
 done ;
 
-DISCARD_ lexer_free(lexer);
-free src_len
+// DISCARD_ lexer_free(lexer);
+skip
 
 end

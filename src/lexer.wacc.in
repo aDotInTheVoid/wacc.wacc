@@ -8,6 +8,9 @@
 #include "utils.wacc.in"
 #include "string.wacc.in"
 
+/*
+ * - Tokens are always on the same logical line.
+ */
 
 LEXER_FN(char, advance)
     bool b = call isAtEnd(self);
@@ -16,13 +19,28 @@ LEXER_FN(char, advance)
         FAIL
     ENDIF ;
 
-    char ret = source[current];
+    char ret = call peek(self);
+    // TODO: Handle moving over the next logical line
     LEXER_SET_CURRENT(current + 1);
+    if current >= len source[logical_line] then 
+        LEXER_SET_LOGICAL_LINE(logical_line+1);
+        LEXER_SET_CURRENT(0)
+    ENDIF ;
+
     return ret
 end
 
 LEXER_FN(char, peek)
-    return source[current]
+    bool b = call isAtEnd(self);
+    if b then
+        println "Unexpected EOF";
+        FAIL
+    ENDIF ;
+    if len source[logical_line]==0 then
+        return '\n' // Kinda hacky, not sure if it works
+    else
+        return source[logical_line][current]
+    fi
 end
 
 LEXER_FN(VOID, skipComment)
@@ -38,7 +56,7 @@ LEXER_FN(VOID, skipComment)
 ENDV
 
 LEXER_FN(bool, isAtEnd)
-    return current >= lenght
+    return source[logical_line] == sentinal 
 end
 
 LEXER_FN(VOID, skipWhitespace)
@@ -49,6 +67,8 @@ LEXER_FN(VOID, skipWhitespace)
         if isAtEnd then
             RETV
         ENDIF ;
+
+        DISCARD lexer_print(self);
 
         char c = call peek(self);
         if c == ' ' || c == '\t' || c == '\n' || c == '\r' then
@@ -62,11 +82,11 @@ LEXER_FN(VOID, skipWhitespace)
 ENDV
 
 LEXER_FN(TOKEN_T, makeToken,, TOKEN_TYPE ttype)
-    RETVRN(TOKEN_T, call token_ctor(ttype, start, current - start))
+    RETVRN(TOKEN_T, call token_ctor(ttype, start, current - start, source[logical_line]))
 end
 
-LEXER_T lexer_new(char[] source, int lenght) is
-    RETVRN(LEXER_T, call lexer_ctor(source, 0, 0, lenght))
+LEXER_T lexer_new(char[][] source, char[] sentinal) is
+    RETVRN(LEXER_T, call lexer_ctor(source, sentinal, 0, 0, 0))
 end
 
 LEXER_FN(bool, match,, char expected)
@@ -74,7 +94,8 @@ LEXER_FN(bool, match,, char expected)
     if isAtEnd then
         return false
     ENDIF ;
-    if source[current] != expected then
+    char c = call peek(self);
+    if c != expected then
         return false
     ENDIF ;
     LEXER_SET_CURRENT(current + 1);
@@ -233,6 +254,11 @@ LEXER_FN(TOKEN_T, next_token)
     #undef RET_IF
 
     println "Lexer error" ; // TODO: Maybe be better
+    print "char = \'";
+    print c;
+    print "\' (ascii ";
+    print ord c;
+    println ")" ;
     FAIL
 end
 
@@ -250,7 +276,7 @@ LEXER_FN(TOKEN_T, identifier)
         fi
     done;
     LEXER_REFRESH;
-    TOKEN_TYPE ttype = call identifier_kind(source, start, current - start);
+    TOKEN_TYPE ttype = call identifier_kind(source[logical_line], start, current - start);
     RETVRN(TOKEN_T, call makeToken(self, ttype))
 end
 
@@ -310,12 +336,8 @@ LEXER_FN(VOID, escape_sequence)
     XXXTODO
 end
 
-LEXER_FN(VOID, lexer_print_token,, TOKEN_T tok)
-    DISCARD token_print_token(tok, source);
-ENDV
 
-
-TOKEN_FN(VOID, token_print_token,, char[] source)
+TOKEN_FN(VOID, print_token)
     print start;
     print " ";
     print length;

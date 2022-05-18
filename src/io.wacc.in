@@ -2,32 +2,52 @@
 #define IO_WACC_IN
 
 #include "utils.wacc.in"
+#include "../gen/line_alloc.wacc.in"
 
 // Iurii extension;
 extern int getchar()
 
-pair(char[], int) readAll() is
-    int maxLen = 1000;
+char[][] read_all(char[] sentinal) is
+    char[][] lines = call alloc_lines();
+    int linesPos = 0;
+    int linePos = 0;
+    bool running = true;
+    
+    bool inStrChr = false;
+    bool inEscape = false;
 
-    char[] buffer = call calloc(1000);
-    // TODO: Realloc buffer
-    int i = 0;
-    bool run = true;
-    while (run) do
+    while running do
         int c = call getchar();
-        if (c == -1) then
-            run = false
-        else
-            if i == maxLen then 
-                println "Input file too big";
-                FAIL
-            ENDIF ;
-
-            buffer[i] = chr c;
-            i = i + 1
-        fi
+        if c == -1 then
+            running = false
+        else 
+            if c == ord '\n'  then
+                if inStrChr then
+                    lines[linesPos][linePos] = chr c
+                else
+                    linesPos = linesPos + 1;
+                    linePos = 0
+                fi
+            else
+                if len lines[linesPos] == 0 then
+                    lines[linesPos] = call alloc_line()
+                ENDIF ;
+                lines[linesPos][linePos] = chr c;
+                if (c == ord '\'' || c == ord '\"') && !inEscape then
+                    inStrChr = !inStrChr
+                ENDIF ;
+                if inStrChr && c == ord '\\' then
+                    inEscape = !inEscape
+                ENDIF
+            fi
+        fi ;
+        INC(linePos)
     done ;
-    RETVRN(pair(char[], int), newpair(buffer, i))
+
+    // Maybe add sentinal
+    lines[linesPos+1] = sentinal;
+
+    return lines
 end
 
 VOID printStr(char[] str, int start, int lenn) is
