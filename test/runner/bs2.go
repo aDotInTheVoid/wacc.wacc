@@ -1,10 +1,10 @@
 package runner
 
-type BS2 struct{}
+type bs2 struct{}
 
-var _ Compiler = BS2{}
+var BS2 Compiler = bs2{}
 
-func (BS2) Ensure() error {
+func (bs2) Ensure() error {
 	if !DirExists("../bs2/_build/test") {
 		err := RunBuildCmd("../bs2", "meson", "_build/test")
 		if err != nil {
@@ -14,6 +14,16 @@ func (BS2) Ensure() error {
 	return RunBuildCmd("../bs2", "ninja", "-C", "_build/test")
 }
 
-func (BS2) Lex(path string) Result {
-	panic("unimplemented")
+func (bs2) Lex(path string) Result {
+	r := RunOutputGet("../bs2/_build/test/bs2", path)
+	return Result{
+		r.Status,
+		r.Stdout,
+		r.Stderr,
+	}
+
+}
+
+func (bs2) Name() string {
+	return "bs2"
 }

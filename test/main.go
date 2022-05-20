@@ -5,36 +5,36 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 
 	"github.com/aDotInTheVoid/wacc.wacc/test/runner"
+	"github.com/fatih/color"
 )
 
-var bs2 string
-var wacc string
-
-var update = os.Getenv("WACC_UPDATE") == "1"
-var refComp = bs2
+var isBlessEnabled = os.Getenv("WACC_UPDATE") == "1"
 
 type runResult int
 
 const (
 	runResultPass = iota
 	runResultFail
+
+	// Normal test
+	blessDisabled = iota
+	blessEnabledAuthoritative
+	blessEnabledNonAuthoritative
 )
+
+type blessMode = int
 
 type runData struct {
 	Path     string
 	Compiler string
 	Result   runResult
-	Stdin    string
-	Stderr   string
-	Stdout   string
-	ExitCode int
+	Message  string
 }
 
-var compilers = []runner.Compiler{runner.BS2{}, runner.WaccWacc{}, runner.WaccToC{}}
+var compilers = []runner.Compiler{runner.BS2, runner.WaccWacc{}, runner.WaccToC{}}
 
 func main() {
 	log.SetFlags(0)
@@ -48,8 +48,16 @@ func main() {
 	c := make(chan runData)
 	done := make(chan struct{})
 
-	filepath.Walk("lex-pass", walkWrap(bs2LexPass, c, &wg))
-	filepath.Walk("lex-pass", walkWrap(waccLexPass, c, &wg))
+	bs2LexPass := LexPassConfig{runner.BS2, blessDisabled}
+	waccWaccLexPass := LexPassConfig{runner.WaccWacc{}, blessDisabled}
+
+	if isBlessEnabled {
+		bs2LexPass.blessMode = blessEnabledAuthoritative
+		waccWaccLexPass.blessMode = blessEnabledNonAuthoritative
+	}
+
+	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, bs2LexPass))
+	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, waccWaccLexPass))
 
 	// Wait for all the tests to finish
 	// Must go this after all runs
@@ -61,21 +69,26 @@ func main() {
 	nPass := 0
 	nFail := 0
 	status := ""
+	statusFail := color.New(color.FgRed).Add(color.Bold).SprintFunc()("FAIL")
+	statusPass := color.GreenString("PASS")
 
-loop:
+done:
 	for {
 		select {
 		case r := <-c:
 			if r.Result == runResultFail {
 				nFail++
-				status = "FAIL"
+				status = statusFail
 			} else {
 				nPass++
-				status = "PASS"
+				status = statusPass
 			}
-			fmt.Printf("%s: %5s %s\n", status, filepath.Base(r.Compiler), r.Path)
+			fmt.Printf("%s: %10s %s\n", status, filepath.Base(r.Compiler), r.Path)
+			if r.Result == runResultFail {
+				// fmt.Println(r.Message)
+			}
 		case <-done:
-			break loop
+			break done
 		}
 	}
 
@@ -86,69 +99,49 @@ loop:
 	}
 }
 
-type TestOverallRunner func(path string) runData
+// Result is optional
+type TestOverallRunner[T any] func(path string, config T) *runData
 
-func bs2LexPass(path string) runData {
-	output := runner.RunOutputGet(bs2, path)
+type LexPassConfig struct {
+	compiler  runner.Compiler
+	blessMode blessMode
+}
+
+func lexPass(path string, config LexPassConfig) *runData {
+	if config.blessMode == blessEnabledNonAuthoritative {
+		return nil
+	}
+
+	out := config.compiler.Lex(path)
 	var status runResult
-	if output.Status != 0 {
+	if out.StatusCode != 0 {
 		status = runResultFail
 	} else {
 		status = runResultPass
 	}
-	// TODO: Encode that bs2 is the reference compiler
-	if update {
-		os.WriteFile(stdoutFile(path), []byte(output.Stdout), 0644)
+
+	message := ""
+
+	if config.blessMode == blessEnabledAuthoritative {
+		os.WriteFile(stdoutFile(path), []byte(out.Stdout), 0644)
 	} else {
 		c, err := os.ReadFile(stdoutFile(path))
 		runner.Must(err)
-		if string(c) != output.Stdout {
+		if string(c) != out.Stdout {
 			status = runResultFail
-			// TODO: Better message
 		}
+		message = "Expected ```" + string(c) + "``` got ```" + out.Stdout + "```"
 	}
 
-	return runData{
-		Path:     path,
-		Compiler: bs2,
-		Result:   status,
-		Stdin:    path,
-		Stderr:   output.Stderr,
-		Stdout:   output.Stdout,
-		ExitCode: output.Status,
-	}
-}
-func waccLexPass(path string) runData {
-
-	output := runner.RunOutputGet(wacc, path)
-	var status runResult
-	if output.Status != 0 {
-		status = runResultFail
-	} else {
-		status = runResultPass
-	}
-	if !update {
-
-		c, err := os.ReadFile(stdoutFile(path))
-		runner.Must(err)
-		if string(c) != output.Stdout {
-			status = runResultFail
-			// TODO: Better message
-			panic("Path(wacc) = " + path + "\nExpectesd ```" + string(c) + "``` got ```" + output.Stdout + "```")
-		}
-	}
-	return runData{
-		Path:     path,
-		Compiler: wacc,
-		Result:   status,
-		Stdin:    path,
-		Stderr:   output.Stderr,
-		Stdout:   output.Stdout,
-		ExitCode: output.Status,
+	return &runData{
+		path,
+		config.compiler.Name(),
+		status,
+		message,
 	}
 }
 
-func walkWrap(f TestOverallRunner, c chan runData, wg *sync.WaitGroup) filepath.WalkFunc {
+func walkWrap[T any](f TestOverallRunner[T], c chan runData, wg *sync.WaitGroup, config T) filepath.WalkFunc {
 	return func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -161,7 +154,10 @@ func walkWrap(f TestOverallRunner, c chan runData, wg *sync.WaitGroup) filepath.
 		}
 		wg.Add(1)
 		go func() {
-			c <- f(path)
+			result := f(path, config)
+			if result != nil {
+				c <- *result
+			}
 			wg.Done()
 		}()
 
@@ -189,47 +185,6 @@ func gotoTestDir() {
 	if !runner.DirExists("runner") {
 		log.Fatal("Failed to find test directory")
 	}
-}
-
-func findCompillers() {
-	// bs2
-	if !runner.DirExists("../bs2") {
-		log.Fatal("Failed to find bs2 directory")
-	}
-	if !runner.DirExists("../bs2/_build/test") {
-		runner.RunBuildCmd("../bs2", "meson", "_build/test")
-	}
-	runner.RunBuildCmd("../bs2", "ninja", "-C", "_build/test")
-	bs2 = "../bs2/_build/test/bs2"
-
-	// wacc
-	runner.RunBuildCmd("..", "make", "_build/wacc")
-	wacc = "../_build/wacc"
-}
-
-func (r *runData) visual() string {
-	var b strings.Builder
-	b.WriteString("Command ")
-	b.WriteString(r.Compiler)
-	b.WriteString(" < ")
-	b.WriteString(r.Path)
-	b.WriteString(" exited with code ")
-	b.WriteString(fmt.Sprintf("%d", r.ExitCode))
-	if r.Stdout != "" {
-		b.WriteString("\n--- stdout ---------------------------------------\n")
-		b.WriteString(strings.TrimSpace(r.Stdout))
-		b.WriteString("\n----------------------------------------------------\n")
-	} else {
-		b.WriteString("\nstdout: none\n")
-	}
-	if r.Stderr != "" {
-		b.WriteString("\n--- stderr ---------------------------------------\n")
-		b.WriteString(strings.TrimSpace(r.Stderr))
-		b.WriteString("\n----------------------------------------------------\n")
-	} else {
-		b.WriteString("\nstderr: none\n")
-	}
-	return b.String()
 }
 
 func stdoutFile(path string) string {

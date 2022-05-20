@@ -12,3 +12,7 @@ func (WaccToC) Ensure() error {
 func (WaccToC) Lex(path string) Result {
 	return Result{}
 }
+
+func (WaccToC) Name() string {
+	return "wacc-to-c"
+}
