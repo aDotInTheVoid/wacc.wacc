@@ -58,7 +58,7 @@ EMAIL=webmasters@gnu.org  # please override with --email
 commonarg= # passed to all makeinfo/texi2html invcations.
 dirargs=   # passed to all tools (-I dir).
 dirs=      # -I directories.
-htmlarg="--css-ref=https://www.gnu.org/software/gnulib/manual.css -c TOP_NODE_UP_URL=/manual"
+htmlarg="--css-ref=https://www.gnu.org/software/gnulib/manual.css -c TOP_NODE_UP_URL=/manual -c HTML_MATH=mathjax"
 default_htmlarg=true
 infoarg=--no-split
 generate_ascii=true
