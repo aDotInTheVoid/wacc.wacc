@@ -3,6 +3,48 @@
 
 #include "xml.hh"
 
+void XmlCodegen::start_function(std::string_view name, Type &ret) {
+  open("fn");
+  open("name");
+  line(name);
+  close("name");
+  open("ret");
+  type(ret);
+  close("ret");
+}
+
+void XmlCodegen::end_function() { close("fn"); }
+
+void XmlCodegen::type(Type &t) {
+  switch (t.kind_) {
+  case TypeKind::Int:
+    return line("int");
+  case TypeKind::Char:
+    return line("char");
+  case TypeKind::String:
+    return line("string");
+  case TypeKind::Bool:
+    return line("bool");
+  case TypeKind::EraisedPair:
+    return line("eraised_pair");
+  case TypeKind::Pair:
+    open("pair");
+    open("left");
+    type(*t.p1_);
+    close("left");
+    open("right");
+    type(*t.p2_);
+    close("right");
+    close("pair");
+    return;
+  case TypeKind::Array:
+    open("array");
+    type(*t.p1_);
+    close("array");
+    return;
+  }
+}
+
 std::string XmlCodegen::finish() {
   close("unit");
   assert(indent == 0);
@@ -27,5 +69,5 @@ void XmlCodegen::open(const char *name) {
   indent += indent_width;
 }
 
-void XmlCodegen::startmain() { open("main"); }
-void XmlCodegen::endmain() { close("main"); }
+void XmlCodegen::start_main() { open("main"); }
+void XmlCodegen::end_main() { close("main"); }

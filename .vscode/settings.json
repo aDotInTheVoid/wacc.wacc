@@ -68,6 +68,7 @@
         "set": "cpp",
         "iomanip": "cpp",
         "typeindex": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "bitset": "cpp"
     }
 }

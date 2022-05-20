@@ -2,6 +2,7 @@
 #define BS2_PARSER_HH
 #include "codegen.hh"
 #include "lex.hh"
+#include "type.hh"
 
 #include <optional>
 
@@ -23,9 +24,11 @@ struct Parser {
   void main();
   void stmts();
   void stmt();
+  void function(std::string_view name, Type &ret);
+  std::optional<Type> ty();
 
   // Lexer functions
-  void expect(TokenType kind);
+  Token expect(TokenType kind);
   std::optional<Token> match(TokenType kind);
   bool peak(TokenType kind);
 

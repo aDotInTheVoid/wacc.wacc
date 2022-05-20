@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eoxu pipefail
 
+cd "$(dirname "$0")"
+
 mkdir -p _build/html
 
 if [[ ! -f ./_build/tool/kgt ]]

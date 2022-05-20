@@ -8,6 +8,7 @@ project(
 bs2_source = [
   'codegen.cc',
   'codegen/xml/xml.cc',
+  'type.cc',
   'lex.cc',
   'main.cc',
   'parser.cc',
