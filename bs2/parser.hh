@@ -6,10 +6,17 @@
 #include <optional>
 
 struct Parser {
-  Lexer lexer;
-  Codegen *codegen;
+  Lexer lexer_;
+  Codegen *codegen_;
+  const char *filename_;
 
-  Token current;
+  Token current_;
+
+  Parser(Lexer lexer, Codegen *codegen, const char *filename) : lexer_(lexer) {
+    codegen_ = codegen;
+    filename_ = filename;
+    current_ = lexer_.next_token();
+  }
 
   // Parser functions
   void unit();
@@ -21,6 +28,8 @@ struct Parser {
   void expect(TokenType kind);
   std::optional<Token> match(TokenType kind);
   bool peak(TokenType kind);
+
+  [[noreturn]] void fatal(std::string);
 };
 
 #endif

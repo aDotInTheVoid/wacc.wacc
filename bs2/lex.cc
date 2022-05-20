@@ -73,7 +73,7 @@ Token Lexer::next_token() {
 Token Lexer::make_token(TokenType tt) {
   std::string_view value =
       std::string_view(input_).substr(start_, current_ - start_);
-  return Token{tt, value, start_};
+  return Token{tt, value, line_, column_};
 }
 
 bool Lexer::match(char expected) {
@@ -81,7 +81,7 @@ bool Lexer::match(char expected) {
     return false;
   if (peak() != expected)
     return false;
-  current_++;
+  advance();
   return true;
 }
 
@@ -257,7 +257,18 @@ void Token::debug(std::ostream &o) {
 }
 
 bool Lexer::is_at_end() { return current_ >= input_.size(); }
-char Lexer::advance() { return input_[current_++]; }
+char Lexer::advance() {
+  // TODO: Update line_ and col_
+  char c = input_[current_];
+  current_++;
+  if (c == '\n') {
+    line_++;
+    column_ = 0;
+  } else {
+    column_++;
+  }
+  return c;
+}
 char Lexer::peak() { return input_[current_]; }
 
 const char *token_type_str(TokenType tt) {

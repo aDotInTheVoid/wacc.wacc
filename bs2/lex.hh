@@ -67,8 +67,9 @@ enum class TokenType {
 struct Token {
   TokenType type_;
   std::string_view value_;
-  size_t start_; // Byte offset
-  // TODO: Line number
+
+  size_t line_;
+  size_t column_;
 
   void debug(std::ostream &);
 };
@@ -77,10 +78,12 @@ struct Lexer {
   std::string input_;
   std::size_t start_;
   std::size_t current_;
+  std::size_t line_;
+  std::size_t column_;
 
   Lexer(std::string input) {
     input_ = input;
-    start_ = current_ = 0;
+    start_ = current_ = line_ = column_ = 0;
   }
 
   Token next_token();

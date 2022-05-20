@@ -6,13 +6,24 @@ project(
   meson_version: '>= 0.56.2')
 
 bs2_source = [
-  #'codegen.cc',
-  #'codegen/xml/xml.cc',
+  'codegen.cc',
+  'codegen/xml/xml.cc',
   'lex.cc',
   'main.cc',
-  #'parser.cc',
+  'parser.cc',
   'util.cc',
 ]
+
+if get_option('b_sanitize') == 'memory'
+  if meson.get_compiler('cpp').get_id() != 'clang'
+    error('msan only suported on clang')
+  else
+    # Msan requires libc++
+    add_global_arguments('-stdlib=libc++', language: 'cpp')
+    add_global_link_arguments('-stdlib=libc++', language: 'cpp')
+  endif
+endif
+
 
 bs2_deps = [
   dependency('fmt')
