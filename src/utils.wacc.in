@@ -42,4 +42,13 @@ VOID wacc_fail(string file, int line, string reason) is
   println "";
 ENDV
 
+#define TRACE(__msg) \
+  begin \
+    print __FILE__; \
+    print ":"; \
+    print __LINE__; \
+    print " "; \
+    println __msg \
+  end
+
 #endif

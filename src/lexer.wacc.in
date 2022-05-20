@@ -20,9 +20,8 @@ LEXER_FN(char, advance)
     ENDIF ;
 
     char ret = call peek(self);
-    // TODO: Handle moving over the next logical line
     LEXER_SET_CURRENT(current + 1);
-    if current >= len source[logical_line] then 
+    if current > len source[logical_line] then 
         LEXER_SET_LOGICAL_LINE(logical_line+1);
         LEXER_SET_CURRENT(0)
     ENDIF ;
@@ -36,7 +35,7 @@ LEXER_FN(char, peek)
         println "Unexpected EOF";
         FAIL
     ENDIF ;
-    if len source[logical_line]==0 then
+    if len source[logical_line]==0 || len source[logical_line]==current then
         return '\n' // Kinda hacky, not sure if it works
     else
         return source[logical_line][current]
@@ -44,16 +43,19 @@ LEXER_FN(char, peek)
 end
 
 LEXER_FN(VOID, skipComment)
+    //TRACE("start skipComment");
     while true do
         bool is_at_end = call isAtEnd(self);
         if is_at_end then 
+            TRACE("END SK EOF");
             RETV 
         ENDIF ;
-        char c = call peek(self);
+        char c = call advance(self);
+//        TRACE(c);
         if c == '\n' then
+          //  TRACE("end skipComment (NL)");
             RETV
-        ENDIF ;
-	    char _nop = call advance(self)
+        ENDIF
     done ;
 ENDV
 

@@ -241,8 +241,8 @@ void Lexer::escape_sequence() {
 }
 
 Token Lexer::number() {
-  while (std::isdigit(advance()))
-    ;
+  while (std::isdigit(peak()))
+    advance();
   return make_token(TokenType::Number);
 }
 
