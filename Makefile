@@ -32,9 +32,10 @@ $(test): $(timestamp) $(go_src)
 $(objdir)/wacc.wacc: $(wacc_src)
 	cpp -undef -nostdinc src/wacc.wacc.in -o $@
 $(objdir)/wacc.c: $(tp) $(objdir)/wacc.wacc
-	CGEN_LINE_CONTROL=1 $(tp) $(objdir)/wacc.wacc $@
+#	CGEN_LINE_CONTROL=1
+	$(tp) $(objdir)/wacc.wacc $@
 $(objdir)/wacc: $(objdir)/wacc.c
-	gcc -g -o $@ $<
+	clang -g -o $@ $< -Wno-parentheses-equality -fsanitize=address
 tools: $(kgt) $(tp) $(test)
 
 .PHONY: debug
@@ -49,6 +50,10 @@ debug:
 
 .PHONY: clean
 clean:
+	rm -rf $(objdir)/wacc $(objdir)/wacc.c $(objdir)/wacc.wacc
+
+.PHONY: clean-all
+clean-all:
 	rm -rf $(objdir)
 
 .PHONY: test

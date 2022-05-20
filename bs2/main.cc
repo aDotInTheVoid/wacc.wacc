@@ -33,15 +33,14 @@ int main(int argc, char **argv) {
 
   Lexer lexer(source);
   // IF LEXDUMP
-  // Token t;
-  // do {
-  //   t = lexer.next_token();
-  //   t.debug(std::cout);
-  // } while (t.type_ != TokenType::Eof);
-  auto c = XmlCodegen();
+  Token t;
+  do {
+    t = lexer.next_token();
+    t.debug(std::cout);
+  } while (t.type_ != TokenType::Eof);
 
-  auto p = Parser{lexer, &c};
-
-  auto end = c.finish();
-  std::cout << end;
+  // auto c = XmlCodegen();
+  // auto p = Parser{lexer, &c};
+  // auto end = c.finish();
+  // std::cout << end;
 }

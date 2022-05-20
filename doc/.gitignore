@@ -1,6 +1,6 @@
-*.toc
-*.log
 manual/
-*.info
-*.aux
 js_licenses.html
+*.aux
+*.info
+*.log
+*.toc

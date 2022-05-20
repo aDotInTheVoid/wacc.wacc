@@ -2,11 +2,17 @@ import sys
 
 maxlen = 0
 numlines = 0
+longline = ""
+
 
 with (open(sys.argv[1])) as f:
-    for line in f.readlines():
+    s = f.read()
+
+    for line in s.splitlines():
         numlines += 1
-        maxlen = max(maxlen, len(line))
+        if len(line) > len(longline):
+            longline = line
 
 print(f"{numlines} lines")
-print(f"{maxlen} longest")
+print(f"{len(longline)} longest")
+print(f"{repr(longline)}")

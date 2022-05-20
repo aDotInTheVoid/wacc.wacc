@@ -2,6 +2,9 @@ import pprint
 from util import Generate, comment, indent
 import itertools
 
+# TODO: Make this in line with new line allocation scheme
+# if it turns out we need it.
+# https://github.com/aDotInTheVoid/wacc.wacc/issues/7
 
 # pre: sorted(l)
 # return pivot, lesseq, greatereq

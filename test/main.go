@@ -34,10 +34,15 @@ type runData struct {
 	ExitCode int
 }
 
+var compilers = []runner.Compiler{runner.BS2{}, runner.WaccWacc{}, runner.WaccToC{}}
+
 func main() {
 	log.SetFlags(0)
 	gotoTestDir()
-	findCompillers()
+
+	for _, c := range compilers {
+		runner.Must(c.Ensure())
+	}
 
 	var wg sync.WaitGroup
 	c := make(chan runData)
@@ -129,7 +134,7 @@ func waccLexPass(path string) runData {
 		if string(c) != output.Stdout {
 			status = runResultFail
 			// TODO: Better message
-			panic("Expectesd ```" + string(c) + "``` got ```" + output.Stdout + "```")
+			panic("Path(wacc) = " + path + "\nExpectesd ```" + string(c) + "``` got ```" + output.Stdout + "```")
 		}
 	}
 	return runData{
@@ -164,20 +169,12 @@ func walkWrap(f TestOverallRunner, c chan runData, wg *sync.WaitGroup) filepath.
 	}
 }
 
-func dirExists(name string) bool {
-	s, err := os.Stat(name)
-	if err != nil {
-		return false
-	}
-	return s.IsDir()
-}
-
 func gotoTestDir() {
 	if td := os.Getenv("WACC_TEST_DIR"); td != "" {
 		runner.Must(os.Chdir(td))
 	} else {
 		for {
-			if dirExists("test") {
+			if runner.DirExists("test") {
 				runner.Must(os.Chdir("test"))
 				return
 			}
@@ -189,24 +186,24 @@ func gotoTestDir() {
 			runner.Must(os.Chdir(".."))
 		}
 	}
-	if !dirExists("runner") {
+	if !runner.DirExists("runner") {
 		log.Fatal("Failed to find test directory")
 	}
 }
 
 func findCompillers() {
 	// bs2
-	if !dirExists("../bs2") {
+	if !runner.DirExists("../bs2") {
 		log.Fatal("Failed to find bs2 directory")
 	}
-	if !dirExists("../bs2/_build/test") {
-		runner.RunBuild("../bs2", "meson", "_build/test")
+	if !runner.DirExists("../bs2/_build/test") {
+		runner.RunBuildCmd("../bs2", "meson", "_build/test")
 	}
-	runner.RunBuild("../bs2", "ninja", "-C", "_build/test")
+	runner.RunBuildCmd("../bs2", "ninja", "-C", "_build/test")
 	bs2 = "../bs2/_build/test/bs2"
 
 	// wacc
-	runner.RunBuild("..", "make", "_build/wacc")
+	runner.RunBuildCmd("..", "make", "_build/wacc")
 	wacc = "../_build/wacc"
 }
 

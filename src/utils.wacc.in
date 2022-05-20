@@ -3,9 +3,13 @@
 
 // This can't include any other files, as everything else depends on it.
 
-
-
 #define ENDIF else skip fi
+
+#define UNPACK(__aty, __a, __bty, __b, __e) \
+  pair(__aty, __bty) unpack ## __a ## __b = __e; \
+  __aty __a = fst unpack ## __a ## __b; \
+  __bty __b = snd unpack ## __a ## __b; \
+  free unpack ## __a ## __b
 
 // Tools funtion that semanticly returns unit
 #define VOID pair(bool[][][], int[][][][])

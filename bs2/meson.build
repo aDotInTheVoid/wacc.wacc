@@ -6,11 +6,11 @@ project(
   meson_version: '>= 0.56.2')
 
 bs2_source = [
-  'codegen.cc',
-  'codegen/xml/xml.cc',
+  #'codegen.cc',
+  #'codegen/xml/xml.cc',
   'lex.cc',
   'main.cc',
-  'parser.cc',
+  #'parser.cc',
   'util.cc',
 ]
 

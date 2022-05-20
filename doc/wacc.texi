@@ -107,7 +107,8 @@ in @code{py/gen_line_alloc.py}. Currenty they are @code{NUM_LINES = 3_000} and @
 As the compiller is written, these will be increased to handle the larger input. I can't imagine anyone
 writing a program larger than the compiler, but if you do please let me know!
 
-Longer input that this will do something, possible undefined.
+Longer input that this will do something, possibly undefined.
+
 
 @node build-system
 @chapter The build system
