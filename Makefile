@@ -35,7 +35,7 @@ $(objdir)/wacc.c: $(tp) $(objdir)/wacc.wacc
 #	CGEN_LINE_CONTROL=1
 	$(tp) $(objdir)/wacc.wacc $@
 $(objdir)/wacc: $(objdir)/wacc.c
-	clang -g -o $@ $< -fsanitize=address -Wno-parentheses-equality
+	clang -g -o $@ $< -Wno-parentheses-equality -fsanitize=address
 tools: $(kgt) $(tp) $(test)
 
 .PHONY: debug

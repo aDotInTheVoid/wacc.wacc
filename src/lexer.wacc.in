@@ -356,8 +356,6 @@ ENDV
 
 
 TOKEN_FN(VOID, print_token)
-    print start;
-    print " ";
     print length;
     string kind = call token_type_str(type);
     print " ";

@@ -61,7 +61,7 @@ has been employed successfully by other compillers.
 > C has traditionally been permissive in
 > checking whether an expression is used in
 > a conext appropriate to its type. A
-> complete list of exam ples would be long,
+> complete list of examples would be long,
 > but two of the most im ortant should
 > illustrate sufficiently. The types of formal
 > arguments of functions are in general not

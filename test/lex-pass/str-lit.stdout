@@ -1,2 +1,2 @@
-0 7 string "hello"
-7 0 eof 
+7 string "hello"
+0 eof 

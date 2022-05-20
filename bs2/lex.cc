@@ -252,8 +252,8 @@ void Lexer::skip_comment() {
 }
 
 void Token::debug(std::ostream &o) {
-  o << start_ << " " << value_.size() << " " << token_type_str(type_) << " "
-    << value_ << std::endl;
+  o << value_.size() << " " << token_type_str(type_) << " " << value_
+    << std::endl;
 }
 
 bool Lexer::is_at_end() { return current_ >= input_.size(); }

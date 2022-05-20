@@ -3,7 +3,7 @@ package runner
 import (
 	"bufio"
 	"bytes"
-	"log"
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -40,13 +40,16 @@ func RunOutputGet(compiller_path string, file_path string) *Output {
 
 }
 
-func RunBuild(dir string, name string, args ...string) {
+func RunBuildCmd(dir string, name string, args ...string) error {
+	as := []any{name}
+	for _, a := range args {
+		as = append(as, a)
+	}
+
+	fmt.Println(as...)
 	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Dir = dir
-	err := cmd.Run()
-	if err != nil {
-		log.Fatal("Failed to run command:", err)
-	}
+	return cmd.Run()
 }
