@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/aDotInTheVoid/wacc.wacc/test/runner"
+	"github.com/adotinthevoid/xmlpp"
 	"github.com/fatih/color"
 )
 
@@ -123,16 +124,20 @@ func parsePass(path string, config LexPassConfig) *runData {
 
 	message := ""
 
+	outXmlT, err := xmlpp.BuildTree(out.Stdout)
+	runner.Must(err)
+	outXml := xmlpp.Pp(&outXmlT)
+
 	if config.blessMode == blessEnabledAuthoritative {
-		os.WriteFile(withSuffix(path, "xml"), []byte(out.Stdout), 0644)
+		os.WriteFile(withSuffix(path, "xml"), []byte(outXml), 0644)
 	} else {
 		c, err := os.ReadFile(withSuffix(path, "xml"))
 		runner.Must(err)
-		if string(c) != out.Stdout {
+		if string(c) != outXml {
 			status = runResultFail
 		}
 		// TODO: Diff
-		message = "Expected ---\n" + string(c) + "\n--- got ---\n" + out.Stdout + "\n---"
+		message = "Expected ---\n" + string(c) + "\n--- got ---\n" + outXml + "\n---"
 	}
 
 	return &runData{

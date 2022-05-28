@@ -1,114 +1,44 @@
 <unit>
   <fn>
-    <name>
-      do_if
-    </name>
-    <ret>
-      bool
-    </ret>
-    <args>
-    </args>
+    <name>do_if</name>
+    <ret>bool</ret>
+    <args/>
     <body>
       <if>
-        <cond>
-          <num>
-            1
-          </num>
-        </cond>
-        <when>
-          <return>
-            <num>
-              1
-            </num>
-          </return>
-        </when>
-        <else>
-          <return>
-            <num>
-              0
-            </num>
-          </return>
-        </else>
+        <cond><num>1</num></cond>
+        <when><return><num>1</num></return></when>
+        <else><return><num>0</num></return></else>
       </if>
     </body>
   </fn>
   <fn>
-    <name>
-      do_while
-    </name>
-    <ret>
-      bool
-    </ret>
-    <args>
-    </args>
+    <name>do_while</name>
+    <ret>bool</ret>
+    <args/>
     <body>
       <while>
-        <cond>
-          <num>
-            1
-          </num>
-        </cond>
+        <cond><num>1</num></cond>
         <body>
           <if>
-            <cond>
-              <num>
-                0
-              </num>
-            </cond>
-            <when>
-              <return>
-                <num>
-                  1
-                </num>
-              </return>
-            </when>
-            <else>
-            </else>
+            <cond><num>0</num></cond>
+            <when><return><num>1</num></return></when>
+            <else/>
           </if>
         </body>
       </while>
     </body>
   </fn>
   <fn>
-    <name>
-      do_signles
-    </name>
-    <ret>
-      bool
-    </ret>
-    <args>
-    </args>
+    <name>do_signles</name>
+    <ret>bool</ret>
+    <args/>
     <body>
-      <print>
-        <num>
-          1
-        </num>
-      </print>
-      <println>
-        <num>
-          1
-        </num>
-      </println>
-      <exit>
-        <num>
-          1
-        </num>
-      </exit>
-      <return>
-        <num>
-          1
-        </num>
-      </return>
-      <block>
-        <return>
-          <num>
-            2
-          </num>
-        </return>
-      </block>
+      <print><num>1</num></print>
+      <println><num>1</num></println>
+      <exit><num>1</num></exit>
+      <return><num>1</num></return>
+      <block><return><num>2</num></return></block>
     </body>
   </fn>
-  <main>
-  </main>
+  <main/>
 </unit>
-

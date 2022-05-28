@@ -1,95 +1,30 @@
 <unit>
   <fn>
-    <name>
-      oneint
-    </name>
-    <ret>
-      int
-    </ret>
-    <args>
-      <arg>
-        <name>
-          a
-        </name>
-        <ty>
-          int
-        </ty>
-      </arg>
-    </args>
-    <body>
-    </body>
+    <name>oneint</name>
+    <ret>int</ret>
+    <args><arg><name>a</name><ty>int</ty></arg></args>
+    <body/>
   </fn>
   <fn>
-    <name>
-      twoints
-    </name>
-    <ret>
-      int
-    </ret>
+    <name>twoints</name>
+    <ret>int</ret>
     <args>
-      <arg>
-        <name>
-          a
-        </name>
-        <ty>
-          int
-        </ty>
-      </arg>
-      <arg>
-        <name>
-          b
-        </name>
-        <ty>
-          int
-        </ty>
-      </arg>
+      <arg><name>a</name><ty>int</ty></arg>
+      <arg><name>b</name><ty>int</ty></arg>
     </args>
-    <body>
-    </body>
+    <body/>
   </fn>
   <fn>
-    <name>
-      arrays
-    </name>
-    <ret>
-      <array>
-        <array>
-          char
-        </array>
-      </array>
-    </ret>
+    <name>arrays</name>
+    <ret><array><array>char</array></array></ret>
     <args>
+      <arg><name>a</name><ty><array><array>int</array></array></ty></arg>
       <arg>
-        <name>
-          a
-        </name>
-        <ty>
-          <array>
-            <array>
-              int
-            </array>
-          </array>
-        </ty>
-      </arg>
-      <arg>
-        <name>
-          b
-        </name>
-        <ty>
-          <array>
-            <array>
-              <array>
-                bool
-              </array>
-            </array>
-          </array>
-        </ty>
+        <name>b</name>
+        <ty><array><array><array>bool</array></array></array></ty>
       </arg>
     </args>
-    <body>
-    </body>
+    <body/>
   </fn>
-  <main>
-  </main>
+  <main/>
 </unit>
-
