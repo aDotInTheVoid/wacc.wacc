@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
       t = lexer.next_token();
       t.debug(std::cout);
     } while (t.type_ != TokenType::Eof);
-  } else if (std::strcmp(argv[1], "passe")) {
+  } else if (std::strcmp(argv[1], "parse") == 0) {
     Lexer lexer(source);
     XmlCodegen codegen;
     Parser parser{lexer, &codegen, filename};

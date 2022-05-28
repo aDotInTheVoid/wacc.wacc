@@ -10,7 +10,11 @@ func (WaccToC) Ensure() error {
 }
 
 func (WaccToC) Lex(path string) Result {
-	return Result{}
+	panic("implement me")
+}
+
+func (WaccToC) Parse(string) Result {
+	panic("implement me")
 }
 
 func (WaccToC) Name() string {

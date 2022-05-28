@@ -15,13 +15,11 @@ func (bs2) Ensure() error {
 }
 
 func (bs2) Lex(path string) Result {
-	r := RunOutputGet("../bs2/_build/test/bs2", path)
-	return Result{
-		r.Status,
-		r.Stdout,
-		r.Stderr,
-	}
+	return RunOutputGet("../bs2/_build/test/bs2", nil, "lex", path)
+}
 
+func (bs2) Parse(path string) Result {
+	return RunOutputGet("../bs2/_build/test/bs2", nil, "parse", path)
 }
 
 func (bs2) Name() string {

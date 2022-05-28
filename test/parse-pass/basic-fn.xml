@@ -1,0 +1,21 @@
+<unit>
+  <fn>
+    <name>
+      foo
+    </name>
+    <ret>
+      int
+    </ret>
+  </fn>
+  <fn>
+    <name>
+      bar
+    </name>
+    <ret>
+      int
+    </ret>
+  </fn>
+  <main>
+  </main>
+</unit>
+

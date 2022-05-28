@@ -9,6 +9,7 @@ void Parser::unit() {
 
   // TODO: Keep parsing functions, until we reach stmts in main.
   std::optional<Type> t;
+
   while ((t = ty())) {
     Token name = expect(TokenType::Identifier);
     // TODO: Handle case where int foo = 1; and start of main,
@@ -56,7 +57,7 @@ void Parser::stmt() {
   }
 
   // TODO
-  exit(-1);
+  fatal("Expecing stmt skip");
 }
 
 std::optional<Type> Parser::ty() {

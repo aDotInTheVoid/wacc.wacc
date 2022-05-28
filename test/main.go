@@ -55,9 +55,11 @@ func main() {
 		bs2LexPass.blessMode = blessEnabledAuthoritative
 		waccWaccLexPass.blessMode = blessEnabledNonAuthoritative
 	}
+	bs2ParsePass := bs2LexPass
 
 	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, bs2LexPass))
 	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, waccWaccLexPass))
+	filepath.Walk("parse-pass", walkWrap(parsePass, c, &wg, bs2ParsePass))
 
 	// Wait for all the tests to finish
 	// Must go this after all runs
@@ -85,7 +87,7 @@ done:
 			}
 			fmt.Printf("%s: %10s %s\n", status, filepath.Base(r.Compiler), r.Path)
 			if r.Result == runResultFail {
-				// fmt.Println(r.Message)
+				fmt.Println(r.Message)
 			}
 		case <-done:
 			break done
@@ -107,6 +109,40 @@ type LexPassConfig struct {
 	blessMode blessMode
 }
 
+func parsePass(path string, config LexPassConfig) *runData {
+	if config.blessMode == blessEnabledNonAuthoritative {
+		return nil
+	}
+	out := config.compiler.Parse(path)
+	var status runResult
+	if out.StatusCode != 0 {
+		status = runResultFail
+	} else {
+		status = runResultPass
+	}
+
+	message := ""
+
+	if config.blessMode == blessEnabledAuthoritative {
+		os.WriteFile(withSuffix(path, "xml"), []byte(out.Stdout), 0644)
+	} else {
+		c, err := os.ReadFile(withSuffix(path, "xml"))
+		runner.Must(err)
+		if string(c) != out.Stdout {
+			status = runResultFail
+		}
+		// TODO: Diff
+		message = "Expected ---\n" + string(c) + "\n--- got ---\n" + out.Stdout + "\n---"
+	}
+
+	return &runData{
+		path,
+		config.compiler.Name(),
+		status,
+		message,
+	}
+}
+
 func lexPass(path string, config LexPassConfig) *runData {
 	if config.blessMode == blessEnabledNonAuthoritative {
 		return nil
@@ -123,9 +159,9 @@ func lexPass(path string, config LexPassConfig) *runData {
 	message := ""
 
 	if config.blessMode == blessEnabledAuthoritative {
-		os.WriteFile(stdoutFile(path), []byte(out.Stdout), 0644)
+		os.WriteFile(withSuffix(path, "stdout"), []byte(out.Stdout), 0644)
 	} else {
-		c, err := os.ReadFile(stdoutFile(path))
+		c, err := os.ReadFile(withSuffix(path, "stdout"))
 		runner.Must(err)
 		if string(c) != out.Stdout {
 			status = runResultFail
@@ -187,7 +223,7 @@ func gotoTestDir() {
 	}
 }
 
-func stdoutFile(path string) string {
+func withSuffix(path string, newExt string) string {
 	ext := filepath.Ext(path)
-	return path[:len(path)-len(ext)] + ".stdout"
+	return path[:len(path)-len(ext)] + "." + newExt
 }

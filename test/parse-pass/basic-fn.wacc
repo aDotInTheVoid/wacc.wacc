@@ -1,0 +1,15 @@
+begin
+
+int foo() is
+    skip
+end
+
+int bar() is 
+    skip
+end
+
+# == main ==
+
+skip
+
+end

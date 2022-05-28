@@ -8,35 +8,31 @@ import (
 	"os/exec"
 )
 
-// TODO: This is the same as result
-type Output struct {
-	Stdout string
-	Stderr string
-	Status int
-}
-
-func RunOutputGet(compiller_path string, file_path string) Output {
-	file, err := os.Open(file_path)
-	Must(err)
-	fbuf := bufio.NewReader(file)
-
+func RunOutputGet(compiller_path string, stdin_path *string, args ...string) Result {
 	var stderr bytes.Buffer
 	var stdout bytes.Buffer
 
-	cmd := exec.Command(compiller_path, file_path)
-	cmd.Stdin = fbuf
+	cmd := exec.Command(compiller_path, args...)
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
-	err = cmd.Run()
+	if stdin_path != nil {
+		file, err := os.Open(*stdin_path)
+		Must(err)
+		fbuf := bufio.NewReader(file)
+		cmd.Stdin = fbuf
+
+	}
+
+	err := cmd.Run()
 	status := 0
 	if err, ok := err.(*exec.ExitError); ok {
 		status = err.ProcessState.ExitCode()
 	}
-	return Output{
-		Stdout: stdout.String(),
-		Stderr: stderr.String(),
-		Status: status,
+	return Result{
+		Stdout:     stdout.String(),
+		Stderr:     stderr.String(),
+		StatusCode: status,
 	}
 
 }

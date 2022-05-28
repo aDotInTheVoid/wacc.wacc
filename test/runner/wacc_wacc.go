@@ -9,12 +9,11 @@ func (WaccWacc) Ensure() error {
 }
 
 func (WaccWacc) Lex(path string) Result {
-	r := RunOutputGet("../_build/wacc", path)
-	return Result{
-		r.Status,
-		r.Stdout,
-		r.Stderr,
-	}
+	return RunOutputGet("../_build/wacc", &path)
+}
+
+func (WaccWacc) Parse(path string) Result {
+	panic("implement me")
 }
 
 func (WaccWacc) Name() string {
