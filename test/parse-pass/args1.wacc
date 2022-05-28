@@ -1,0 +1,11 @@
+begin
+
+int oneint(int a) is skip end
+
+int twoints (int a, int b) is skip end
+
+char[][] arrays (int[][] a, bool[][][] b) is skip end
+
+skip
+
+end

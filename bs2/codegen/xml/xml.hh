@@ -14,7 +14,10 @@ struct XmlCodegen : Codegen {
   // Parser hooks
   void start_main();
   void end_main();
+
   void start_function(std::string_view name, Type &ret);
+  virtual void add_arg(std::string_view name, Type &ty);
+  virtual void start_function_body();
   void end_function();
 
   void type(Type &t);

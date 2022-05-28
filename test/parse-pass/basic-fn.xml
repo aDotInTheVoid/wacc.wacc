@@ -6,6 +6,10 @@
     <ret>
       int
     </ret>
+    <args>
+    </args>
+    <body>
+    </body>
   </fn>
   <fn>
     <name>
@@ -14,6 +18,10 @@
     <ret>
       int
     </ret>
+    <args>
+    </args>
+    <body>
+    </body>
   </fn>
   <main>
   </main>

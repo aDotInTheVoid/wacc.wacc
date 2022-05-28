@@ -34,9 +34,21 @@ void Parser::function(std::string_view name, Type &ret) {
 
   expect(TokenType::Lparen);
   // TODO: Args
+  std::optional<Type> oty;
+  if ((oty = ty())) {
+    Token name = expect(TokenType::Identifier);
+    codegen_->add_arg(name.value_, oty.value());
+    if (match(TokenType::Comma)) {
+      Type aty = ty().value();
+      Token name = expect(TokenType::Identifier);
+      codegen_->add_arg(name.value_, aty);
+    }
+  }
+
   expect(TokenType::Rparen);
   expect(TokenType::Is);
 
+  codegen_->start_function_body();
   stmts();
 
   expect(TokenType::End);

@@ -11,9 +11,29 @@ void XmlCodegen::start_function(std::string_view name, Type &ret) {
   open("ret");
   type(ret);
   close("ret");
+  open("args");
 }
 
-void XmlCodegen::end_function() { close("fn"); }
+void XmlCodegen::add_arg(std::string_view name, Type &ty) {
+  open("arg");
+  open("name");
+  line(name);
+  close("name");
+  open("ty");
+  type(ty);
+  close("ty");
+  close("arg");
+}
+
+void XmlCodegen::start_function_body() {
+  close("args");
+  open("body");
+}
+
+void XmlCodegen::end_function() {
+  close("body");
+  close("fn");
+}
 
 void XmlCodegen::type(Type &t) {
   switch (t.kind_) {

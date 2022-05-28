@@ -13,7 +13,10 @@ struct Codegen {
   // Parser hooks
   virtual void start_main() = 0;
   virtual void end_main() = 0;
+
   virtual void start_function(std::string_view name, Type &ret) = 0;
+  virtual void add_arg(std::string_view name, Type &ty) = 0;
+  virtual void start_function_body() = 0;
   virtual void end_function() = 0;
 };
 
