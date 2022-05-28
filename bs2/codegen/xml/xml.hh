@@ -42,6 +42,11 @@ struct XmlCodegen : Codegen {
   // Expr
   void e_push_number(int32_t) override;
 
+  // Assignment
+  void add_var(std::string_view name, Type &ty) override;
+  void assign_addr_local(std::string_view) override; // Push address of local
+  void assign_do() override;                         // Pop value and address.
+
   // Internal
   void type(Type &t);
   void line(std::string_view l);

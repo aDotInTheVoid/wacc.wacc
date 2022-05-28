@@ -1,0 +1,36 @@
+<unit>
+  <fn>
+    <name>a</name>
+    <ret>int</ret>
+    <args/>
+    <body>
+      <var><name>a</name><ty>int</ty></var>
+      <addr_local>a</addr_local>
+      <num>0</num>
+      <assign_do/>
+      <var><name>b</name><ty>int</ty></var>
+      <addr_local>b</addr_local>
+      <num>1</num>
+      <assign_do/>
+      <var><name>c</name><ty>int</ty></var>
+      <addr_local>c</addr_local>
+      <num>2</num>
+      <assign_do/>
+      <block>
+        <var><name>d</name><ty>int</ty></var>
+        <addr_local>d</addr_local>
+        <num>3</num>
+        <assign_do/>
+        <var><name>e</name><ty>int</ty></var>
+        <addr_local>e</addr_local>
+        <num>4</num>
+        <assign_do/>
+      </block>
+      <var><name>f</name><ty>int</ty></var>
+      <addr_local>f</addr_local>
+      <num>5</num>
+      <assign_do/>
+    </body>
+  </fn>
+  <main/>
+</unit>

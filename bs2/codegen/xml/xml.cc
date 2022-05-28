@@ -95,6 +95,30 @@ void XmlCodegen::e_push_number(int32_t n) {
 }
 /* endregion */
 
+/* #region assign */
+void XmlCodegen::add_var(std::string_view name, Type &ty) {
+  open("var");
+  open("name");
+  line(name);
+  close("name");
+  open("ty");
+  type(ty);
+  close("ty");
+  close("var");
+}
+
+void XmlCodegen::assign_addr_local(std::string_view name) {
+  open("addr_local");
+  line(name);
+  close("addr_local");
+}
+
+void XmlCodegen::assign_do() {
+  open("assign_do");
+  close("assign_do");
+}
+/* #endregion */
+
 /* #region internal */
 void XmlCodegen::type(Type &t) {
   switch (t.kind_) {

@@ -6,6 +6,12 @@
 
 #include <optional>
 
+// The parser takes a stream of tokens, and converts it into instructions
+// for the code generator.
+//
+// These are designed to be amenable to a signle-pass stack based code
+// generation. Note that we don't do any type checking.
+
 struct Parser {
   Lexer lexer_;
   Codegen *codegen_;
@@ -37,9 +43,12 @@ struct Parser {
   void s_if();
   void s_while();
   void s_block();
+  void s_decl(Type &);
 
   // Expr
   void expr();
+  // Assignment
+  void assign_rhs();
 
   // Lexer functions
   Token expect(TokenType kind);

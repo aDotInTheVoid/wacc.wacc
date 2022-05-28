@@ -64,7 +64,10 @@ void Parser::stmts() {
 }
 
 void Parser::stmt() {
-  if (match(TokenType::Skip))
+  std::optional<Type> oty;
+  if ((oty = ty()))
+    s_decl(oty.value());
+  else if (match(TokenType::Skip))
     return;
   // TODO: type ident = assign-rhs
   // TODO: assign-lhs = assign-rhs
@@ -117,7 +120,18 @@ std::optional<Type> Parser::ty() {
 /* #region stmt */
 void Parser::s_read() {
   // TODO
+  exit(-1);
 }
+void Parser::s_decl(Type &ty) {
+  //  type, ident, "=", assign-rhs
+  Token ident = expect(TokenType::Identifier);
+  expect(TokenType::Assign);
+  codegen_->add_var(ident.value_, ty);
+  codegen_->assign_addr_local(ident.value_);
+  assign_rhs();
+  codegen_->assign_do();
+}
+
 void Parser::s_free() {
   codegen_->start_free();
   expr();
@@ -182,6 +196,14 @@ void Parser::expr() {
     codegen_->e_push_number(n);
   }
 }
+/* #endregion */
+
+/* #region assign-rhs */
+void Parser::assign_rhs() {
+  // TODO: FLesh out
+  expr();
+}
+
 /* #endregion */
 
 // === Internal functions ===

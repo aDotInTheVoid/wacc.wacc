@@ -40,6 +40,10 @@ struct Codegen {
   virtual void end_block() = 0;
   // Expr
   virtual void e_push_number(int32_t) = 0;
+  // Assignment
+  virtual void add_var(std::string_view name, Type &ty) = 0;
+  virtual void assign_addr_local(std::string_view) = 0; // Push address of local
+  virtual void assign_do() = 0; // Pop value and address.
 };
 
 #endif

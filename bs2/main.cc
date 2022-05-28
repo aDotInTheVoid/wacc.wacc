@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     parser.unit();
     std::cout << codegen.finish() << std::endl;
   } else {
-    std::cerr << "Usage: " << argv[0] << "(lex|parse) filename?" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " (lex|parse) filename?" << std::endl;
     return EXIT_FAILURE;
   }
 }
