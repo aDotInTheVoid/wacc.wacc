@@ -1,8 +1,15 @@
 #include <cassert>
 #include <fmt/core.h>
+#include <string>
 
 #include "xml.hh"
 
+/* #region main */
+void XmlCodegen::start_main() { open("main"); }
+void XmlCodegen::end_main() { close("main"); }
+/* #endregion main */
+
+/* #region function */
 void XmlCodegen::start_function(std::string_view name, Type &ret) {
   open("fn");
   open("name");
@@ -34,7 +41,61 @@ void XmlCodegen::end_function() {
   close("body");
   close("fn");
 }
+/* #endregion */
 
+/* #region stmt */
+void XmlCodegen::start_free() { open("free"); }
+void XmlCodegen::end_free() { close("free"); }
+void XmlCodegen::start_return() { open("return"); }
+void XmlCodegen::end_return() { close("return"); }
+void XmlCodegen::start_exit() { open("exit"); }
+void XmlCodegen::end_exit() { close("exit"); }
+void XmlCodegen::start_print() { open("print"); }
+void XmlCodegen::end_print() { close("print"); }
+void XmlCodegen::start_println() { open("println"); }
+void XmlCodegen::end_println() { close("println"); }
+void XmlCodegen::if_cond() {
+  open("if");
+  open("cond");
+}
+void XmlCodegen::if_when() {
+  close("cond");
+  open("when");
+}
+void XmlCodegen::if_else() {
+  close("when");
+  open("else");
+}
+void XmlCodegen::if_end() {
+  close("else");
+  close("if");
+}
+void XmlCodegen::while_cond() {
+  open("while");
+  open("cond");
+}
+void XmlCodegen::while_body() {
+  close("cond");
+  open("body");
+}
+void XmlCodegen::while_end() {
+  close("body");
+  close("while");
+}
+void XmlCodegen::start_block() { open("block"); }
+void XmlCodegen::end_block() { close("block"); }
+/* #endregion stmt */
+
+/* #region expr */
+void XmlCodegen::e_push_number(int32_t n) {
+  std::string s = fmt::format("{}", n);
+  open("num");
+  line(s);
+  close("num");
+}
+/* endregion */
+
+/* #region internal */
 void XmlCodegen::type(Type &t) {
   switch (t.kind_) {
   case TypeKind::Int:
@@ -89,5 +150,4 @@ void XmlCodegen::open(const char *name) {
   indent += indent_width;
 }
 
-void XmlCodegen::start_main() { open("main"); }
-void XmlCodegen::end_main() { close("main"); }
+/* #endregion */

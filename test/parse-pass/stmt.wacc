@@ -1,0 +1,33 @@
+begin
+
+bool do_if() is
+    if 1 then
+        return 1
+    else
+        return 0
+    fi
+end
+
+bool do_while() is
+    while 1 do
+        if 0 then
+            return 1
+        else skip
+        fi
+    done
+end
+
+bool do_signles() is 
+    print 1;
+    println 1;
+    exit 1;
+    return 1;
+    begin
+        skip;
+        return 2
+    end
+end
+
+skip
+
+end

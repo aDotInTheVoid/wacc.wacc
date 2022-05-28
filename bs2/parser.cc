@@ -1,3 +1,5 @@
+#include <cassert>
+#include <charconv>
 #include <fmt/core.h>
 #include <iostream>
 #include <optional>
@@ -33,7 +35,6 @@ void Parser::function(std::string_view name, Type &ret) {
   codegen_->start_function(name, ret);
 
   expect(TokenType::Lparen);
-  // TODO: Args
   std::optional<Type> oty;
   if ((oty = ty())) {
     Token name = expect(TokenType::Identifier);
@@ -59,17 +60,37 @@ void Parser::function(std::string_view name, Type &ret) {
 void Parser::stmts() {
   do {
     stmt();
-  } while (peak(TokenType::Semi));
+  } while (match(TokenType::Semi));
 }
 
 void Parser::stmt() {
-  // TODO: Flesh out
-  if (match(TokenType::Skip)) {
+  if (match(TokenType::Skip))
     return;
+  // TODO: type ident = assign-rhs
+  // TODO: assign-lhs = assign-rhs
+  else if (match(TokenType::Read))
+    s_read();
+  else if (match(TokenType::Free))
+    s_free();
+  else if (match(TokenType::Return))
+    s_return();
+  else if (match(TokenType::Exit))
+    s_exit();
+  else if (match(TokenType::Print))
+    s_print();
+  else if (match(TokenType::Println))
+    s_println();
+  else if (match(TokenType::If))
+    s_if();
+  else if (match(TokenType::While))
+    s_while();
+  else if (match(TokenType::Begin))
+    s_block();
+  else {
+    Token t = current_;
+    fatal(fmt::format("Expected stmt got {}({})", token_type_str(t.type_),
+                      t.value_));
   }
-
-  // TODO
-  fatal("Expecing stmt skip");
 }
 
 std::optional<Type> Parser::ty() {
@@ -92,6 +113,76 @@ std::optional<Type> Parser::ty() {
   }
   return t;
 }
+
+/* #region stmt */
+void Parser::s_read() {
+  // TODO
+}
+void Parser::s_free() {
+  codegen_->start_free();
+  expr();
+  codegen_->end_free();
+}
+void Parser::s_return() {
+  codegen_->start_return();
+  expr();
+  codegen_->end_return();
+}
+void Parser::s_exit() {
+  codegen_->start_exit();
+  expr();
+  codegen_->end_exit();
+}
+void Parser::s_print() {
+  codegen_->start_print();
+  expr();
+  codegen_->end_print();
+}
+void Parser::s_println() {
+  codegen_->start_println();
+  expr();
+  codegen_->end_println();
+}
+void Parser::s_if() {
+  codegen_->if_cond();
+  expr();
+  expect(TokenType::Then);
+  codegen_->if_when();
+  stmts();
+  expect(TokenType::Else);
+  codegen_->if_else();
+  stmts();
+  expect(TokenType::Fi);
+  codegen_->if_end();
+}
+void Parser::s_while() {
+  codegen_->while_cond();
+  expr();
+  expect(TokenType::Do);
+  codegen_->while_body();
+  stmts();
+  expect(TokenType::Done);
+  codegen_->while_end();
+}
+void Parser::s_block() {
+  codegen_->start_block();
+  stmts();
+  expect(TokenType::End);
+  codegen_->end_block();
+}
+/* #endregion */
+
+/* #region expr */
+void Parser::expr() {
+  std::optional<Token> ot;
+  if ((ot = match(TokenType::Number))) {
+    int32_t n;
+    Token t = ot.value();
+    std::from_chars(t.value_.data(), t.value_.end(), n);
+    codegen_->e_push_number(n);
+  }
+}
+/* #endregion */
 
 // === Internal functions ===
 Token Parser::expect(TokenType kind) {

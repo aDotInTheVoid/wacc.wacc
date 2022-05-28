@@ -27,6 +27,20 @@ struct Parser {
   void function(std::string_view name, Type &ret);
   std::optional<Type> ty();
 
+  // Stmts
+  void s_read();
+  void s_free();
+  void s_return();
+  void s_exit();
+  void s_print();
+  void s_println();
+  void s_if();
+  void s_while();
+  void s_block();
+
+  // Expr
+  void expr();
+
   // Lexer functions
   Token expect(TokenType kind);
   std::optional<Token> match(TokenType kind);
