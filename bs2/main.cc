@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include "codegen.hh"
+#include "codegen/x64/x64.hh"
 #include "codegen/xml/xml.hh"
 #include "lex.hh"
 #include "parser.hh"
@@ -13,7 +14,7 @@
 int main(int argc, char **argv) {
   if (!(argc == 2 || argc == 3)) {
     char *name = argv[0];
-    fprintf(stderr, "Usage: %s (parse|lex) file?\n", name);
+    fprintf(stderr, "Usage: %s (parse|lex|asm) file?\n", name);
     return EXIT_FAILURE;
   }
 
@@ -48,8 +49,15 @@ int main(int argc, char **argv) {
     Parser parser{lexer, &codegen, filename};
     parser.unit();
     std::cout << codegen.finish() << std::endl;
+  } else if (std::strcmp(argv[1], "asm") == 0) {
+    Lexer lexer(source);
+    X64Codegen codegen;
+    Parser parser{lexer, &codegen, filename};
+    parser.unit();
+    std::cout << codegen.finish() << std::endl; // TODO: Dedup with parse
   } else {
-    std::cerr << "Usage: " << argv[0] << " (lex|parse) filename?" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " (lex|parse|asm) filename?"
+              << std::endl;
     return EXIT_FAILURE;
   }
 }

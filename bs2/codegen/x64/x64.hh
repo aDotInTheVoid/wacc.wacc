@@ -1,18 +1,19 @@
-#ifndef BS2_CODEGEN_XML_XML_HH
-#define BS2_CODEGEN_XML_XML_HH
+#ifndef BS2_CODEGEN_X64_X64_HH
+#define BS2_CODEGEN_X64_X64_HH
+
+#include <string>
 
 #include "codegen.hh"
 
-const size_t indent_width = 2;
-
-struct XmlCodegen : Codegen {
-  size_t indent = 0;
-  XmlCodegen() { open("unit"); }
-  std::string finish();
+struct X64Codegen : Codegen {
+  std::string buff;
+  X64Codegen(){};
+  ~X64Codegen() override = default;
 
   // Parser hooks
   void start_main() override;
   void end_main() override;
+  std::string finish();
   // Function
   void start_function(std::string_view name, Type &ret) override;
   void add_arg(std::string_view name, Type &ty) override;
@@ -48,12 +49,6 @@ struct XmlCodegen : Codegen {
   void assign_do() override;                         // Pop value and address.
   void assign_addr_fst() override;
   void assign_addr_snd() override;
-
-  // Internal
-  void type(Type &t);
-  void line(std::string_view l);
-  void open(const char *name);
-  void close(const char *name);
 };
 
 #endif
