@@ -20,11 +20,11 @@ main:
     mov rax, [rbp-0] # e_push_local
     push rax # e_push_local
     pop rdi # load print
-    call wacctr_println_i32
+    call waccrt_println_i32
     mov rax, [rbp-8] # e_push_local
     push rax # e_push_local
     pop rdi # load print
-    call wacctr_println_i32
+    call waccrt_println_i32
     lea rax, [rbp-16]
     push rax # assign_addr_local
     mov rax, [rbp-0] # e_push_local
@@ -49,11 +49,11 @@ main:
     mov rax, [rbp-0] # e_push_local
     push rax # e_push_local
     pop rdi # load print
-    call wacctr_println_i32
+    call waccrt_println_i32
     mov rax, [rbp-8] # e_push_local
     push rax # e_push_local
     pop rdi # load print
-    call wacctr_println_i32
+    call waccrt_println_i32
     pop rbp
     ret
 

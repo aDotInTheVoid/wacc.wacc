@@ -13,7 +13,7 @@ main:
     mov rax, [rbp-0] # e_push_local
     push rax # e_push_local
     pop rdi # load print
-    call wacctr_println_i32
+    call waccrt_println_i32
     pop rbp
     ret
 

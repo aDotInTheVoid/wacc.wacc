@@ -44,14 +44,14 @@ void X64Codegen::start_print() {
 }
 void X64Codegen::end_print() {
   add_instr("pop rdi # Load print arg");
-  add_instr("call wacctr_print_i32"); // TODO: Use correct type
+  add_instr("call waccrt_print_i32"); // TODO: Use correct type
 }
 void X64Codegen::start_println() {
   // nothing
 }
 void X64Codegen::end_println() {
   add_instr("pop rdi # load print");
-  add_instr("call wacctr_println_i32"); // TODO: Use correct type
+  add_instr("call waccrt_println_i32"); // TODO: Use correct type
 }
 void X64Codegen::if_cond() { assert(0); }
 void X64Codegen::if_when() { assert(0); }

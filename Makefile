@@ -19,6 +19,7 @@ all: $(objdir)/wacc
 $(timestamp):
 	@mkdir -p $(objdir)
 	@mkdir -p $(tooldir)
+	@mkdir -p $(objdir)/asm-pass
 	touch $(timestamp)
 
 $(kgt): $(timestamp) ./regen-kgt.sh
@@ -36,6 +37,15 @@ $(objdir)/wacc.c: $(tp) $(objdir)/wacc.wacc
 	$(tp) $(objdir)/wacc.wacc $@
 $(objdir)/wacc: $(objdir)/wacc.c
 	clang -g -o $@ $< -Wno-parentheses-equality -fsanitize=address
+
+
+$(objdir)/rt.o: rt.c
+	gcc -c -o $@ $<
+$(objdir)/asm-pass/%.o: test/asm-pass/%.s
+	gcc -c -o $@ $<
+$(objdir)/asm-pass/%: $(objdir)/asm-pass/%.o $(objdir)/rt.o
+	gcc -o $@ $^
+
 tools: $(kgt) $(tp) $(test)
 
 .PHONY: debug
