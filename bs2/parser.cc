@@ -31,7 +31,7 @@ void Parser::main() {
   codegen_->end_main();
 }
 
-void Parser::function(std::string_view name, Type &ret) {
+void Parser::function(std::string_view name, const Type &ret) {
   codegen_->start_function(name, ret);
 
   expect(TokenType::Lparen);

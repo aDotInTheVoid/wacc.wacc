@@ -1,0 +1,9 @@
+begin
+
+skip;
+
+int a = 0;
+
+println a
+
+end

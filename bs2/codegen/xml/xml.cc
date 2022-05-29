@@ -10,7 +10,7 @@ void XmlCodegen::end_main() { close("main"); }
 /* #endregion main */
 
 /* #region function */
-void XmlCodegen::start_function(std::string_view name, Type &ret) {
+void XmlCodegen::start_function(std::string_view name, const Type &ret) {
   open("fn");
   open("name");
   line(name);
@@ -21,7 +21,7 @@ void XmlCodegen::start_function(std::string_view name, Type &ret) {
   open("args");
 }
 
-void XmlCodegen::add_arg(std::string_view name, Type &ty) {
+void XmlCodegen::add_arg(std::string_view name, const Type &ty) {
   open("arg");
   open("name");
   line(name);
@@ -101,7 +101,7 @@ void XmlCodegen::e_push_local(std::string_view name) {
 /* endregion */
 
 /* #region assign */
-void XmlCodegen::add_var(std::string_view name, Type &ty) {
+void XmlCodegen::add_var(std::string_view name, const Type &ty) {
   open("var");
   open("name");
   line(name);
@@ -132,7 +132,7 @@ void XmlCodegen::assign_do() {
 /* #endregion */
 
 /* #region internal */
-void XmlCodegen::type(Type &t) {
+void XmlCodegen::type(const Type &t) {
   switch (t.kind_) {
   case TypeKind::Int:
     return line("int");

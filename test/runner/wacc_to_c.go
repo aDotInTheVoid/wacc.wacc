@@ -17,6 +17,11 @@ func (WaccToC) Parse(string) Result {
 	panic("implement me")
 }
 
+// Assemble implements Compiler
+func (WaccToC) Assemble(path string) Result {
+	panic("unimplemented")
+}
+
 func (WaccToC) Name() string {
 	return "wacc-to-c"
 }

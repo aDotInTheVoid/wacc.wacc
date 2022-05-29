@@ -14,8 +14,8 @@ struct Codegen {
   virtual void start_main() = 0;
   virtual void end_main() = 0;
   // Function
-  virtual void start_function(std::string_view name, Type &ret) = 0;
-  virtual void add_arg(std::string_view name, Type &ty) = 0;
+  virtual void start_function(std::string_view name, const Type &ret) = 0;
+  virtual void add_arg(std::string_view name, const Type &ty) = 0;
   virtual void start_function_body() = 0;
   virtual void end_function() = 0;
   // Stmt
@@ -42,7 +42,7 @@ struct Codegen {
   virtual void e_push_number(int32_t) = 0;
   virtual void e_push_local(std::string_view) = 0;
   // Assignment
-  virtual void add_var(std::string_view name, Type &ty) = 0;
+  virtual void add_var(std::string_view name, const Type &ty) = 0;
   virtual void assign_addr_local(std::string_view) = 0; // Push address of local
   virtual void assign_addr_fst() = 0;
   virtual void assign_addr_snd() = 0;

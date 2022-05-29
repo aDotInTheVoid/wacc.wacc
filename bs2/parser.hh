@@ -30,7 +30,7 @@ struct Parser {
   void main();
   void stmts();
   void stmt();
-  void function(std::string_view name, Type &ret);
+  void function(std::string_view name, const Type &ret);
   std::optional<Type> ty();
 
   // Stmts

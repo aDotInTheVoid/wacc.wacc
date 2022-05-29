@@ -19,3 +19,8 @@ func (WaccWacc) Parse(path string) Result {
 func (WaccWacc) Name() string {
 	return "wacc.wacc"
 }
+
+// Assemble implements Compiler
+func (WaccWacc) Assemble(path string) Result {
+	panic("unimplemented")
+}

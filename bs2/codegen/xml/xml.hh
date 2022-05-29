@@ -14,8 +14,8 @@ struct XmlCodegen : Codegen {
   void start_main() override;
   void end_main() override;
   // Function
-  void start_function(std::string_view name, Type &ret) override;
-  void add_arg(std::string_view name, Type &ty) override;
+  void start_function(std::string_view name, const Type &ret) override;
+  void add_arg(std::string_view name, const Type &ty) override;
   void start_function_body() override;
   void end_function() override;
   // Stmt
@@ -43,14 +43,14 @@ struct XmlCodegen : Codegen {
   void e_push_local(std::string_view) override;
 
   // Assignment
-  void add_var(std::string_view name, Type &ty) override;
+  void add_var(std::string_view name, const Type &ty) override;
   void assign_addr_local(std::string_view) override; // Push address of local
   void assign_do() override;                         // Pop value and address.
   void assign_addr_fst() override;
   void assign_addr_snd() override;
 
   // Internal
-  void type(Type &t);
+  void type(const Type &t);
   void line(std::string_view l);
   void open(const char *name);
   void close(const char *name);

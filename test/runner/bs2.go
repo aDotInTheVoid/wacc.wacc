@@ -22,6 +22,11 @@ func (bs2) Parse(path string) Result {
 	return RunOutputGet("../bs2/_build/test/bs2", nil, "parse", path)
 }
 
+// Assemble implements Compiler
+func (bs2) Assemble(path string) Result {
+	return RunOutputGet("../bs2/_build/test/bs2", nil, "asm", path)
+}
+
 func (bs2) Name() string {
 	return "bs2"
 }

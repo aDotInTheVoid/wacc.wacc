@@ -57,10 +57,12 @@ func main() {
 		waccWaccLexPass.blessMode = blessEnabledNonAuthoritative
 	}
 	bs2ParsePass := bs2LexPass
+	bs2AsmPass := bs2LexPass
 
 	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, bs2LexPass))
 	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, waccWaccLexPass))
 	filepath.Walk("parse-pass", walkWrap(parsePass, c, &wg, bs2ParsePass))
+	filepath.Walk("asm-pass", walkWrap(asmPass, c, &wg, bs2AsmPass))
 
 	// Wait for all the tests to finish
 	// Must go this after all runs
@@ -108,6 +110,33 @@ type TestOverallRunner[T any] func(path string, config T) *runData
 type LexPassConfig struct {
 	compiler  runner.Compiler
 	blessMode blessMode
+}
+
+func asmPass(path string, config LexPassConfig) *runData {
+	if config.blessMode == blessEnabledNonAuthoritative {
+		return nil
+	}
+	out := config.compiler.Assemble(path)
+	var status runResult
+	if out.StatusCode != 0 {
+		status = runResultFail
+	} else {
+		status = runResultPass
+	}
+	message := ""
+	if config.blessMode == blessEnabledAuthoritative {
+		os.WriteFile(withSuffix(path, "s"), []byte(out.Stdout), 0644)
+	} else {
+		c, err := os.ReadFile(withSuffix(path, "s"))
+		runner.Must(err)
+		if string(c) != out.Stdout {
+			status = runResultFail
+			// TODO: Message
+		}
+	}
+	return &runData{
+		path, config.compiler.Name(), status, message,
+	}
 }
 
 func parsePass(path string, config LexPassConfig) *runData {
