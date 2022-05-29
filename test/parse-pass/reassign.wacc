@@ -1,0 +1,17 @@
+begin 
+
+int foo() is 
+    int a = 0;
+    int b = 1;
+    println a;
+    println b;
+    int c = a;
+    a = b;
+    b = c;
+    println a;
+    println b
+end
+
+skip
+
+end

@@ -65,11 +65,11 @@ void Parser::stmts() {
 
 void Parser::stmt() {
   std::optional<Type> oty;
+  std::optional<Token> oname;
   if ((oty = ty()))
     s_decl(oty.value());
   else if (match(TokenType::Skip))
     return;
-  // TODO: type ident = assign-rhs
   // TODO: assign-lhs = assign-rhs
   else if (match(TokenType::Read))
     s_read();
@@ -89,6 +89,12 @@ void Parser::stmt() {
     s_while();
   else if (match(TokenType::Begin))
     s_block();
+  else if (match(TokenType::Fst))
+    s_assign_fst();
+  else if (match(TokenType::Snd))
+    s_assign_snd();
+  else if ((oname = match(TokenType::Identifier)))
+    s_assign_local(oname.value().value_);
   else {
     Token t = current_;
     fatal(fmt::format("Expected stmt got {}({})", token_type_str(t.type_),
@@ -184,6 +190,30 @@ void Parser::s_block() {
   expect(TokenType::End);
   codegen_->end_block();
 }
+void Parser::s_assign_local(std::string_view name) {
+  // TODO: Arrays
+  expect(TokenType::Assign);
+  codegen_->assign_addr_local(name);
+  assign_rhs();
+  codegen_->assign_do();
+}
+void Parser::s_assign_fst() {
+  Token ident = expect(TokenType::Identifier);
+  expect(TokenType::Assign);
+  codegen_->assign_addr_local(ident.value_);
+  codegen_->assign_addr_fst();
+  assign_rhs();
+  codegen_->assign_do();
+}
+void Parser::s_assign_snd() {
+  Token ident = expect(TokenType::Identifier);
+  expect(TokenType::Assign);
+  codegen_->assign_addr_local(ident.value_);
+  codegen_->assign_addr_snd();
+  assign_rhs();
+  codegen_->assign_do();
+}
+
 /* #endregion */
 
 /* #region expr */
@@ -194,6 +224,12 @@ void Parser::expr() {
     Token t = ot.value();
     std::from_chars(t.value_.data(), t.value_.end(), n);
     codegen_->e_push_number(n);
+  } else if ((ot = match(TokenType::Identifier))) {
+    codegen_->e_push_local(ot.value().value_);
+  } else {
+    // TODO: Flesh out
+    Parser::fatal(fmt::format("Expected expr got {}({})",
+                              token_type_str(current_.type_), current_.value_));
   }
 }
 /* #endregion */
@@ -220,7 +256,7 @@ Token Parser::expect(TokenType kind) {
 bool Parser::peak(TokenType type) { return current_.type_ == type; }
 
 [[noreturn]] void Parser::fatal(std::string msg) {
-  std::cerr << fmt::format("{}:{}:{} {}", filename_, current_.line_,
+  std::cerr << fmt::format("{}:{}:{} {}", filename_, current_.line_ + 1,
                            current_.column_, msg)
             << std::endl;
   std::exit(EXIT_FAILURE);

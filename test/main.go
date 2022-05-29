@@ -125,19 +125,22 @@ func parsePass(path string, config LexPassConfig) *runData {
 	message := ""
 
 	outXmlT, err := xmlpp.BuildTree(out.Stdout)
-	runner.Must(err)
-	outXml := xmlpp.Pp(&outXmlT)
-
-	if config.blessMode == blessEnabledAuthoritative {
-		os.WriteFile(withSuffix(path, "xml"), []byte(outXml), 0644)
+	if err != nil {
+		status = runResultFail
+		message = "Expected XML, got ```" + out.Stdout + "```"
 	} else {
-		c, err := os.ReadFile(withSuffix(path, "xml"))
-		runner.Must(err)
-		if string(c) != outXml {
-			status = runResultFail
+		outXml := xmlpp.Pp(&outXmlT)
+		if config.blessMode == blessEnabledAuthoritative {
+			os.WriteFile(withSuffix(path, "xml"), []byte(outXml), 0644)
+		} else {
+			c, err := os.ReadFile(withSuffix(path, "xml"))
+			runner.Must(err)
+			if string(c) != outXml {
+				status = runResultFail
+			}
+			// TODO: Diff
+			message = "Expected ---\n" + string(c) + "\n--- got ---\n" + outXml + "\n---"
 		}
-		// TODO: Diff
-		message = "Expected ---\n" + string(c) + "\n--- got ---\n" + outXml + "\n---"
 	}
 
 	return &runData{

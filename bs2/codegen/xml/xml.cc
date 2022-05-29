@@ -93,6 +93,11 @@ void XmlCodegen::e_push_number(int32_t n) {
   line(s);
   close("num");
 }
+void XmlCodegen::e_push_local(std::string_view name) {
+  open("local");
+  line(name);
+  close("local");
+}
 /* endregion */
 
 /* #region assign */
@@ -112,7 +117,14 @@ void XmlCodegen::assign_addr_local(std::string_view name) {
   line(name);
   close("addr_local");
 }
-
+void XmlCodegen::assign_addr_fst() {
+  open("addr_fst");
+  close("addr_fst");
+}
+void XmlCodegen::assign_addr_snd() {
+  open("addr_snd");
+  close("addr_snd");
+}
 void XmlCodegen::assign_do() {
   open("assign_do");
   close("assign_do");

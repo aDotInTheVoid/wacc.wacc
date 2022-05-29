@@ -1,0 +1,32 @@
+<unit>
+  <fn>
+    <name>foo</name>
+    <ret>int</ret>
+    <args/>
+    <body>
+      <var><name>a</name><ty>int</ty></var>
+      <addr_local>a</addr_local>
+      <num>0</num>
+      <assign_do/>
+      <var><name>b</name><ty>int</ty></var>
+      <addr_local>b</addr_local>
+      <num>1</num>
+      <assign_do/>
+      <println><local>a</local></println>
+      <println><local>b</local></println>
+      <var><name>c</name><ty>int</ty></var>
+      <addr_local>c</addr_local>
+      <local>a</local>
+      <assign_do/>
+      <addr_local>a</addr_local>
+      <local>b</local>
+      <assign_do/>
+      <addr_local>b</addr_local>
+      <local>c</local>
+      <assign_do/>
+      <println><local>a</local></println>
+      <println><local>b</local></println>
+    </body>
+  </fn>
+  <main/>
+</unit>

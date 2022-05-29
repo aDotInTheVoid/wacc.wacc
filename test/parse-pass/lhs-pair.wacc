@@ -1,0 +1,9 @@
+begin
+
+skip; # Hack to tell the parser we're in main
+
+int foo = 0;
+fst foo = 1;
+snd foo = 2
+
+end
