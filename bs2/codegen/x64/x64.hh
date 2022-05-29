@@ -24,16 +24,10 @@ struct X64Codegen : Codegen {
   void start_function_body() override;
   void end_function() override;
   // Stmt
-  void start_free() override;
-  void end_free() override;
-  void start_return() override;
-  void end_return() override;
-  void start_exit() override;
-  void end_exit() override;
-  void start_print() override;
-  void end_print() override;
-  void start_println() override;
-  void end_println() override;
+  void pop_free(FreeKind) override;
+  void pop_return() override;
+  void pop_exit() override;
+  void pop_print(PrintKind, bool) override;
   void if_cond() override;
   void if_when() override;
   void if_else() override;

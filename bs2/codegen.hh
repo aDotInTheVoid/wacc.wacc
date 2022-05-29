@@ -19,16 +19,10 @@ struct Codegen {
   virtual void start_function_body() = 0;
   virtual void end_function() = 0;
   // Stmt
-  virtual void start_free() = 0;
-  virtual void end_free() = 0;
-  virtual void start_return() = 0;
-  virtual void end_return() = 0;
-  virtual void start_exit() = 0;
-  virtual void end_exit() = 0;
-  virtual void start_print() = 0;
-  virtual void end_print() = 0;
-  virtual void start_println() = 0;
-  virtual void end_println() = 0;
+  virtual void pop_free(FreeKind) = 0;
+  virtual void pop_return() = 0;
+  virtual void pop_exit() = 0;
+  virtual void pop_print(PrintKind, bool) = 0;
   virtual void if_cond() = 0;
   virtual void if_when() = 0;
   virtual void if_else() = 0;

@@ -6,8 +6,8 @@
     <body>
       <if>
         <cond><num>1</num></cond>
-        <when><return><num>1</num></return></when>
-        <else><return><num>0</num></return></else>
+        <when><num>1</num><return/></when>
+        <else><num>0</num><return/></else>
       </if>
     </body>
   </fn>
@@ -19,11 +19,7 @@
       <while>
         <cond><num>1</num></cond>
         <body>
-          <if>
-            <cond><num>0</num></cond>
-            <when><return><num>1</num></return></when>
-            <else/>
-          </if>
+          <if><cond><num>0</num></cond><when><num>1</num><return/></when><else/></if>
         </body>
       </while>
     </body>
@@ -33,11 +29,15 @@
     <ret>bool</ret>
     <args/>
     <body>
-      <print><num>1</num></print>
-      <println><num>1</num></println>
-      <exit><num>1</num></exit>
-      <return><num>1</num></return>
-      <block><return><num>2</num></return></block>
+      <num>1</num>
+      <print><kind>i32</kind><newline>false</newline></print>
+      <num>1</num>
+      <print><kind>i32</kind><newline>true</newline></print>
+      <num>1</num>
+      <exit/>
+      <num>1</num>
+      <return/>
+      <block><num>2</num><return/></block>
     </body>
   </fn>
   <main/>

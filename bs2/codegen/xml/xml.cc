@@ -44,16 +44,20 @@ void XmlCodegen::end_function() {
 /* #endregion */
 
 /* #region stmt */
-void XmlCodegen::start_free() { open("free"); }
-void XmlCodegen::end_free() { close("free"); }
-void XmlCodegen::start_return() { open("return"); }
-void XmlCodegen::end_return() { close("return"); }
-void XmlCodegen::start_exit() { open("exit"); }
-void XmlCodegen::end_exit() { close("exit"); }
-void XmlCodegen::start_print() { open("print"); }
-void XmlCodegen::end_print() { close("print"); }
-void XmlCodegen::start_println() { open("println"); }
-void XmlCodegen::end_println() { close("println"); }
+void XmlCodegen::pop_free(FreeKind) { open_close("free"); }
+void XmlCodegen::pop_return() { open_close("return"); }
+void XmlCodegen::pop_exit() { open_close("exit"); }
+void XmlCodegen::pop_print(PrintKind pk, bool nl) {
+  open("print");
+  open("kind");
+  line(print_kind_name(pk));
+  close("kind");
+  open("newline");
+  line(nl ? "true" : "false");
+  close("newline");
+  close("print");
+}
+
 void XmlCodegen::if_cond() {
   open("if");
   open("cond");
@@ -184,6 +188,10 @@ void XmlCodegen::close(const char *name) {
 void XmlCodegen::open(const char *name) {
   line(fmt::format("<{}>", name));
   indent += indent_width;
+}
+void XmlCodegen::open_close(const char *name) {
+  open(name);
+  close(name);
 }
 
 /* #endregion */

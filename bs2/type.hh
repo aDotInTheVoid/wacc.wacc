@@ -13,12 +13,29 @@ enum class TypeKind {
   EraisedPair,
 };
 
+enum class PrintKind {
+  Int,
+  Char,
+  String,
+  Bool,
+  Ptr,
+};
+const char *print_kind_name(PrintKind);
+
+enum class FreeKind {
+  Scalar,
+  Pair,
+  Array,
+};
+
 struct Type {
   TypeKind kind_;
   std::unique_ptr<Type> p1_;
   std::unique_ptr<Type> p2_;
 
   bool is_valid();
+  FreeKind free_kind();
+  PrintKind print_kind();
 };
 
 Type type_int();

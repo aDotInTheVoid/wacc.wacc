@@ -139,29 +139,24 @@ void Parser::s_decl(Type &ty) {
 }
 
 void Parser::s_free() {
-  codegen_->start_free();
-  expr();
-  codegen_->end_free();
+  auto ty = expr();
+  codegen_->pop_free(ty.free_kind());
 }
 void Parser::s_return() {
-  codegen_->start_return();
   expr();
-  codegen_->end_return();
+  codegen_->pop_return();
 }
 void Parser::s_exit() {
-  codegen_->start_exit();
   expr();
-  codegen_->end_exit();
+  codegen_->pop_exit();
 }
 void Parser::s_print() {
-  codegen_->start_print();
   expr();
-  codegen_->end_print();
+  codegen_->pop_print(PrintKind::Int, false);
 }
 void Parser::s_println() {
-  codegen_->start_println();
   expr();
-  codegen_->end_println();
+  codegen_->pop_print(PrintKind::Int, true); // TODO: Cary type
 }
 void Parser::s_if() {
   codegen_->if_cond();
@@ -217,15 +212,17 @@ void Parser::s_assign_snd() {
 /* #endregion */
 
 /* #region expr */
-void Parser::expr() {
+Type Parser::expr() {
   std::optional<Token> ot;
   if ((ot = match(TokenType::Number))) {
     int32_t n;
     Token t = ot.value();
     std::from_chars(t.value_.data(), t.value_.end(), n);
     codegen_->e_push_number(n);
+    return type_int();
   } else if ((ot = match(TokenType::Identifier))) {
     codegen_->e_push_local(ot.value().value_);
+    return type_int(); // TODO: load type from map
   } else {
     // TODO: Flesh out
     Parser::fatal(fmt::format("Expected expr got {}({})",

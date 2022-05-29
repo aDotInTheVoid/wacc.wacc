@@ -1,5 +1,6 @@
 #include "type.hh"
 
+#include <cassert>
 #include <cstdlib>
 #include <utility>
 
@@ -17,7 +18,23 @@ bool Type::is_valid() {
   case TypeKind::Array:
     return p1_ && !p2_ && p1_->is_valid();
   }
-  std::exit(-1); // Unreachable
+  assert(0);
+}
+
+FreeKind Type::free_kind() {
+  switch (kind_) {
+  case TypeKind::Int:
+  case TypeKind::Char:
+  case TypeKind::Bool:
+    return FreeKind::Scalar;
+  case TypeKind::Pair:
+  case TypeKind::EraisedPair:
+    return FreeKind::Pair;
+  case TypeKind::Array:
+  case TypeKind::String:
+    return FreeKind::Array;
+  }
+  assert(0);
 }
 
 Type type_array(Type t) {
@@ -30,4 +47,20 @@ Type type_bool() { return Type{TypeKind::Bool, nullptr, nullptr}; }
 Type type_string() { return Type{TypeKind::String, nullptr, nullptr}; }
 Type type_eraised_pair() {
   return Type{TypeKind::EraisedPair, nullptr, nullptr};
+}
+
+const char *print_kind_name(PrintKind pk) {
+  switch (pk) {
+  case PrintKind::Int:
+    return "i32";
+  case PrintKind::Char:
+    return "char";
+  case PrintKind::String:
+    return "str";
+  case PrintKind::Bool:
+    return "bool";
+  case PrintKind::Ptr:
+    return "ptr";
+  }
+  assert(0);
 }

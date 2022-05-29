@@ -15,6 +15,9 @@
 #define LOC_SIZE 8
 
 static int32_t addr_of(int32_t locno) { return LOC_SIZE * (locno + 1); }
+static const char *print_fn_name(PrintKind pk) {
+  return "i32"; // TODO
+}
 
 X64Codegen::X64Codegen() {
   add_dir(".intel_syntax noprefix");
@@ -45,26 +48,16 @@ void X64Codegen::end_function() {
   // Probably reset vars
 }
 // Stmt
-void X64Codegen::start_free() { assert(0); }
-void X64Codegen::end_free() { assert(0); }
-void X64Codegen::start_return() { assert(0); }
-void X64Codegen::end_return() { assert(0); }
-void X64Codegen::start_exit() { assert(0); }
-void X64Codegen::end_exit() { assert(0); }
-void X64Codegen::start_print() {
-  // nothing
-}
-void X64Codegen::end_print() {
-  add_instr("pop rdi # Load print arg");
-  add_instr("call waccrt_print_i32"); // TODO: Use correct type
-}
-void X64Codegen::start_println() {
-  // nothing
-}
-void X64Codegen::end_println() {
+
+void X64Codegen::pop_print(PrintKind pk, bool multiline) {
   add_instr("pop rdi # load print");
-  add_instr("call waccrt_println_i32"); // TODO: Use correct type
+  add_instr(fmt::format("call waccrt_print{}_{}", multiline ? "ln" : "",
+                        print_fn_name(pk))); // TODO: Use correct type
 }
+
+void X64Codegen::pop_free(FreeKind) { assert(0); }
+void X64Codegen::pop_return() { assert(0); }
+void X64Codegen::pop_exit() { assert(0); }
 void X64Codegen::if_cond() { assert(0); }
 void X64Codegen::if_when() { assert(0); }
 void X64Codegen::if_else() { assert(0); }

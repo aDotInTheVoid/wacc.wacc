@@ -49,7 +49,7 @@ struct Parser {
   void s_assign_local(std::string_view);
 
   // Expr
-  void expr();
+  Type expr();
   // Assignment
   void assign_rhs();
 
