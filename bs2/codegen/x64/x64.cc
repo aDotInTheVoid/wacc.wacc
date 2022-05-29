@@ -5,9 +5,13 @@
 #include "type.hh"
 #include "x64.hh"
 
+/*
+ * We generate x64 assembly code for GNU GAS using intel syntax.
+ */
+
 X64Codegen::X64Codegen() {
-  add_dir("extern wacctr_println_i32");
-  add_dir("global main");
+  add_dir(".intel_syntax noprefix");
+  add_dir(".global main");
 }
 
 void X64Codegen::start_main() { start_function("main", type_int()); }
@@ -39,14 +43,14 @@ void X64Codegen::start_print() {
   // nothing
 }
 void X64Codegen::end_print() {
-  add_instr("pop rdi ; Load print arg");
+  add_instr("pop rdi # Load print arg");
   add_instr("call wacctr_print_i32"); // TODO: Use correct type
 }
 void X64Codegen::start_println() {
   // nothing
 }
 void X64Codegen::end_println() {
-  add_instr("pop rdi ; load print");
+  add_instr("pop rdi # load print");
   add_instr("call wacctr_println_i32"); // TODO: Use correct type
 }
 void X64Codegen::if_cond() { assert(0); }
@@ -61,12 +65,12 @@ void X64Codegen::end_block() { assert(0); }
 // Expr
 void X64Codegen::e_push_number(int32_t n) {
   add_instr(fmt::format("mov eax, {}", n));
-  add_instr("push rax ; e_push_number");
+  add_instr("push rax # e_push_number");
 }
 void X64Codegen::e_push_local(std::string_view name) {
   int32_t addr = locs_[name];
-  add_instr(fmt::format("mov rax, [rbp-{}] ; e_push_local", addr * 8));
-  add_instr("push rax ; e_push_local");
+  add_instr(fmt::format("mov rax, [rbp-{}] # e_push_local", addr * 8));
+  add_instr("push rax # e_push_local");
 }
 
 // Assignment
@@ -77,11 +81,11 @@ void X64Codegen::add_var(std::string_view name, const Type &ty) {
 void X64Codegen::assign_addr_local(std::string_view name) {
   int32_t addr = locs_[name];
   add_instr(fmt::format("lea rax, [rbp-{}]", addr * 8));
-  add_instr("push rax ; assign_addr_local");
+  add_instr("push rax # assign_addr_local");
 } // Push address of local
 void X64Codegen::assign_do() {
-  add_instr("pop rdi ; assign_do val");  // Value
-  add_instr("pop rax ; assign_do addr"); // Address
+  add_instr("pop rdi # assign_do val");  // Value
+  add_instr("pop rax # assign_do addr"); // Address
   add_instr("mov [rax], rdi");
 } // Pop value and address.
 void X64Codegen::assign_addr_fst() { assert(0); }
