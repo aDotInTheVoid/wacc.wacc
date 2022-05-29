@@ -7,7 +7,14 @@
 
 /*
  * We generate x64 assembly code for GNU GAS using intel syntax.
+ *
+ * - https://en.wikibooks.org/wiki/X86_Disassembly/The_Stack
  */
+
+#define MAX_LOCS 10
+#define LOC_SIZE 8
+
+static int32_t addr_of(int32_t locno) { return LOC_SIZE * (locno + 1); }
 
 X64Codegen::X64Codegen() {
   add_dir(".intel_syntax noprefix");
@@ -15,18 +22,23 @@ X64Codegen::X64Codegen() {
 }
 
 void X64Codegen::start_main() { start_function("main", type_int()); }
-void X64Codegen::end_main() { end_function(); }
+void X64Codegen::end_main() {
+  add_instr("xor rax, rax");
+  end_function();
+}
 std::string X64Codegen::finish() { return buff_; }
 // Function
 void X64Codegen::start_function(std::string_view name, const Type &ret) {
   add_dir(fmt::format("{}:", name));
   add_instr("push rbp");
   add_instr("mov rbp, rsp");
+  add_instr(fmt::format("sub rsp, {}", MAX_LOCS * LOC_SIZE));
   // TODO: Reserve stack space?
 }
 void X64Codegen::add_arg(std::string_view name, const Type &ty) { assert(0); }
 void X64Codegen::start_function_body() { assert(0); }
 void X64Codegen::end_function() {
+  add_instr(fmt::format("add rsp, {}", MAX_LOCS * LOC_SIZE));
   add_instr("pop rbp");
   add_instr("ret");
   // TODO: What needs to be done?
@@ -68,19 +80,23 @@ void X64Codegen::e_push_number(int32_t n) {
   add_instr("push rax # e_push_number");
 }
 void X64Codegen::e_push_local(std::string_view name) {
-  int32_t addr = locs_[name];
-  add_instr(fmt::format("mov rax, [rbp-{}] # e_push_local", addr * 8));
+  int32_t locno = locs_[name];
+  add_instr(fmt::format("mov rax, [rbp-{}] # e_push_local", addr_of(locno)));
   add_instr("push rax # e_push_local");
 }
 
 // Assignment
 void X64Codegen::add_var(std::string_view name, const Type &ty) {
-  locs_[name] = n_locs_++;
+  int32_t locno = n_locs_++;
+  if (n_locs_ > MAX_LOCS) {
+    throw std::runtime_error("Too many locals");
+  }
+  locs_[name] = locno;
 }
 // Push the addr of a local to the stack
 void X64Codegen::assign_addr_local(std::string_view name) {
-  int32_t addr = locs_[name];
-  add_instr(fmt::format("lea rax, [rbp-{}]", addr * 8));
+  int32_t locno = locs_[name];
+  add_instr(fmt::format("lea rax, [rbp-{}]", addr_of(locno)));
   add_instr("push rax # assign_addr_local");
 } // Push address of local
 void X64Codegen::assign_do() {

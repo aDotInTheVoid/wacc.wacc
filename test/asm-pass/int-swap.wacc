@@ -1,8 +1,6 @@
 begin
 
     skip;
-
-    # TODO: Output in wrong.
     
     int a = 0;
     int b = 1;

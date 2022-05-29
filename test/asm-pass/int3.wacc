@@ -1,0 +1,15 @@
+begin
+
+skip;
+
+int a = 0;
+println a;
+int b = 1;
+println a;
+println b;
+int c = 2;
+println a;
+println b;
+println c
+
+end
