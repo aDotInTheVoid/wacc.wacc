@@ -51,10 +51,12 @@ func main() {
 
 	bs2LexPass := LexPassConfig{runner.BS2, blessDisabled}
 	waccWaccLexPass := LexPassConfig{runner.WaccWacc{}, blessDisabled}
+	asmPassOut := AsmRunConfig{blessDisabled}
 
 	if isBlessEnabled {
 		bs2LexPass.blessMode = blessEnabledAuthoritative
 		waccWaccLexPass.blessMode = blessEnabledNonAuthoritative
+		asmPassOut.blessMode = blessEnabledAuthoritative
 	}
 	bs2ParsePass := bs2LexPass
 	bs2AsmPass := bs2LexPass
@@ -63,6 +65,7 @@ func main() {
 	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, waccWaccLexPass))
 	filepath.Walk("parse-pass", walkWrap(parsePass, c, &wg, bs2ParsePass))
 	filepath.Walk("asm-pass", walkWrap(asmPass, c, &wg, bs2AsmPass))
+	filepath.Walk("asm-pass", walkWrap(asmPassRun, c, &wg, asmPassOut))
 
 	// Wait for all the tests to finish
 	// Must go this after all runs
@@ -110,6 +113,38 @@ type TestOverallRunner[T any] func(path string, config T) *runData
 type LexPassConfig struct {
 	compiler  runner.Compiler
 	blessMode blessMode
+}
+type AsmRunConfig struct {
+	blessMode blessMode
+}
+
+func asmPassRun(path string, config AsmRunConfig) *runData {
+	if config.blessMode == blessEnabledNonAuthoritative {
+		return nil
+	}
+	target := withSuffix(path, "")
+	target = "_build/" + target[:len(target)-1]
+	out := runner.RunOutputGet("make", nil, "-C", "..", target)
+	var status runResult = runResultPass
+	message := ""
+	if out.StatusCode != 0 {
+		status = runResultFail
+		message = out.Stderr
+	} else {
+		out = runner.RunOutputGet("../"+target, nil)
+		if config.blessMode == blessEnabledAuthoritative {
+			os.WriteFile(withSuffix(path, "out"), []byte(out.Stdout), 0644)
+		} else {
+			c, err := os.ReadFile(withSuffix(path, "out"))
+			runner.Must(err)
+			if string(c) != out.Stdout {
+				status = runResultFail
+				message = "Expected:\n" + string(c) + "\nGot:\n" + out.Stdout
+			}
+		}
+	}
+	return &runData{path, "run", status, message}
+
 }
 
 func asmPass(path string, config LexPassConfig) *runData {

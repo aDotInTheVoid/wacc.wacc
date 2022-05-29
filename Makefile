@@ -40,7 +40,7 @@ $(objdir)/wacc: $(objdir)/wacc.c
 
 
 $(objdir)/rt.o: rt.c
-	gcc -c -o $@ $<
+	gcc -O3 -Wall -c -o $@ $<
 $(objdir)/asm-pass/%.o: test/asm-pass/%.s
 	gcc -c -o $@ $<
 $(objdir)/asm-pass/%: $(objdir)/asm-pass/%.o $(objdir)/rt.o
