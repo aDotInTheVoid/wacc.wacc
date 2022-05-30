@@ -6,6 +6,28 @@ main:
     sub rsp, 80
     mov eax, 1
     push rax # e_push_number
+    mov eax, 2
+    push rax # e_push_number
+    mov eax, 3
+    push rax # e_push_number
+    pop rax
+    pop rbx
+    imul ebx, eax
+    push rbx
+    pop rax
+    pop rbx
+    add ebx, eax
+    push rbx
+    pop rdi # load print
+    call waccrt_println_i32
+    mov eax, 2
+    push rax # e_push_number
+    mov eax, 3
+    push rax # e_push_number
+    pop rax
+    pop rbx
+    imul ebx, eax
+    push rbx
     mov eax, 1
     push rax # e_push_number
     pop rax
@@ -14,29 +36,21 @@ main:
     push rbx
     pop rdi # load print
     call waccrt_println_i32
-    mov eax, 100
-    push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    sub ebx, eax
-    push rbx
-    pop rdi # load print
-    call waccrt_println_i32
-    mov eax, 1
-    push rax # e_push_number
-    mov eax, 100
-    push rax # e_push_number
-    pop rax
-    pop rbx
-    sub ebx, eax
-    push rbx
-    pop rdi # load print
-    call waccrt_println_i32
-    mov eax, 2147483647
+    mov eax, 2
     push rax # e_push_number
     mov eax, 3
+    push rax # e_push_number
+    pop rax
+    pop rbx
+    imul ebx, eax
+    push rbx
+    pop rax
+    pop rbx
+    add ebx, eax
+    push rbx
+    mov eax, 4
     push rax # e_push_number
     pop rax
     pop rbx

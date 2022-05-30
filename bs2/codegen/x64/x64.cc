@@ -25,7 +25,7 @@ static const char *print_fn_name(PrintKind pk) {
   case PrintKind::Char:
     return "char";
   case PrintKind::String:
-    return "string";
+    return "str";
   case PrintKind::Ptr:
     return "ptr";
   }
@@ -41,6 +41,11 @@ void X64Codegen::start_main() { start_function("main", type_int()); }
 void X64Codegen::end_main() {
   add_instr("xor rax, rax");
   end_function();
+  add_dir(".section .rodata");
+  for (int i = 0; i < strs_.size(); i++) {
+    add_dir(fmt::format(".str{}:", i));
+    add_instr(fmt::format(".string {}", strs_[i]));
+  }
 }
 std::string X64Codegen::finish() { return buff_; }
 // Function
@@ -92,6 +97,8 @@ void X64Codegen::e_push_local(std::string_view name) {
 }
 void X64Codegen::e_push_char(std::string_view c) {
   assert(c.size() == 3); // TODO: Escape
+  // https://sourceware.org/binutils/docs-2.38/as/Strings.html
+  // GAS syntax is probably a superset of wacc syntax
   int cno = c[1];
   add_instr(fmt::format("mov rax, {}", cno));
   add_instr("push rax"); // TODO: x64 Imm version??
@@ -101,7 +108,10 @@ void X64Codegen::e_push_bool(bool b) {
   add_instr("push rax");
 }
 void X64Codegen::e_push_string(std::string_view s) {
-  assert(0); // TODO
+  strs_.push_back(s);
+  add_instr(fmt::format("lea rax, .str{}[rip]", strs_.size() - 1));
+  // add_instr("call waccrt_str_new");
+  add_instr("push rax");
 }
 void X64Codegen::e_pop_op(Op op) {
   add_instr("pop rax"); // rax = rhs
@@ -113,8 +123,12 @@ void X64Codegen::e_pop_op(Op op) {
   case Op::Sub:
     add_instr("sub ebx, eax");
     break;
+  case Op::Mul:
+    add_instr("imul ebx, eax");
+    break;
   default:
     fprintf(stderr, "Unhandled op: %s\n", op_name(op));
+    assert(0);
   }
   add_instr("push rbx");
 }

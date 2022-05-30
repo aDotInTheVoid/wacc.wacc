@@ -1,0 +1,13 @@
+begin
+
+skip;
+
+string s = "hello";
+print s;
+println s;
+print s;
+print s;
+println s;
+
+skip
+end

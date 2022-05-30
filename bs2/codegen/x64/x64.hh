@@ -3,12 +3,14 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #include "codegen.hh"
 
 struct X64Codegen : Codegen {
   std::string buff_;
   int32_t n_locs_ = 0;
+  std::vector<std::string_view> strs_;
   std::map<std::string_view, int32_t> locs_;
   // std::map<std::string_view, Type> locs_ty_;
 

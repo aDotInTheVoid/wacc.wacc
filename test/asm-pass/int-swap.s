@@ -59,4 +59,5 @@ main:
     add rsp, 80
     pop rbp
     ret
+.section .rodata
 
