@@ -10,6 +10,7 @@
 struct X64Codegen : Codegen {
   std::string buff_;
   int32_t n_locs_ = 0;
+  int32_t jno_ = 0;
   std::vector<std::string_view> strs_;
   std::map<std::string_view, int32_t> locs_;
   // std::map<std::string_view, Type> locs_ty_;
@@ -32,9 +33,9 @@ struct X64Codegen : Codegen {
   void pop_exit() override;
   void pop_print(PrintKind, bool) override;
   void if_cond() override;
-  void if_when() override;
-  void if_else() override;
-  void if_end() override;
+  int32_t if_when() override;
+  int32_t if_else(int32_t) override;
+  void if_end(int32_t) override;
   void while_cond() override;
   void while_body() override;
   void while_end() override;
@@ -57,6 +58,7 @@ struct X64Codegen : Codegen {
 
   void add_dir(std::string_view);
   void add_instr(std::string_view);
+  int32_t jno();
 };
 
 #endif

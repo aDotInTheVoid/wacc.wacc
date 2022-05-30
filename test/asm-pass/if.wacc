@@ -1,0 +1,38 @@
+begin
+
+if true then
+    print "t"
+else
+    print "f"
+fi;
+
+if false then
+    print "f"
+else
+    print "t"
+fi;
+
+if true then
+    if true then
+        if false then 
+            skip
+        else
+            print "t"
+        fi
+    else skip fi
+else skip fi;
+
+if false then
+    skip
+else 
+    if true then
+        if false then 
+            skip
+        else
+            print "t"
+        fi
+    else skip fi
+fi;
+
+skip
+end

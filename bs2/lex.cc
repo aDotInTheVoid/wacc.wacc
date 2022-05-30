@@ -256,7 +256,11 @@ void Token::debug(std::ostream &o) {
     << std::endl;
 }
 
-bool Lexer::is_at_end() { return current_ >= input_.size(); }
+bool Lexer::is_at_end() {
+  int a = current_;
+  a = input_.size();
+  return current_ >= input_.size();
+}
 char Lexer::advance() {
   // TODO: Update line_ and col_
   char c = input_[current_];

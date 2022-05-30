@@ -62,15 +62,17 @@ void XmlCodegen::if_cond() {
   open("if");
   open("cond");
 }
-void XmlCodegen::if_when() {
+int32_t XmlCodegen::if_when() {
   close("cond");
   open("when");
+  return -1;
 }
-void XmlCodegen::if_else() {
+int32_t XmlCodegen::if_else(int32_t _) {
   close("when");
   open("else");
+  return -1;
 }
-void XmlCodegen::if_end() {
+void XmlCodegen::if_end(int32_t _) {
   close("else");
   close("if");
 }

@@ -18,8 +18,8 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  std::string source;
-  std::stringstream ss;
+  std::string source{};
+  std::stringstream ss{};
   const char *filename;
 
   // Read the file into a string.
@@ -31,6 +31,10 @@ int main(int argc, char **argv) {
     filename = "<stdin>";
   } else {
     std::ifstream file(argv[2]);
+    if (!file.is_open()) {
+      fprintf(stderr, "Could not open file: %s\n", argv[2]);
+      return EXIT_FAILURE;
+    }
     ss << file.rdbuf();
     source = ss.str();
     filename = argv[2];

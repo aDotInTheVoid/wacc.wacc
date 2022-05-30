@@ -160,16 +160,17 @@ void Parser::s_println() {
   codegen_->pop_print(t.print_kind(), true);
 }
 void Parser::s_if() {
+  // http://craftinginterpreters.com/image/jumping-back-and-forth/if-else.png
   codegen_->if_cond();
   expr();
   expect(TokenType::Then);
-  codegen_->if_when();
-  stmts();
+  int32_t jno = codegen_->if_when();
+  stmts(); //
   expect(TokenType::Else);
-  codegen_->if_else();
+  jno = codegen_->if_else(jno);
   stmts();
   expect(TokenType::Fi);
-  codegen_->if_end();
+  codegen_->if_end(jno);
 }
 void Parser::s_while() {
   codegen_->while_cond();
@@ -305,7 +306,7 @@ Type Parser::expr_base() {
     return type_char();
   } else if ((ot = match(TokenType::String))) {
     codegen_->e_push_string(ot.value().value_);
-    return type_char();
+    return type_string();
   } else if ((ot = match(TokenType::Identifier))) {
     codegen_->e_push_local(ot.value().value_);
     auto ty = loc_tys_.find(ot.value().value_);

@@ -76,10 +76,21 @@ void X64Codegen::pop_print(PrintKind pk, bool multiline) {
 void X64Codegen::pop_free(FreeKind) { assert(0); }
 void X64Codegen::pop_return() { assert(0); }
 void X64Codegen::pop_exit() { assert(0); }
-void X64Codegen::if_cond() { assert(0); }
-void X64Codegen::if_when() { assert(0); }
-void X64Codegen::if_else() { assert(0); }
-void X64Codegen::if_end() { assert(0); }
+void X64Codegen::if_cond() {} // nop
+int32_t X64Codegen::if_when() {
+  int32_t j = jno();
+  add_instr("pop rax");
+  add_instr("test rax, rax");
+  add_instr(fmt::format("je .CF{}", j));
+  return j;
+}
+int32_t X64Codegen::if_else(int32_t rno) {
+  int32_t j = jno();
+  add_instr(fmt::format("jmp .CF{}", j));
+  add_dir(fmt::format(".CF{}:", rno));
+  return j;
+}
+void X64Codegen::if_end(int32_t jno) { add_dir(fmt::format(".CF{}:", jno)); }
 void X64Codegen::while_cond() { assert(0); }
 void X64Codegen::while_body() { assert(0); }
 void X64Codegen::while_end() { assert(0); }
@@ -165,3 +176,5 @@ void X64Codegen::add_instr(std::string_view s) {
   buff_ += s;
   buff_ += "\n";
 }
+
+int32_t X64Codegen::jno() { return jno_++; }
