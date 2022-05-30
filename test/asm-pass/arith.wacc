@@ -1,0 +1,8 @@
+begin 
+
+println 1 + 1;
+println 100 - 1;
+println 1 - 100;
+println 2147483647 + 3
+
+end

@@ -11,6 +11,7 @@ bs2_source = [
   'codegen/xml/xml.cc',
   'lex.cc',
   'main.cc',
+  'op.cc',
   'parser.cc',
   'type.cc',
   'util.cc',

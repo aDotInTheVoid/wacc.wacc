@@ -10,6 +10,7 @@ struct X64Codegen : Codegen {
   std::string buff_;
   int32_t n_locs_ = 0;
   std::map<std::string_view, int32_t> locs_;
+  // std::map<std::string_view, Type> locs_ty_;
 
   X64Codegen();
   ~X64Codegen() override = default;
@@ -39,7 +40,11 @@ struct X64Codegen : Codegen {
   void end_block() override;
   // Expr
   void e_push_number(int32_t) override;
+  void e_push_bool(bool) override;
+  void e_push_string(std::string_view) override;
+  void e_push_char(std::string_view) override;
   void e_push_local(std::string_view) override;
+  void e_pop_op(Op) override;
 
   // Assignment
   void add_var(std::string_view name, const Type &ty) override;

@@ -36,6 +36,7 @@ struct Type {
   bool is_valid();
   FreeKind free_kind();
   PrintKind print_kind();
+  Type clone() const;
 };
 
 Type type_int();

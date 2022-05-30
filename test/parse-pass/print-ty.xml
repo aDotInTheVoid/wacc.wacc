@@ -1,0 +1,22 @@
+<unit>
+  <main>
+    <var><name>a</name><ty>int</ty></var>
+    <addr_local>a</addr_local>
+    <num>1</num>
+    <assign_do/>
+    <var><name>b</name><ty>bool</ty></var>
+    <addr_local>b</addr_local>
+    <false/>
+    <assign_do/>
+    <var><name>c</name><ty>char</ty></var>
+    <addr_local>c</addr_local>
+    <char>'c'</char>
+    <assign_do/>
+    <local>a</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+    <local>b</local>
+    <print><kind>bool</kind><newline>true</newline></print>
+    <local>c</local>
+    <print><kind>char</kind><newline>true</newline></print>
+  </main>
+</unit>

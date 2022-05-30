@@ -1,4 +1,5 @@
 #include <cassert>
+#include <utility>
 
 #include <fmt/core.h>
 
@@ -16,7 +17,19 @@
 
 static int32_t addr_of(int32_t locno) { return LOC_SIZE * (locno + 1); }
 static const char *print_fn_name(PrintKind pk) {
-  return "i32"; // TODO
+  switch (pk) {
+  case PrintKind::Int:
+    return "i32";
+  case PrintKind::Bool:
+    return "bool";
+  case PrintKind::Char:
+    return "char";
+  case PrintKind::String:
+    return "string";
+  case PrintKind::Ptr:
+    return "ptr";
+  }
+  assert(0);
 }
 
 X64Codegen::X64Codegen() {
@@ -52,7 +65,7 @@ void X64Codegen::end_function() {
 void X64Codegen::pop_print(PrintKind pk, bool multiline) {
   add_instr("pop rdi # load print");
   add_instr(fmt::format("call waccrt_print{}_{}", multiline ? "ln" : "",
-                        print_fn_name(pk))); // TODO: Use correct type
+                        print_fn_name(pk)));
 }
 
 void X64Codegen::pop_free(FreeKind) { assert(0); }
@@ -77,6 +90,34 @@ void X64Codegen::e_push_local(std::string_view name) {
   add_instr(fmt::format("mov rax, [rbp-{}] # e_push_local", addr_of(locno)));
   add_instr("push rax # e_push_local");
 }
+void X64Codegen::e_push_char(std::string_view c) {
+  assert(c.size() == 3); // TODO: Escape
+  int cno = c[1];
+  add_instr(fmt::format("mov rax, {}", cno));
+  add_instr("push rax"); // TODO: x64 Imm version??
+}
+void X64Codegen::e_push_bool(bool b) {
+  add_instr(fmt::format("mov rax, {}", b ? 1 : 0));
+  add_instr("push rax");
+}
+void X64Codegen::e_push_string(std::string_view s) {
+  assert(0); // TODO
+}
+void X64Codegen::e_pop_op(Op op) {
+  add_instr("pop rax"); // rax = rhs
+  add_instr("pop rbx"); // rbx = lhs
+  switch (op) {
+  case Op::Add:
+    add_instr("add ebx, eax");
+    break;
+  case Op::Sub:
+    add_instr("sub ebx, eax");
+    break;
+  default:
+    fprintf(stderr, "Unhandled op: %s\n", op_name(op));
+  }
+  add_instr("push rbx");
+}
 
 // Assignment
 void X64Codegen::add_var(std::string_view name, const Type &ty) {
@@ -85,6 +126,7 @@ void X64Codegen::add_var(std::string_view name, const Type &ty) {
     throw std::runtime_error("Too many locals");
   }
   locs_[name] = locno;
+  // locs_ty_[name] = std::move(ty);
 }
 // Push the addr of a local to the stack
 void X64Codegen::assign_addr_local(std::string_view name) {

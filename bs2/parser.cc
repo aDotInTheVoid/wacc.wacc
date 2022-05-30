@@ -66,11 +66,9 @@ void Parser::stmts() {
 void Parser::stmt() {
   std::optional<Type> oty;
   std::optional<Token> oname;
-  if ((oty = ty()))
-    s_decl(oty.value());
-  else if (match(TokenType::Skip))
+
+  if (match(TokenType::Skip))
     return;
-  // TODO: assign-lhs = assign-rhs
   else if (match(TokenType::Read))
     s_read();
   else if (match(TokenType::Free))
@@ -89,6 +87,8 @@ void Parser::stmt() {
     s_while();
   else if (match(TokenType::Begin))
     s_block();
+  else if ((oty = ty()))
+    s_decl(std::move(oty.value()));
   else if (match(TokenType::Fst))
     s_assign_fst();
   else if (match(TokenType::Snd))
@@ -128,11 +128,12 @@ void Parser::s_read() {
   // TODO
   exit(-1);
 }
-void Parser::s_decl(Type &ty) {
+void Parser::s_decl(Type ty) {
   //  type, ident, "=", assign-rhs
   Token ident = expect(TokenType::Identifier);
   expect(TokenType::Assign);
   codegen_->add_var(ident.value_, ty);
+  loc_tys_[ident.value_] = std::move(ty);
   codegen_->assign_addr_local(ident.value_);
   assign_rhs();
   codegen_->assign_do();
@@ -151,12 +152,12 @@ void Parser::s_exit() {
   codegen_->pop_exit();
 }
 void Parser::s_print() {
-  expr();
-  codegen_->pop_print(PrintKind::Int, false);
+  auto t = expr();
+  codegen_->pop_print(t.print_kind(), false);
 }
 void Parser::s_println() {
-  expr();
-  codegen_->pop_print(PrintKind::Int, true); // TODO: Cary type
+  auto t = expr();
+  codegen_->pop_print(t.print_kind(), true);
 }
 void Parser::s_if() {
   codegen_->if_cond();
@@ -212,7 +213,80 @@ void Parser::s_assign_snd() {
 /* #endregion */
 
 /* #region expr */
-Type Parser::expr() {
+
+// https://github.com/aDotInTheVoid/pisswaccrs/blob/89c8688f4d18a389241f5ccd323c846987689edf/src/parser.lalrpop#L126-L164
+
+Type Parser::expr() { return expr_or(); }
+Type Parser::expr_or() {
+  Type tp = expr_and();
+  while ((match(TokenType::Or))) {
+    tp = expr_and();
+    // TODO Typecheck
+    codegen_->e_pop_op(Op::Or);
+  }
+  return tp;
+}
+Type Parser::expr_and() {
+  Type tp = expr_eq();
+  while ((match(TokenType::And))) {
+    tp = expr_eq();
+    // TODO Typecheck
+    codegen_->e_pop_op(Op::And);
+  }
+  return tp;
+}
+Type Parser::expr_eq() {
+  Type tp = expr_cmp();
+  std::optional<Token> otk;
+  while ((otk = match2(TokenType::Eq, TokenType::Ne))) {
+    tp = expr_cmp();
+    codegen_->e_pop_op(token_to_op(otk.value().type_));
+  }
+  return tp;
+}
+Type Parser::expr_cmp() {
+  Type tp = expr_add();
+  std::optional<Token> otk;
+  while ((otk = match4(TokenType::Lt, TokenType::Le, TokenType::Gt,
+                       TokenType::Ge))) {
+    tp = expr_add();
+    codegen_->e_pop_op(token_to_op(otk.value().type_));
+  }
+  return tp;
+}
+Type Parser::expr_add() {
+  Type tp = expr_mul();
+  std::optional<Token> otk;
+  while ((otk = match2(TokenType::Plus, TokenType::Minus))) {
+    tp = expr_mul();
+    codegen_->e_pop_op(token_to_op(otk.value().type_));
+  }
+  return tp;
+}
+Type Parser::expr_mul() {
+  Type tp = expr_unary();
+  std::optional<Token> otk;
+  while ((otk = match3(TokenType::Times, TokenType::Div, TokenType::Mod))) {
+    tp = expr_unary();
+    codegen_->e_pop_op(token_to_op(otk.value().type_));
+  }
+  return tp;
+}
+Type Parser::expr_unary() {
+  // TODO:
+  return expr_base();
+}
+Type Parser::expr_base() {
+  /*
+
+    CharLiter,
+    StrLiter,
+    PairLiter,
+    Ident,
+    ArrayElem,
+    "(" Expr ")",
+    */
+
   std::optional<Token> ot;
   if ((ot = match(TokenType::Number))) {
     int32_t n;
@@ -220,15 +294,30 @@ Type Parser::expr() {
     std::from_chars(t.value_.data(), t.value_.end(), n);
     codegen_->e_push_number(n);
     return type_int();
+  } else if ((ot = match(TokenType::True))) {
+    codegen_->e_push_bool(true);
+    return type_bool();
+  } else if ((ot = match(TokenType::False))) {
+    codegen_->e_push_bool(false);
+    return type_bool();
+  } else if ((ot = match(TokenType::Char))) {
+    codegen_->e_push_char(ot.value().value_);
+    return type_char();
+  } else if ((ot = match(TokenType::String))) {
+    codegen_->e_push_string(ot.value().value_);
+    return type_char();
   } else if ((ot = match(TokenType::Identifier))) {
     codegen_->e_push_local(ot.value().value_);
-    return type_int(); // TODO: load type from map
+    auto ty = loc_tys_.find(ot.value().value_);
+    assert(ty != loc_tys_.end());
+    return ty->second.clone();
   } else {
     // TODO: Flesh out
     Parser::fatal(fmt::format("Expected expr got {}({})",
                               token_type_str(current_.type_), current_.value_));
   }
 }
+
 /* #endregion */
 
 /* #region assign-rhs */
@@ -261,6 +350,34 @@ bool Parser::peak(TokenType type) { return current_.type_ == type; }
 
 std::optional<Token> Parser::match(TokenType type) {
   if (peak(type)) {
+    auto t = current_;
+    current_ = lexer_.next_token();
+    return t;
+  }
+  return {};
+}
+
+std::optional<Token> Parser::match2(TokenType a, TokenType b) {
+  if (peak(a) || peak(b)) {
+    auto t = current_;
+    current_ = lexer_.next_token();
+    return t;
+  }
+  return {};
+}
+
+std::optional<Token> Parser::match3(TokenType a, TokenType b, TokenType c) {
+  if (peak(a) || peak(b) || peak(c)) {
+    auto t = current_;
+    current_ = lexer_.next_token();
+    return t;
+  }
+  return {};
+}
+
+std::optional<Token> Parser::match4(TokenType a, TokenType b, TokenType c,
+                                    TokenType d) {
+  if (peak(a) || peak(b) || peak(c) || peak(d)) {
     auto t = current_;
     current_ = lexer_.next_token();
     return t;

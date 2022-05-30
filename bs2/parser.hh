@@ -4,6 +4,7 @@
 #include "lex.hh"
 #include "type.hh"
 
+#include <map>
 #include <optional>
 
 // The parser takes a stream of tokens, and converts it into instructions
@@ -16,6 +17,7 @@ struct Parser {
   Lexer lexer_;
   Codegen *codegen_;
   const char *filename_;
+  std::map<std::string_view, Type> loc_tys_; // TODO: Reset on new func
 
   Token current_;
 
@@ -43,19 +45,31 @@ struct Parser {
   void s_if();
   void s_while();
   void s_block();
-  void s_decl(Type &);
+  void s_decl(Type);
   void s_assign_fst();
   void s_assign_snd();
   void s_assign_local(std::string_view);
 
   // Expr
   Type expr();
+  Type expr_or();
+  Type expr_and();
+  Type expr_eq();
+  Type expr_cmp();
+  Type expr_add();
+  Type expr_mul();
+  Type expr_unary();
+  Type expr_base();
   // Assignment
   void assign_rhs();
 
   // Lexer functions
   Token expect(TokenType kind);
   std::optional<Token> match(TokenType kind);
+  std::optional<Token> match2(TokenType a, TokenType b);
+  std::optional<Token> match3(TokenType a, TokenType b, TokenType c);
+  std::optional<Token> match4(TokenType a, TokenType b, TokenType c,
+                              TokenType d);
   bool peak(TokenType kind);
 
   [[noreturn]] void fatal(std::string);

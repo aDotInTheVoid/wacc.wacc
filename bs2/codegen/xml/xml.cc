@@ -97,11 +97,34 @@ void XmlCodegen::e_push_number(int32_t n) {
   line(s);
   close("num");
 }
+void XmlCodegen::e_push_bool(bool b) {
+  if (b) {
+    open_close("true");
+  } else {
+    open_close("false");
+  }
+}
+void XmlCodegen::e_push_string(std::string_view s) {
+  open("str");
+  line(s);
+  close("str");
+}
+void XmlCodegen::e_push_char(std::string_view c) {
+  open("char");
+  line(c);
+  close("char");
+}
 void XmlCodegen::e_push_local(std::string_view name) {
   open("local");
   line(name);
   close("local");
 }
+void XmlCodegen::e_pop_op(Op op) {
+  open("op");
+  line(op_name(op));
+  close("op");
+}
+
 /* endregion */
 
 /* #region assign */

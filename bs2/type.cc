@@ -37,6 +37,33 @@ FreeKind Type::free_kind() {
   assert(0);
 }
 
+PrintKind Type::print_kind() {
+  switch (kind_) {
+  case TypeKind::Int:
+    return PrintKind::Int;
+  case TypeKind::Char:
+    return PrintKind::Char;
+  case TypeKind::String:
+    return PrintKind::String;
+  case TypeKind::Bool:
+    return PrintKind::Bool;
+  case TypeKind::Array:
+    if (p1_->kind_ == TypeKind::Char)
+      return PrintKind::String;
+    // Fallthrough
+  case TypeKind::Pair:
+  case TypeKind::EraisedPair:
+    return PrintKind::Ptr;
+  }
+  assert(0);
+}
+
+Type Type::clone() const {
+  auto p1 = p1_ ? std::make_unique<Type>(p1_->clone()) : nullptr;
+  auto p2 = p2_ ? std::make_unique<Type>(p2_->clone()) : nullptr;
+  return Type{kind_, std::move(p1), std::move(p2)};
+}
+
 Type type_array(Type t) {
   return Type{TypeKind::Array, std::make_unique<Type>(std::move(t)), nullptr};
 }

@@ -1,0 +1,13 @@
+begin 
+
+skip;
+
+int a = 1;
+bool b = false;
+char c = 'c';
+
+println a;
+println b;
+println c
+
+end
