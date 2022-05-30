@@ -28,9 +28,9 @@ struct Codegen {
   virtual int32_t if_when() = 0;
   virtual int32_t if_else(int32_t) = 0;
   virtual void if_end(int32_t) = 0;
-  virtual void while_cond() = 0;
-  virtual void while_body() = 0;
-  virtual void while_end() = 0;
+  virtual int32_t while_cond() = 0;
+  virtual int32_t while_body() = 0;
+  virtual void while_end(int32_t j_cond, int32_t j_body) = 0;
   virtual void start_block() = 0;
   virtual void end_block() = 0;
   // Expr

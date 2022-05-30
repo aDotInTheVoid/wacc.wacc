@@ -173,13 +173,15 @@ void Parser::s_if() {
   codegen_->if_end(jno);
 }
 void Parser::s_while() {
-  codegen_->while_cond();
+  // http://craftinginterpreters.com/image/jumping-back-and-forth/while.png
+
+  int32_t j_cond = codegen_->while_cond();
   expr();
   expect(TokenType::Do);
-  codegen_->while_body();
+  int32_t j_body = codegen_->while_body();
   stmts();
   expect(TokenType::Done);
-  codegen_->while_end();
+  codegen_->while_end(j_cond, j_body);
 }
 void Parser::s_block() {
   codegen_->start_block();

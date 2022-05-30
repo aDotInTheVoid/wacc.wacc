@@ -27,9 +27,9 @@ struct XmlCodegen : Codegen {
   int32_t if_when() override;
   int32_t if_else(int32_t) override;
   void if_end(int32_t) override;
-  void while_cond() override;
-  void while_body() override;
-  void while_end() override;
+  int32_t while_cond() override;
+  int32_t while_body() override;
+  void while_end(int32_t, int32_t) override;
   void start_block() override;
   void end_block() override;
   // Expr

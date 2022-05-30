@@ -1,0 +1,10 @@
+begin
+skip;
+
+int i = 0;
+while i < 10 do 
+    println i;
+    i = i + 1
+done
+
+end

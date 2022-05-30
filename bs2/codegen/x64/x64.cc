@@ -91,9 +91,22 @@ int32_t X64Codegen::if_else(int32_t rno) {
   return j;
 }
 void X64Codegen::if_end(int32_t jno) { add_dir(fmt::format(".CF{}:", jno)); }
-void X64Codegen::while_cond() { assert(0); }
-void X64Codegen::while_body() { assert(0); }
-void X64Codegen::while_end() { assert(0); }
+int32_t X64Codegen::while_cond() {
+  int32_t j_cond = jno();
+  add_dir(fmt::format(".CF{}:", j_cond));
+  return j_cond;
+}
+int32_t X64Codegen::while_body() {
+  int32_t j_cond = jno();
+  add_instr("pop rax");
+  add_instr("test rax, rax");
+  add_instr(fmt::format("je .CF{}", j_cond));
+  return j_cond;
+}
+void X64Codegen::while_end(int32_t j_cond, int32_t j_body) {
+  add_instr(fmt::format("jmp .CF{}", j_cond));
+  add_dir(fmt::format(".CF{}:", j_body));
+}
 void X64Codegen::start_block() { assert(0); }
 void X64Codegen::end_block() { assert(0); }
 // Expr
@@ -136,6 +149,13 @@ void X64Codegen::e_pop_op(Op op) {
     break;
   case Op::Mul:
     add_instr("imul ebx, eax");
+    break;
+  case Op::Lt:
+    // rbx := rbx < rax
+    add_instr("mov ecx, ebx");
+    add_instr("xor ebx, ebx");
+    add_instr("cmp ecx, eax");
+    add_instr("setl bl");
     break;
   default:
     fprintf(stderr, "Unhandled op: %s\n", op_name(op));

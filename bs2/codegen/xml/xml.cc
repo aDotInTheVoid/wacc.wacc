@@ -76,15 +76,17 @@ void XmlCodegen::if_end(int32_t _) {
   close("else");
   close("if");
 }
-void XmlCodegen::while_cond() {
+int32_t XmlCodegen::while_cond() {
   open("while");
   open("cond");
+  return -1;
 }
-void XmlCodegen::while_body() {
+int32_t XmlCodegen::while_body() {
   close("cond");
   open("body");
+  return -1;
 }
-void XmlCodegen::while_end() {
+void XmlCodegen::while_end(int32_t _a, int32_t _b) {
   close("body");
   close("while");
 }
