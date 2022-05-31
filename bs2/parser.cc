@@ -12,15 +12,19 @@ void Parser::unit() {
   // TODO: Keep parsing functions, until we reach stmts in main.
   std::optional<Type> t;
 
-  while ((t = ty())) {
-    Token name = expect(TokenType::Identifier);
-    // TODO: Handle case where int foo = 1; and start of main,
-    // not int foo() is ...
-    function(name.value_, t.value());
+  for (;;) {
+    if ((t = ty())) {
+      Token name = expect(TokenType::Identifier);
+      // TODO: Handle case where int foo = 1; and start of main,
+      // not int foo() is ...
+      function(name.value_, t.value());
+    } else if (match(TokenType::Extern)) {
+      extern_fn();
+    } else {
+      break;
+    }
   }
-
   main();
-
   expect(TokenType::End);
   expect(TokenType::Eof);
 }
@@ -59,6 +63,13 @@ void Parser::function(std::string_view name, const Type &ret) {
   expect(TokenType::End);
 
   codegen_->end_function();
+}
+
+void Parser::extern_fn() {
+  ty().value();
+  expect(TokenType::Identifier);
+  expect(TokenType::Lparen); // TODO: Parse with args in extern.
+  expect(TokenType::Rparen);
 }
 
 void Parser::stmts() {
@@ -296,7 +307,29 @@ Type Parser::expr_mul() {
 }
 Type Parser::expr_unary() {
   // TODO:
-  return expr_base();
+  if (match(TokenType::Len)) {
+    Type t = expr_unary();
+    if (t.kind_ != TypeKind::Array)
+      fatal(fmt::format("len on non-array type {}",
+                        print_kind_name(t.print_kind())));
+    codegen_->e_len();
+    return type_int();
+  } else if (match(TokenType::Ord)) {
+    expr_unary(); // Due to how we handle types, no need to do anything
+    return type_int();
+  } else if (match(TokenType::Chr)) {
+    expr_unary(); // Ditto
+    return type_char();
+  } else if (match(TokenType::Not)) {
+    expr_unary();
+    codegen_->e_not();
+    return type_bool();
+  } else if (match(TokenType::Minus)) {
+    expr_unary();
+    codegen_->e_neg();
+    return type_int();
+  } else
+    return expr_base();
 }
 Type Parser::expr_base() {
   /*

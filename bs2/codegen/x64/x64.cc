@@ -167,6 +167,21 @@ void X64Codegen::e_snd() {
   add_instr("mov rdi, [rax+8]");
   add_push("rdi");
 }
+void X64Codegen::e_len() {
+  add_pop("rax");
+  add_instr("mov rdi, [rax-8]");
+  add_push("rdi");
+}
+void X64Codegen::e_not() {
+  add_pop("rax");
+  add_instr("xor rax, 1");
+  add_push("rax");
+}
+void X64Codegen::e_neg() {
+  add_pop("rax");
+  add_instr("neg eax");
+  add_push("rax");
+}
 void X64Codegen::e_array_elem() {
   add_pop("rbx"); // rbx = index
   add_pop("rax"); // rax = array

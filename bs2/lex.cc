@@ -132,6 +132,8 @@ Token Lexer::identifier() {
     new_type = TokenType::End;
   else if (t.value_ == "exit")
     new_type = TokenType::Exit;
+  else if (t.value_ == "extern")
+    new_type = TokenType::Extern;
   else if (t.value_ == "false")
     new_type = TokenType::False;
   else if (t.value_ == "fi")
@@ -299,6 +301,8 @@ const char *token_type_str(TokenType tt) {
     return "end";
   case TokenType::Exit:
     return "exit";
+  case TokenType::Extern:
+    return "extern";
   case TokenType::False:
     return "false";
   case TokenType::Fi:

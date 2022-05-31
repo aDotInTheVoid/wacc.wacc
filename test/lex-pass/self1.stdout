@@ -13807,7 +13807,7 @@
 6 return return
 1 identifier r
 3 end end
-6 identifier extern
+6 extern extern
 3 int int
 7 identifier getchar
 1 lparen (

@@ -43,6 +43,9 @@ struct Codegen {
   virtual void e_push_newpair() = 0;
   virtual void e_fst() = 0;
   virtual void e_snd() = 0;
+  virtual void e_len() = 0;
+  virtual void e_not() = 0;
+  virtual void e_neg() = 0;
   virtual void e_array_elem() = 0;
   virtual void e_push_array_lit(int32_t) = 0;
 

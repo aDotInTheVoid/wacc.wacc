@@ -112,6 +112,9 @@ void XmlCodegen::e_push_null() { open_close("null"); }
 void XmlCodegen::e_push_newpair() { open_close("newpair"); }
 void XmlCodegen::e_fst() { open_close("fst"); }
 void XmlCodegen::e_snd() { open_close("snd"); }
+void XmlCodegen::e_len() { open_close("len"); }
+void XmlCodegen::e_not() { open_close("not"); }
+void XmlCodegen::e_neg() { open_close("neg"); }
 void XmlCodegen::e_array_elem() { open_close("array_elem"); }
 
 void XmlCodegen::e_push_array_lit(int32_t nels) {
