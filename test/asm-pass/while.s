@@ -18,9 +18,9 @@ main:
     push rax # e_push_number
     pop rax
     pop rbx
-    mov ecx, ebx
+    mov rcx, rbx
     xor ebx, ebx
-    cmp ecx, eax
+    cmp rcx, rax
     setl bl
     push rbx
     pop rax

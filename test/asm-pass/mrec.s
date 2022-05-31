@@ -11,7 +11,7 @@ r1:
     push rax # e_push_number
     pop rax
     pop rbx
-    mov ecx, ebx
+    mov rcx, rbx
     xor ebx, ebx
     cmp rcx, rax
     sete bl

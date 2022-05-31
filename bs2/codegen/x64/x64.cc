@@ -169,6 +169,27 @@ void X64Codegen::e_push_string(std::string_view s) {
   // add_instr("call waccrt_str_new");
   add_push("rax");
 }
+
+static const char *test_name(Op op) {
+  switch (op) {
+  case Op::Eq:
+    return "e";
+  case Op::Ne:
+    return "ne";
+  case Op::Lt:
+    return "l";
+  case Op::Le:
+    return "le";
+  case Op::Gt:
+    return "g";
+  case Op::Ge:
+    return "ge";
+  default:
+    fprintf(stderr, "Unknown test op %d\n", op_name(op));
+    assert(0);
+  }
+}
+
 void X64Codegen::e_pop_op(Op op) {
   add_pop("rax"); // rax = rhs
   add_pop("rbx"); // rbx = lhs
@@ -182,18 +203,23 @@ void X64Codegen::e_pop_op(Op op) {
   case Op::Mul:
     add_instr("imul ebx, eax");
     break;
-  case Op::Lt:
-    // rbx := rbx < rax
-    add_instr("mov ecx, ebx");
-    add_instr("xor ebx, ebx");
-    add_instr("cmp ecx, eax");
-    add_instr("setl bl");
+  case Op::And:
+    add_instr("and ebx, eax"); // TODO: Merge and,sub,mul,and
     break;
-  case Op::Eq: // TODO: Is this right for strings?
-    add_instr("mov ecx, ebx");
+  case Op::Or:
+    add_instr("or ebx, eax"); // TODO: is bitwize OK here?
+    break;
+  case Op::Lt:
+  case Op::Le:
+  case Op::Gt:
+  case Op::Ge:
+  case Op::Eq:
+  case Op::Ne:
+    // rbx := rbx < rax
+    add_instr("mov rcx, rbx");
     add_instr("xor ebx, ebx");
     add_instr("cmp rcx, rax");
-    add_instr("sete bl");
+    add_instr(fmt::format("set{} bl", test_name(op)));
     break;
   default:
     fprintf(stderr, "Unhandled op: %s\n", op_name(op));

@@ -1,0 +1,45 @@
+begin 
+
+println "==";
+println 1 == 1;
+println 1 == 2;
+
+println "!=";
+println 1 != 2;
+println 7 != 7;
+
+println "<";
+println 0 < 1;
+println 1 < 1;
+println 2 < 1;
+
+println "<=";
+println 0 <= 1;
+println 1 <= 1;
+println 2 <= 1;
+
+println ">";
+println 1 > 0;
+println 1 > 1;
+println 1 > 2;
+
+println ">=";
+println 1 >= 0;
+println 1 >= 1;
+println 1 >= 2;
+
+println "&&";
+println true && true;
+println true && false;
+println false && false;
+println false && true;
+
+println "||";
+println true || true;
+println true || false;
+println false || false;
+println false || true;
+
+skip
+
+end

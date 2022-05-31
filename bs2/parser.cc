@@ -227,18 +227,20 @@ Type Parser::expr() { return expr_or(); }
 Type Parser::expr_or() {
   Type tp = expr_and();
   while ((match(TokenType::Or))) {
-    tp = expr_and();
+    expr_and();
     // TODO Typecheck
     codegen_->e_pop_op(Op::Or);
+    tp = type_bool();
   }
   return tp;
 }
 Type Parser::expr_and() {
   Type tp = expr_eq();
   while ((match(TokenType::And))) {
-    tp = expr_eq();
+    expr_eq();
     // TODO Typecheck
     codegen_->e_pop_op(Op::And);
+    tp = type_bool();
   }
   return tp;
 }
@@ -246,8 +248,9 @@ Type Parser::expr_eq() {
   Type tp = expr_cmp();
   std::optional<Token> otk;
   while ((otk = match2(TokenType::Eq, TokenType::Ne))) {
-    tp = expr_cmp();
+    expr_cmp();
     codegen_->e_pop_op(token_to_op(otk.value().type_));
+    tp = type_bool();
   }
   return tp;
 }
@@ -256,8 +259,9 @@ Type Parser::expr_cmp() {
   std::optional<Token> otk;
   while ((otk = match4(TokenType::Lt, TokenType::Le, TokenType::Gt,
                        TokenType::Ge))) {
-    tp = expr_add();
+    expr_add();
     codegen_->e_pop_op(token_to_op(otk.value().type_));
+    tp = type_bool();
   }
   return tp;
 }
@@ -265,8 +269,9 @@ Type Parser::expr_add() {
   Type tp = expr_mul();
   std::optional<Token> otk;
   while ((otk = match2(TokenType::Plus, TokenType::Minus))) {
-    tp = expr_mul();
+    expr_mul();
     codegen_->e_pop_op(token_to_op(otk.value().type_));
+    tp = type_int();
   }
   return tp;
 }
@@ -274,8 +279,9 @@ Type Parser::expr_mul() {
   Type tp = expr_unary();
   std::optional<Token> otk;
   while ((otk = match3(TokenType::Times, TokenType::Div, TokenType::Mod))) {
-    tp = expr_unary();
+    expr_unary();
     codegen_->e_pop_op(token_to_op(otk.value().type_));
+    tp = type_int();
   }
   return tp;
 }
@@ -318,6 +324,10 @@ Type Parser::expr_base() {
     auto ty = loc_tys_.find(ot.value().value_);
     assert(ty != loc_tys_.end());
     return ty->second.clone();
+  } else if (match(TokenType::Lparen)) {
+    auto ty = expr();
+    expect(TokenType::Rparen);
+    return ty;
   } else {
     // TODO: Flesh out
     Parser::fatal(fmt::format("Expected expr got {}({})",

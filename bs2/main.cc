@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
     filename = "<stdin>";
   } else {
     input = std::fopen(argv[2], "r");
+    filename = argv[2];
     if (!input) {
       fprintf(stderr, "Could not open file: %s\n", argv[2]);
       return EXIT_FAILURE;
