@@ -303,7 +303,6 @@ Type Parser::expr_base() {
 
     CharLiter,
     StrLiter,
-    PairLiter,
     Ident,
     ArrayElem,
     "(" Expr ")",
@@ -337,6 +336,9 @@ Type Parser::expr_base() {
     auto ty = expr();
     expect(TokenType::Rparen);
     return ty;
+  } else if (match(TokenType::Null)) {
+    codegen_->e_push_null();
+    return type_eraised_pair();
   } else {
     // TODO: Flesh out
     Parser::fatal(fmt::format("Expected expr got {}({})",
@@ -349,10 +351,21 @@ Type Parser::expr_base() {
 /* #region assign-rhs */
 void Parser::assign_rhs() {
   // TODO: FLesh out
+  // Expr,
+  // ArrayLiter,
+  // "newpair" "(" Expr "," Expr ")",
+  // PairElem,
+  // "call" Ident "(" ArgList ? ")",
   if (match(TokenType::Call))
-    return rhs_call();
-
-  expr();
+    rhs_call();
+  else if (match(TokenType::Newpair))
+    rhs_newpair();
+  else if (match(TokenType::Fst))
+    rhs_fst();
+  else if (match(TokenType::Snd))
+    rhs_snd();
+  else
+    expr();
 }
 
 void Parser::rhs_call() {
@@ -367,6 +380,22 @@ void Parser::rhs_call() {
     expect(TokenType::Rparen);
   }
   codegen_->call_func(ident.value_, nargs);
+}
+void Parser::rhs_newpair() {
+  expect(TokenType::Lparen);
+  expr();
+  expect(TokenType::Comma);
+  expr();
+  expect(TokenType::Rparen);
+  codegen_->e_push_newpair();
+}
+void Parser::rhs_fst() {
+  expr();
+  codegen_->e_fst();
+}
+void Parser::rhs_snd() {
+  expr();
+  codegen_->e_snd();
 }
 
 /* #endregion */

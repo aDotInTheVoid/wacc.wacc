@@ -50,6 +50,10 @@ struct X64Codegen : Codegen {
   void e_push_string(std::string_view) override;
   void e_push_char(std::string_view) override;
   void e_push_local(std::string_view) override;
+  void e_push_null() override;
+  void e_push_newpair() override;
+  void e_fst() override;
+  void e_snd() override;
   void e_pop_op(Op) override;
 
   // Assignment

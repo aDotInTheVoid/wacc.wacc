@@ -82,6 +82,7 @@ void X64Codegen::call_func(std::string_view name, int32_t nargs) {
   add_instr(fmt::format("call {}", name));
   if (npush_ % 2 != 0)
     add_instr("add rsp, 8"); // Deallign stack
+  // TODO: Make these methods
   add_push("rax");
 }
 
@@ -162,6 +163,30 @@ void X64Codegen::e_push_char(std::string_view c) {
 void X64Codegen::e_push_bool(bool b) {
   add_instr(fmt::format("mov rax, {}", b ? 1 : 0));
   add_push("rax");
+}
+void X64Codegen::e_push_null() {
+  add_instr("xor eax, eax");
+  add_push("rax");
+}
+void X64Codegen::e_push_newpair() {
+  add_pop("rsi"); // rsi = snd
+  add_pop("rdi"); // rdi = fst
+  if (npush_ % 2 != 0)
+    add_instr("sub rsp, 8"); // Allign stack
+  add_instr("call waccrt_pair_new");
+  if (npush_ % 2 != 0)
+    add_instr("add rsp, 8"); // Deallign stack
+  add_push("rax");
+}
+void X64Codegen::e_fst() {
+  add_pop("rax");
+  add_instr("mov rdi, [rax]");
+  add_push("rdi");
+}
+void X64Codegen::e_snd() {
+  add_pop("rax");
+  add_instr("mov rdi, [rax+8]");
+  add_push("rdi");
 }
 void X64Codegen::e_push_string(std::string_view s) {
   strs_.push_back(s);

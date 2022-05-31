@@ -39,6 +39,10 @@ struct Codegen {
   virtual void e_push_string(std::string_view) = 0;
   virtual void e_push_char(std::string_view) = 0;
   virtual void e_push_local(std::string_view) = 0;
+  virtual void e_push_null() = 0;
+  virtual void e_push_newpair() = 0;
+  virtual void e_fst() = 0;
+  virtual void e_snd() = 0;
   virtual void e_pop_op(Op) = 0;
   // Assignment
   virtual void add_var(std::string_view name, const Type &ty) = 0;

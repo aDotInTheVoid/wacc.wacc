@@ -108,6 +108,10 @@ void XmlCodegen::e_push_bool(bool b) {
     open_close("false");
   }
 }
+void XmlCodegen::e_push_null() { open_close("null"); }
+void XmlCodegen::e_push_newpair() { open_close("newpair"); }
+void XmlCodegen::e_fst() { open_close("fst"); }
+void XmlCodegen::e_snd() { open_close("snd"); }
 void XmlCodegen::e_push_string(std::string_view s) {
   open("str");
   line(s);

@@ -1,0 +1,13 @@
+begin
+
+skip;
+
+pair(int, int) p = newpair(10, 100);
+
+int l = fst p;
+int r = snd p;
+println l;
+println r;
+
+skip
+end
