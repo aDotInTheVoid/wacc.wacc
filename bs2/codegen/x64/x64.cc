@@ -187,6 +187,12 @@ void X64Codegen::e_pop_op(Op op) {
     add_instr("cmp ecx, eax");
     add_instr("setl bl");
     break;
+  case Op::Eq: // TODO: Is this right for strings?
+    add_instr("mov ecx, ebx");
+    add_instr("xor ebx, ebx");
+    add_instr("cmp rcx, rax");
+    add_instr("sete bl");
+    break;
   default:
     fprintf(stderr, "Unhandled op: %s\n", op_name(op));
     assert(0);

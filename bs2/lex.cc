@@ -6,6 +6,7 @@
 #include "util.hh"
 
 static bool is_alpha(char c) { return std::isalpha(c) || c == '_'; }
+static bool is_alphanum(char c) { return is_alpha(c) || std::isdigit(c); }
 
 Token Lexer::next_token() {
   skip_whitespace();
@@ -105,7 +106,7 @@ void Lexer::skip_whitespace() {
 }
 
 Token Lexer::identifier() {
-  while (is_alpha(peak()))
+  while (is_alphanum(peak()))
     advance();
   auto t = make_token(TokenType::Identifier);
   auto new_type = TokenType::Identifier;
@@ -256,13 +257,8 @@ void Token::debug(std::ostream &o) {
     << std::endl;
 }
 
-bool Lexer::is_at_end() {
-  int a = current_;
-  a = input_.size();
-  return current_ >= input_.size();
-}
+bool Lexer::is_at_end() { return current_ >= input_.size(); }
 char Lexer::advance() {
-  // TODO: Update line_ and col_
   char c = input_[current_];
   current_++;
   if (c == '\n') {

@@ -1,0 +1,16 @@
+3 int int
+3 identifier fn2
+1 lparen (
+3 int int
+2 identifier r0
+1 comma ,
+3 int int
+2 identifier r1
+1 rparen )
+2 is is
+3 int int
+1 identifier a
+1 assign =
+1 number 0
+4 done done
+0 eof 
