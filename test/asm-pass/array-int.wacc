@@ -1,0 +1,10 @@
+begin
+skip;
+
+int[] a = [1,2,3];
+println a[0];
+println a[1];
+println a[2];
+
+skip
+end

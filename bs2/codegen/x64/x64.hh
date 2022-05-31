@@ -54,6 +54,8 @@ struct X64Codegen : Codegen {
   void e_push_newpair() override;
   void e_fst() override;
   void e_snd() override;
+  void e_array_elem() override;
+  void e_push_array_lit(int32_t) override;
   void e_pop_op(Op) override;
 
   // Assignment
@@ -68,6 +70,8 @@ struct X64Codegen : Codegen {
   void add_instr(std::string_view);
   void add_push(const char *);
   void add_pop(const char *);
+  void add_call(std::string_view name);
+
   int32_t jno();
 };
 

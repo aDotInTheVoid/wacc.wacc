@@ -1,0 +1,14 @@
+begin
+skip;
+
+char[] a = ['1', '2', '3'];
+char[][] b = [a, a, a];
+
+println b[0][0];
+println b[0];
+println b;
+
+free b[0];
+free b;
+
+skip end

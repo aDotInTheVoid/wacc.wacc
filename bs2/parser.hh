@@ -60,10 +60,12 @@ struct Parser {
   Type expr_mul();
   Type expr_unary();
   Type expr_base();
+  Type expr_array_elem(Type);
   // Assignment
   void assign_rhs();
   void rhs_call();
   void rhs_newpair();
+  void rhs_array_lit();
   void rhs_fst();
   void rhs_snd();
 

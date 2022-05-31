@@ -1,0 +1,10 @@
+begin
+
+int print_arr(char[][] x) is
+    println x; # Ptr
+    println x[0]; # string?
+    println x[0][0];  #char
+    return 0
+end
+skip
+end

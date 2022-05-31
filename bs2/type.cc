@@ -23,18 +23,13 @@ bool Type::is_valid() {
 
 FreeKind Type::free_kind() {
   switch (kind_) {
-  case TypeKind::Int:
-  case TypeKind::Char:
-  case TypeKind::Bool:
-    return FreeKind::Scalar;
   case TypeKind::Pair:
   case TypeKind::EraisedPair:
     return FreeKind::Pair;
   case TypeKind::Array:
-  case TypeKind::String:
     return FreeKind::Array;
   }
-  assert(0);
+  assert(0 && "invalid free kind");
 }
 
 PrintKind Type::print_kind() {
@@ -49,7 +44,7 @@ PrintKind Type::print_kind() {
     return PrintKind::Bool;
   case TypeKind::Array:
     if (p1_->kind_ == TypeKind::Char)
-      return PrintKind::String;
+      return PrintKind::CharArray;
     // Fallthrough
   case TypeKind::Pair:
   case TypeKind::EraisedPair:
@@ -80,6 +75,11 @@ Type type_pair(Type t1, Type t2) {
               std::make_unique<Type>(std::move(t2))};
 }
 
+Type type_array_inner(Type t) {
+  assert(t.kind_ == TypeKind::Array);
+  return std::move(*t.p1_);
+}
+
 const char *print_kind_name(PrintKind pk) {
   switch (pk) {
   case PrintKind::Int:
@@ -92,6 +92,18 @@ const char *print_kind_name(PrintKind pk) {
     return "bool";
   case PrintKind::Ptr:
     return "ptr";
+  case PrintKind::CharArray:
+    return "char_array";
+  }
+  assert(0);
+}
+
+const char *free_kind_name(FreeKind fk) {
+  switch (fk) {
+  case FreeKind::Pair:
+    return "pair";
+  case FreeKind::Array:
+    return "array";
   }
   assert(0);
 }

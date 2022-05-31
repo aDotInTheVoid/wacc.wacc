@@ -331,7 +331,7 @@ Type Parser::expr_base() {
     codegen_->e_push_local(ot.value().value_);
     auto ty = loc_tys_.find(ot.value().value_);
     assert(ty != loc_tys_.end());
-    return ty->second.clone();
+    return expr_array_elem(ty->second.clone());
   } else if (match(TokenType::Lparen)) {
     auto ty = expr();
     expect(TokenType::Rparen);
@@ -344,6 +344,15 @@ Type Parser::expr_base() {
     Parser::fatal(fmt::format("Expected expr got {}({})",
                               token_type_str(current_.type_), current_.value_));
   }
+}
+Type Parser::expr_array_elem(Type ty) {
+  while (match(TokenType::Lsquare)) {
+    expr();
+    codegen_->e_array_elem();
+    expect(TokenType::Rsquare);
+    ty = type_array_inner(std::move(ty));
+  }
+  return ty;
 }
 
 /* #endregion */
@@ -364,6 +373,8 @@ void Parser::assign_rhs() {
     rhs_fst();
   else if (match(TokenType::Snd))
     rhs_snd();
+  else if (match(TokenType::Lsquare))
+    return rhs_array_lit();
   else
     expr();
 }
@@ -396,6 +407,17 @@ void Parser::rhs_fst() {
 void Parser::rhs_snd() {
   expr();
   codegen_->e_snd();
+}
+void Parser::rhs_array_lit() {
+  int32_t nels = 0;
+  if (!match(TokenType::Rsquare)) {
+    do {
+      expr();
+      nels++;
+    } while (match(TokenType::Comma));
+    expect(TokenType::Rsquare);
+  }
+  codegen_->e_push_array_lit(nels);
 }
 
 /* #endregion */

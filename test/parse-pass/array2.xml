@@ -1,0 +1,13 @@
+<unit>
+  <main>
+    <var><name>a</name><ty><array>int</array></ty></var>
+    <addr_local>a</addr_local>
+    <num>1</num>
+    <num>2</num>
+    <num>3</num>
+    <num>4</num>
+    <num>5</num>
+    <array_lit>5</array_lit>
+    <assign_do/>
+  </main>
+</unit>

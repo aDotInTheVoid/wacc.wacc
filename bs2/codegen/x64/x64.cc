@@ -21,21 +21,6 @@ static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
 #define LOC_SIZE 8
 
 static int32_t addr_of(int32_t locno) { return LOC_SIZE * (locno + 1); }
-static const char *print_fn_name(PrintKind pk) {
-  switch (pk) {
-  case PrintKind::Int:
-    return "i32";
-  case PrintKind::Bool:
-    return "bool";
-  case PrintKind::Char:
-    return "char";
-  case PrintKind::String:
-    return "str";
-  case PrintKind::Ptr:
-    return "ptr";
-  }
-  assert(0);
-}
 
 X64Codegen::X64Codegen() {
   add_dir(".intel_syntax noprefix");
@@ -77,12 +62,7 @@ void X64Codegen::call_func(std::string_view name, int32_t nargs) {
   for (int32_t i = nargs - 1; i >= 0; i--)
     add_pop(rnames[i]);
   // TODO: Is the stack aligned here
-  if (npush_ % 2 != 0)
-    add_instr("sub rsp, 8"); // Allign stack
-  add_instr(fmt::format("call {}", name));
-  if (npush_ % 2 != 0)
-    add_instr("add rsp, 8"); // Deallign stack
-  // TODO: Make these methods
+  add_call(name);
   add_push("rax");
 }
 
@@ -99,11 +79,14 @@ void X64Codegen::end_function() {
 void X64Codegen::pop_print(PrintKind pk, bool multiline) {
   add_pop("rdi # load print");
   // TODO: Is the stack aligned here
-  add_instr(fmt::format("call waccrt_print{}_{}", multiline ? "ln" : "",
-                        print_fn_name(pk)));
+  add_call(fmt::format("waccrt_print{}_{}", multiline ? "ln" : "",
+                       print_kind_name(pk)));
 }
 
-void X64Codegen::pop_free(FreeKind) { assert(0); }
+void X64Codegen::pop_free(FreeKind fk) {
+  add_pop("rdi");
+  add_call(fmt::format("waccrt_{}_delete", free_kind_name(fk)));
+}
 void X64Codegen::pop_return() {
   add_pop("rax");
   add_instr(fmt::format("jmp .ret_{}", cur_func_));
@@ -171,11 +154,7 @@ void X64Codegen::e_push_null() {
 void X64Codegen::e_push_newpair() {
   add_pop("rsi"); // rsi = snd
   add_pop("rdi"); // rdi = fst
-  if (npush_ % 2 != 0)
-    add_instr("sub rsp, 8"); // Allign stack
-  add_instr("call waccrt_pair_new");
-  if (npush_ % 2 != 0)
-    add_instr("add rsp, 8"); // Deallign stack
+  add_call("waccrt_pair_new");
   add_push("rax");
 }
 void X64Codegen::e_fst() {
@@ -188,6 +167,22 @@ void X64Codegen::e_snd() {
   add_instr("mov rdi, [rax+8]");
   add_push("rdi");
 }
+void X64Codegen::e_array_elem() {
+  add_pop("rbx"); // rbx = index
+  add_pop("rax"); // rax = array
+  add_instr("mov rdi, [rax+rbx*8]");
+  add_push("rdi");
+}
+void X64Codegen::e_push_array_lit(int32_t nels) {
+  add_instr(fmt::format("mov rdi, {}", nels));                 // arg1 = nels
+  add_instr(fmt::format("lea rsi, [rsp+{}]", (nels - 1) * 8)); // arg2 = array
+  add_call("waccrt_array_new");
+  // rax = array
+  for (int i = 0; i < nels; i++)
+    add_pop("rdx");
+  add_push("rax");
+}
+
 void X64Codegen::e_push_string(std::string_view s) {
   strs_.push_back(s);
   add_instr(fmt::format("lea rax, .str{}[rip]", strs_.size() - 1));
@@ -291,6 +286,15 @@ void X64Codegen::add_push(const char *reg) {
 void X64Codegen::add_pop(const char *reg) {
   add_instr(fmt::format("pop {}", reg));
   npush_--;
+}
+
+void X64Codegen::add_call(std::string_view name) {
+  if (npush_ % 2 != 0)
+    add_instr("sub rsp, 8"); // Allign stack
+  add_instr(fmt::format("call {}", name));
+  if (npush_ % 2 != 0)
+    add_instr("add rsp, 8"); // Deallign stack
+  // TODO: Make these methods
 }
 
 int32_t X64Codegen::jno() { return jno_++; }

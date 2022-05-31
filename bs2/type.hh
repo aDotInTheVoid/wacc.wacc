@@ -17,16 +17,17 @@ enum class PrintKind {
   Int,
   Char,
   String,
+  CharArray,
   Bool,
   Ptr,
 };
 const char *print_kind_name(PrintKind);
 
 enum class FreeKind {
-  Scalar,
   Pair,
   Array,
 };
+const char *free_kind_name(FreeKind);
 
 struct Type {
   TypeKind kind_;
@@ -46,5 +47,6 @@ Type type_string();
 Type type_eraised_pair();
 Type type_pair(Type, Type);
 Type type_array(Type);
+Type type_array_inner(Type);
 
 #endif

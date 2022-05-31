@@ -1,0 +1,24 @@
+<unit>
+  <fn>
+    <name>print_arr</name>
+    <ret>int</ret>
+    <args><arg><name>x</name><ty><array><array>char</array></array></ty></arg></args>
+    <body>
+      <local>x</local>
+      <print><kind>ptr</kind><newline>true</newline></print>
+      <local>x</local>
+      <num>0</num>
+      <array_elem/>
+      <print><kind>char_array</kind><newline>true</newline></print>
+      <local>x</local>
+      <num>0</num>
+      <array_elem/>
+      <num>0</num>
+      <array_elem/>
+      <print><kind>char</kind><newline>true</newline></print>
+      <num>0</num>
+      <return/>
+    </body>
+  </fn>
+  <main/>
+</unit>

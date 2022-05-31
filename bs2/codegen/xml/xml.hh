@@ -42,6 +42,8 @@ struct XmlCodegen : Codegen {
   void e_push_newpair() override;
   void e_fst() override;
   void e_snd() override;
+  void e_array_elem() override;
+  void e_push_array_lit(int32_t) override;
   void e_pop_op(Op) override;
 
   // Assignment
