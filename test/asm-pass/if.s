@@ -93,6 +93,7 @@ main:
 .CF15:
 .CF11:
     xor rax, rax
+.ret_main:
     add rsp, 80
     pop rbp
     ret

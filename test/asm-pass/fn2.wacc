@@ -1,0 +1,12 @@
+begin
+
+int hello() is 
+    println "Hello World" ;
+    return 0
+end
+
+skip;
+
+int _x = call hello()
+
+end

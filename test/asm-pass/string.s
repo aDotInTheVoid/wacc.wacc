@@ -32,6 +32,7 @@ main:
     pop rdi # load print
     call waccrt_println_str
     xor rax, rax
+.ret_main:
     add rsp, 80
     pop rbp
     ret

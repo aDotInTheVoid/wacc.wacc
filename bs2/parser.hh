@@ -62,6 +62,7 @@ struct Parser {
   Type expr_base();
   // Assignment
   void assign_rhs();
+  void rhs_call();
 
   // Lexer functions
   Token expect(TokenType kind);

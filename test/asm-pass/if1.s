@@ -17,6 +17,7 @@ main:
 .CF0:
 .CF1:
     xor rax, rax
+.ret_main:
     add rsp, 80
     pop rbp
     ret

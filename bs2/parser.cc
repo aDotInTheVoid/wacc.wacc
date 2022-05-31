@@ -38,11 +38,15 @@ void Parser::function(std::string_view name, const Type &ret) {
   std::optional<Type> oty;
   if ((oty = ty())) {
     Token name = expect(TokenType::Identifier);
-    codegen_->add_arg(name.value_, oty.value());
-    if (match(TokenType::Comma)) {
-      Type aty = ty().value();
+    Type aty = std::move(oty.value());
+    codegen_->add_arg(name.value_, aty);
+    loc_tys_[name.value_] = std::move(aty);
+
+    while (match(TokenType::Comma)) {
+      aty = ty().value();
       Token name = expect(TokenType::Identifier);
       codegen_->add_arg(name.value_, aty);
+      loc_tys_[name.value_] = std::move(aty);
     }
   }
 
@@ -326,7 +330,24 @@ Type Parser::expr_base() {
 /* #region assign-rhs */
 void Parser::assign_rhs() {
   // TODO: FLesh out
+  if (match(TokenType::Call))
+    return rhs_call();
+
   expr();
+}
+
+void Parser::rhs_call() {
+  Token ident = expect(TokenType::Identifier);
+  expect(TokenType::Lparen);
+  int32_t nargs = 0;
+  if (!match(TokenType::Rparen)) {
+    do {
+      expr();
+      nargs++;
+    } while (match(TokenType::Comma));
+    expect(TokenType::Rparen);
+  }
+  codegen_->call_func(ident.value_, nargs);
 }
 
 /* #endregion */

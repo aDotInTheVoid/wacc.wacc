@@ -7,12 +7,16 @@
 
 #include "codegen.hh"
 
+static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
+
 struct X64Codegen : Codegen {
   std::string buff_;
   int32_t n_locs_ = 0;
   int32_t jno_ = 0;
+  int32_t nargs_ = 0;
   std::vector<std::string_view> strs_;
   std::map<std::string_view, int32_t> locs_;
+  std::string_view cur_func_;
   // std::map<std::string_view, Type> locs_ty_;
 
   X64Codegen();
@@ -55,6 +59,7 @@ struct X64Codegen : Codegen {
   void assign_do() override;                         // Pop value and address.
   void assign_addr_fst() override;
   void assign_addr_snd() override;
+  void call_func(std::string_view, int32_t nargs) override;
 
   void add_dir(std::string_view);
   void add_instr(std::string_view);

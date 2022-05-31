@@ -42,7 +42,7 @@ void X64Codegen::end_main() {
   add_instr("xor rax, rax");
   end_function();
   add_dir(".section .rodata");
-  for (int i = 0; i < strs_.size(); i++) {
+  for (size_t i = 0; i < strs_.size(); i++) {
     add_dir(fmt::format(".str{}:", i));
     add_instr(fmt::format(".string {}", strs_[i]));
   }
@@ -50,15 +50,30 @@ void X64Codegen::end_main() {
 std::string X64Codegen::finish() { return buff_; }
 // Function
 void X64Codegen::start_function(std::string_view name, const Type &ret) {
+  nargs_ = 0;
+  cur_func_ = name;
   add_dir(fmt::format("{}:", name));
+
   add_instr("push rbp");
   add_instr("mov rbp, rsp");
   add_instr(fmt::format("sub rsp, {}", MAX_LOCS * LOC_SIZE));
   // TODO: Reserve stack space?
 }
-void X64Codegen::add_arg(std::string_view name, const Type &ty) { assert(0); }
-void X64Codegen::start_function_body() { assert(0); }
+void X64Codegen::add_arg(std::string_view name, const Type &ty) {
+  add_var(name, ty);
+  auto argno = locs_[name];
+  add_instr(fmt::format("mov [rbp-{}], {}", addr_of(argno), rnames[argno]));
+}
+void X64Codegen::call_func(std::string_view name, int32_t nargs) {
+  for (int32_t i = nargs - 1; i >= 0; i--)
+    add_instr(fmt::format("pop {}", rnames[i]));
+  add_instr(fmt::format("call {}", name));
+  add_instr("push rax");
+}
+
+void X64Codegen::start_function_body() {}
 void X64Codegen::end_function() {
+  add_dir(fmt::format(".ret_{}:", cur_func_));
   add_instr(fmt::format("add rsp, {}", MAX_LOCS * LOC_SIZE));
   add_instr("pop rbp");
   add_instr("ret");
@@ -74,7 +89,10 @@ void X64Codegen::pop_print(PrintKind pk, bool multiline) {
 }
 
 void X64Codegen::pop_free(FreeKind) { assert(0); }
-void X64Codegen::pop_return() { assert(0); }
+void X64Codegen::pop_return() {
+  add_instr("pop rax");
+  add_instr(fmt::format("jmp .ret_{}", cur_func_));
+}
 void X64Codegen::pop_exit() { assert(0); }
 void X64Codegen::if_cond() {} // nop
 int32_t X64Codegen::if_when() {
@@ -165,13 +183,12 @@ void X64Codegen::e_pop_op(Op op) {
 }
 
 // Assignment
-void X64Codegen::add_var(std::string_view name, const Type &ty) {
+void X64Codegen::add_var(std::string_view name, const Type &_) {
   int32_t locno = n_locs_++;
   if (n_locs_ > MAX_LOCS) {
     throw std::runtime_error("Too many locals");
   }
   locs_[name] = locno;
-  // locs_ty_[name] = std::move(ty);
 }
 // Push the addr of a local to the stack
 void X64Codegen::assign_addr_local(std::string_view name) {

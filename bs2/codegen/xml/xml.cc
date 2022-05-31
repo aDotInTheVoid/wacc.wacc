@@ -192,6 +192,16 @@ void XmlCodegen::type(const Type &t) {
     return;
   }
 }
+void XmlCodegen::call_func(std::string_view name, int32_t nargs) {
+  open("call_func");
+  open("name");
+  line(name);
+  close("name");
+  open("nargs");
+  line(fmt::format("{}", nargs));
+  close("nargs");
+  open("args");
+}
 
 std::string XmlCodegen::finish() {
   close("unit");

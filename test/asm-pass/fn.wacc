@@ -1,0 +1,16 @@
+begin
+
+int add(int a, int b) is
+    print "a = ";
+    print a;
+    print ", b = ";
+    println b;
+    return a + b
+end
+
+skip;
+
+int c = call add(1, 2);
+println c
+
+end
