@@ -19,25 +19,23 @@ int main(int argc, char **argv) {
   }
 
   std::string source{};
-  std::stringstream ss{};
   const char *filename;
+  std::FILE *input;
 
   // Read the file into a string.
   if (argc == 2 || std::strcmp(argv[2], "-") == 0) {
-    char c;
-    while ((c = std::getchar()) != EOF) {
-      source.push_back(c);
-    }
+    input = stdin;
     filename = "<stdin>";
   } else {
-    std::ifstream file(argv[2]);
-    if (!file.is_open()) {
+    input = std::fopen(argv[2], "r");
+    if (!input) {
       fprintf(stderr, "Could not open file: %s\n", argv[2]);
       return EXIT_FAILURE;
     }
-    ss << file.rdbuf();
-    source = ss.str();
-    filename = argv[2];
+  }
+  char c;
+  while ((c = std::fgetc(input)) != EOF) {
+    source.push_back(c);
   }
 
   if (std::strcmp(argv[1], "lex") == 0) {

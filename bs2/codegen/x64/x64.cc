@@ -15,6 +15,8 @@
  * Needing to keep a 16-byte stack frame is quite annoying.
  */
 
+static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
+
 #define MAX_LOCS 10
 #define LOC_SIZE 8
 

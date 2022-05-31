@@ -7,8 +7,6 @@
 
 #include "codegen.hh"
 
-static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
-
 struct X64Codegen : Codegen {
   std::string buff_;
   int32_t n_locs_ = 0;
