@@ -75,6 +75,10 @@ Type type_string() { return Type{TypeKind::String, nullptr, nullptr}; }
 Type type_eraised_pair() {
   return Type{TypeKind::EraisedPair, nullptr, nullptr};
 }
+Type type_pair(Type t1, Type t2) {
+  return Type{TypeKind::Pair, std::make_unique<Type>(std::move(t1)),
+              std::make_unique<Type>(std::move(t2))};
+}
 
 const char *print_kind_name(PrintKind pk) {
   switch (pk) {

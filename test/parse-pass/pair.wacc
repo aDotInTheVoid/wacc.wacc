@@ -1,0 +1,18 @@
+begin
+
+
+pair(bool[][][], int[][][][]) wacc_fail(string file, int line, string reason) is
+  print file;
+  print ":";
+  print line;
+  print " ";
+  print reason;
+  println "";
+return 1
+end
+
+pair(pair, pair) foo() is skip end
+
+
+skip
+end

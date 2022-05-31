@@ -185,7 +185,7 @@ static const char *test_name(Op op) {
   case Op::Ge:
     return "ge";
   default:
-    fprintf(stderr, "Unknown test op %d\n", op_name(op));
+    fprintf(stderr, "Unknown test op %s\n", op_name(op));
     assert(0);
   }
 }

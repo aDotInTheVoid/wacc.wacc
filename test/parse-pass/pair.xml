@@ -1,0 +1,39 @@
+<unit>
+  <fn>
+    <name>wacc_fail</name>
+    <ret>
+      <pair>
+        <left><array><array><array>bool</array></array></array></left>
+        <right><array><array><array><array>int</array></array></array></array></right>
+      </pair>
+    </ret>
+    <args>
+      <arg><name>file</name><ty>string</ty></arg>
+      <arg><name>line</name><ty>int</ty></arg>
+      <arg><name>reason</name><ty>string</ty></arg>
+    </args>
+    <body>
+      <local>file</local>
+      <print><kind>str</kind><newline>false</newline></print>
+      <str>":"</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>line</local>
+      <print><kind>i32</kind><newline>false</newline></print>
+      <str>" "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>reason</local>
+      <print><kind>str</kind><newline>false</newline></print>
+      <str>""</str>
+      <print><kind>str</kind><newline>true</newline></print>
+      <num>1</num>
+      <return/>
+    </body>
+  </fn>
+  <fn>
+    <name>foo</name>
+    <ret><pair><left>eraised_pair</left><right>eraised_pair</right></pair></ret>
+    <args/>
+    <body/>
+  </fn>
+  <main/>
+</unit>

@@ -44,6 +44,7 @@ Type type_char();
 Type type_bool();
 Type type_string();
 Type type_eraised_pair();
+Type type_pair(Type, Type);
 Type type_array(Type);
 
 #endif

@@ -116,6 +116,15 @@ std::optional<Type> Parser::ty() {
     t = type_bool();
   } else if (match(TokenType::String)) {
     t = type_string();
+  } else if (match(TokenType::Pair)) {
+    t = type_eraised_pair();
+    if (match(TokenType::Lparen)) {
+      auto lt = ty().value();
+      expect(TokenType::Comma);
+      auto rt = ty().value();
+      expect(TokenType::Rparen);
+      t = type_pair(std::move(lt), std::move(rt));
+    }
   } else {
     // TODO: Handle pairs
     return {};
