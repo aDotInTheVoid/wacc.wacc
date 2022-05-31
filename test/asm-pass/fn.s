@@ -40,7 +40,7 @@ main:
     push rbp
     mov rbp, rsp
     sub rsp, 80
-    lea rax, [rbp-24]
+    lea rax, [rbp-8]
     push rax # assign_addr_local
     mov eax, 1
     push rax # e_push_number
@@ -48,12 +48,14 @@ main:
     push rax # e_push_number
     pop rsi
     pop rdi
+    sub rsp, 8
     call add
+    add rsp, 8
     push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
-    mov rax, [rbp-24] # e_push_local
+    mov rax, [rbp-8] # e_push_local
     push rax # e_push_local
     pop rdi # load print
     call waccrt_println_i32

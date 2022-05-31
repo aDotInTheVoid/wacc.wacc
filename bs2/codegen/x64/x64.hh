@@ -14,6 +14,7 @@ struct X64Codegen : Codegen {
   int32_t n_locs_ = 0;
   int32_t jno_ = 0;
   int32_t nargs_ = 0;
+  int32_t npush_ = 0;
   std::vector<std::string_view> strs_;
   std::map<std::string_view, int32_t> locs_;
   std::string_view cur_func_;
@@ -63,6 +64,8 @@ struct X64Codegen : Codegen {
 
   void add_dir(std::string_view);
   void add_instr(std::string_view);
+  void add_push(const char *);
+  void add_pop(const char *);
   int32_t jno();
 };
 

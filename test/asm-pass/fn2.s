@@ -22,7 +22,9 @@ main:
     sub rsp, 80
     lea rax, [rbp-8]
     push rax # assign_addr_local
+    sub rsp, 8
     call hello
+    add rsp, 8
     push rax
     pop rdi # assign_do val
     pop rax # assign_do addr

@@ -1,4 +1,5 @@
 #include <cassert>
+#include <iostream>
 #include <utility>
 
 #include <fmt/core.h>
@@ -10,6 +11,8 @@
  * We generate x64 assembly code for GNU GAS using intel syntax.
  *
  * - https://en.wikibooks.org/wiki/X86_Disassembly/The_Stack
+ *
+ * Needing to keep a 16-byte stack frame is quite annoying.
  */
 
 #define MAX_LOCS 10
@@ -52,9 +55,13 @@ std::string X64Codegen::finish() { return buff_; }
 void X64Codegen::start_function(std::string_view name, const Type &ret) {
   nargs_ = 0;
   cur_func_ = name;
+  n_locs_ = 0;
+  locs_.clear();
+  assert(npush_ == 0);
+
   add_dir(fmt::format("{}:", name));
 
-  add_instr("push rbp");
+  add_instr("push rbp"); // This doesn't get counted in npush_
   add_instr("mov rbp, rsp");
   add_instr(fmt::format("sub rsp, {}", MAX_LOCS * LOC_SIZE));
   // TODO: Reserve stack space?
@@ -66,38 +73,43 @@ void X64Codegen::add_arg(std::string_view name, const Type &ty) {
 }
 void X64Codegen::call_func(std::string_view name, int32_t nargs) {
   for (int32_t i = nargs - 1; i >= 0; i--)
-    add_instr(fmt::format("pop {}", rnames[i]));
+    add_pop(rnames[i]);
+  // TODO: Is the stack aligned here
+  if (npush_ % 2 != 0)
+    add_instr("sub rsp, 8"); // Allign stack
   add_instr(fmt::format("call {}", name));
-  add_instr("push rax");
+  if (npush_ % 2 != 0)
+    add_instr("add rsp, 8"); // Deallign stack
+  add_push("rax");
 }
 
 void X64Codegen::start_function_body() {}
 void X64Codegen::end_function() {
   add_dir(fmt::format(".ret_{}:", cur_func_));
   add_instr(fmt::format("add rsp, {}", MAX_LOCS * LOC_SIZE));
-  add_instr("pop rbp");
+  assert(npush_ == 0);
+  add_instr("pop rbp"); // Doens't get counted in npush_
   add_instr("ret");
-  // TODO: What needs to be done?
-  // Probably reset vars
 }
 // Stmt
 
 void X64Codegen::pop_print(PrintKind pk, bool multiline) {
-  add_instr("pop rdi # load print");
+  add_pop("rdi # load print");
+  // TODO: Is the stack aligned here
   add_instr(fmt::format("call waccrt_print{}_{}", multiline ? "ln" : "",
                         print_fn_name(pk)));
 }
 
 void X64Codegen::pop_free(FreeKind) { assert(0); }
 void X64Codegen::pop_return() {
-  add_instr("pop rax");
+  add_pop("rax");
   add_instr(fmt::format("jmp .ret_{}", cur_func_));
 }
 void X64Codegen::pop_exit() { assert(0); }
 void X64Codegen::if_cond() {} // nop
 int32_t X64Codegen::if_when() {
   int32_t j = jno();
-  add_instr("pop rax");
+  add_pop("rax");
   add_instr("test rax, rax");
   add_instr(fmt::format("je .CF{}", j));
   return j;
@@ -116,7 +128,7 @@ int32_t X64Codegen::while_cond() {
 }
 int32_t X64Codegen::while_body() {
   int32_t j_cond = jno();
-  add_instr("pop rax");
+  add_pop("rax");
   add_instr("test rax, rax");
   add_instr(fmt::format("je .CF{}", j_cond));
   return j_cond;
@@ -130,12 +142,12 @@ void X64Codegen::end_block() { assert(0); }
 // Expr
 void X64Codegen::e_push_number(int32_t n) {
   add_instr(fmt::format("mov eax, {}", n));
-  add_instr("push rax # e_push_number");
+  add_push("rax # e_push_number");
 }
 void X64Codegen::e_push_local(std::string_view name) {
   int32_t locno = locs_[name];
   add_instr(fmt::format("mov rax, [rbp-{}] # e_push_local", addr_of(locno)));
-  add_instr("push rax # e_push_local");
+  add_push("rax # e_push_local");
 }
 void X64Codegen::e_push_char(std::string_view c) {
   assert(c.size() == 3); // TODO: Escape
@@ -143,21 +155,21 @@ void X64Codegen::e_push_char(std::string_view c) {
   // GAS syntax is probably a superset of wacc syntax
   int cno = c[1];
   add_instr(fmt::format("mov rax, {}", cno));
-  add_instr("push rax"); // TODO: x64 Imm version??
+  add_push("rax"); // TODO: x64 Imm version??
 }
 void X64Codegen::e_push_bool(bool b) {
   add_instr(fmt::format("mov rax, {}", b ? 1 : 0));
-  add_instr("push rax");
+  add_push("rax");
 }
 void X64Codegen::e_push_string(std::string_view s) {
   strs_.push_back(s);
   add_instr(fmt::format("lea rax, .str{}[rip]", strs_.size() - 1));
   // add_instr("call waccrt_str_new");
-  add_instr("push rax");
+  add_push("rax");
 }
 void X64Codegen::e_pop_op(Op op) {
-  add_instr("pop rax"); // rax = rhs
-  add_instr("pop rbx"); // rbx = lhs
+  add_pop("rax"); // rax = rhs
+  add_pop("rbx"); // rbx = lhs
   switch (op) {
   case Op::Add:
     add_instr("add ebx, eax");
@@ -179,7 +191,7 @@ void X64Codegen::e_pop_op(Op op) {
     fprintf(stderr, "Unhandled op: %s\n", op_name(op));
     assert(0);
   }
-  add_instr("push rbx");
+  add_push("rbx");
 }
 
 // Assignment
@@ -194,11 +206,11 @@ void X64Codegen::add_var(std::string_view name, const Type &_) {
 void X64Codegen::assign_addr_local(std::string_view name) {
   int32_t locno = locs_[name];
   add_instr(fmt::format("lea rax, [rbp-{}]", addr_of(locno)));
-  add_instr("push rax # assign_addr_local");
+  add_push("rax # assign_addr_local");
 } // Push address of local
 void X64Codegen::assign_do() {
-  add_instr("pop rdi # assign_do val");  // Value
-  add_instr("pop rax # assign_do addr"); // Address
+  add_pop("rdi # assign_do val");  // Value
+  add_pop("rax # assign_do addr"); // Address
   add_instr("mov [rax], rdi");
 } // Pop value and address.
 void X64Codegen::assign_addr_fst() { assert(0); }
@@ -212,6 +224,14 @@ void X64Codegen::add_instr(std::string_view s) {
   buff_ += "    ";
   buff_ += s;
   buff_ += "\n";
+}
+void X64Codegen::add_push(const char *reg) {
+  add_instr(fmt::format("push {}", reg));
+  npush_++;
+}
+void X64Codegen::add_pop(const char *reg) {
+  add_instr(fmt::format("pop {}", reg));
+  npush_--;
 }
 
 int32_t X64Codegen::jno() { return jno_++; }
