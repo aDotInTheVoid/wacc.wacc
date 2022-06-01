@@ -167,8 +167,8 @@ def gen_trie_code(trie, vals):
             gttext = gen_trie_code(gt, vals)
             return f"if str[start + {l}] <= '{expected}' then\n{indent(leqtext)}\nelse\n{indent(gttext)}\nfi"
         case str(s):
-            l1 = "char[] exp = [" + ", ".join(f"'{c}'" for c in s) + "]"
-            l2 = "bool eq =  call streq(str, start, lenn, exp)"
+            l1 = "exp = [" + ", ".join(f"'{c}'" for c in s) + "]"
+            l2 = "eq =  call streq(str, start, lenn, exp)"
             l3 = "free exp"
             l4 = f"if eq then return {vals[s]} ENDIF"
             return ";\n".join([l1, l2, l3, l4])
@@ -186,7 +186,8 @@ def gen_trie(name, includes, ret_ty, vals, default):
             f.write(f'//     "{k}" => {v}\n')
         f.write(f"// }}\n")
 
-        f.write(f"{ret_ty} {name}(char[] str, int start, int lenn) is\n")
+        f.write(f"{ret_ty} {name}(char[] str, int start, int lenn) is \n")
+        f.write(f"  char[] exp=[];\n  free exp; bool eq=false;\n")
 
         keynames = list(vals.keys())
         trie = build_trie(keynames)
