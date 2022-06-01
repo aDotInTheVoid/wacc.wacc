@@ -16,6 +16,7 @@
 //     "else" => TOKEN_ELSE
 //     "end" => TOKEN_END
 //     "exit" => TOKEN_EXIT
+//     "extern" => TOKEN_EXTERN
 //     "false" => TOKEN_FALSE
 //     "fi" => TOKEN_FI
 //     "free" => TOKEN_FREE
@@ -245,16 +246,23 @@ TOKEN_TYPE identifier_kind(char[] str, int start, int lenn) is
             else
                 if lenn <= 6 then
                     if lenn == 6 then
-                        if str[start + 0] <= 'r' then
-                            exp = ['r', 'e', 't', 'u', 'r', 'n'];
+                        if str[start + 0] <= 'e' then
+                            exp = ['e', 'x', 't', 'e', 'r', 'n'];
                             eq =  call streq(str, start, lenn, exp);
                             free exp;
-                            if eq then return TOKEN_RETURN ENDIF
+                            if eq then return TOKEN_EXTERN ENDIF
                         else
-                            exp = ['s', 't', 'r', 'i', 'n', 'g'];
-                            eq =  call streq(str, start, lenn, exp);
-                            free exp;
-                            if eq then return TOKEN_STRING ENDIF
+                            if str[start + 0] <= 'r' then
+                                exp = ['r', 'e', 't', 'u', 'r', 'n'];
+                                eq =  call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return TOKEN_RETURN ENDIF
+                            else
+                                exp = ['s', 't', 'r', 'i', 'n', 'g'];
+                                eq =  call streq(str, start, lenn, exp);
+                                free exp;
+                                if eq then return TOKEN_STRING ENDIF
+                            fi
                         fi
                     ENDIF
                 else

@@ -37,6 +37,7 @@ KEYWORDS = [
     "else",
     "end",
     "exit",
+    "extern",
     "false",
     "fi",
     "free",

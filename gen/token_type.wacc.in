@@ -17,49 +17,50 @@
 //     else = 10,
 //     end = 11,
 //     exit = 12,
-//     false = 13,
-//     fi = 14,
-//     free = 15,
-//     fst = 16,
-//     if = 17,
-//     int = 18,
-//     is = 19,
-//     len = 20,
-//     newpair = 21,
-//     null = 22,
-//     ord = 23,
-//     pair = 24,
-//     print = 25,
-//     println = 26,
-//     read = 27,
-//     return = 28,
-//     skip = 29,
-//     snd = 30,
-//     string = 31,
-//     then = 32,
-//     true = 33,
-//     while = 34,
-//     lparen = 35,
-//     rparen = 36,
-//     assign = 37,
-//     semi = 38,
-//     comma = 39,
-//     lsquare = 40,
-//     rsquare = 41,
-//     not = 42,
-//     minus = 43,
-//     times = 44,
-//     div = 45,
-//     mod = 46,
-//     plus = 47,
-//     gt = 48,
-//     ge = 49,
-//     lt = 50,
-//     le = 51,
-//     eq = 52,
-//     ne = 53,
-//     and = 54,
-//     or = 55,
+//     extern = 13,
+//     false = 14,
+//     fi = 15,
+//     free = 16,
+//     fst = 17,
+//     if = 18,
+//     int = 19,
+//     is = 20,
+//     len = 21,
+//     newpair = 22,
+//     null = 23,
+//     ord = 24,
+//     pair = 25,
+//     print = 26,
+//     println = 27,
+//     read = 28,
+//     return = 29,
+//     skip = 30,
+//     snd = 31,
+//     string = 32,
+//     then = 33,
+//     true = 34,
+//     while = 35,
+//     lparen = 36,
+//     rparen = 37,
+//     assign = 38,
+//     semi = 39,
+//     comma = 40,
+//     lsquare = 41,
+//     rsquare = 42,
+//     not = 43,
+//     minus = 44,
+//     times = 45,
+//     div = 46,
+//     mod = 47,
+//     plus = 48,
+//     gt = 49,
+//     ge = 50,
+//     lt = 51,
+//     le = 52,
+//     eq = 53,
+//     ne = 54,
+//     and = 55,
+//     or = 56,
 // }
 
 #define TOKEN_TYPE int
@@ -77,49 +78,50 @@
 #define TOKEN_ELSE 10
 #define TOKEN_END 11
 #define TOKEN_EXIT 12
-#define TOKEN_FALSE 13
-#define TOKEN_FI 14
-#define TOKEN_FREE 15
-#define TOKEN_FST 16
-#define TOKEN_IF 17
-#define TOKEN_INT 18
-#define TOKEN_IS 19
-#define TOKEN_LEN 20
-#define TOKEN_NEWPAIR 21
-#define TOKEN_NULL 22
-#define TOKEN_ORD 23
-#define TOKEN_PAIR 24
-#define TOKEN_PRINT 25
-#define TOKEN_PRINTLN 26
-#define TOKEN_READ 27
-#define TOKEN_RETURN 28
-#define TOKEN_SKIP 29
-#define TOKEN_SND 30
-#define TOKEN_STRING 31
-#define TOKEN_THEN 32
-#define TOKEN_TRUE 33
-#define TOKEN_WHILE 34
-#define TOKEN_LPAREN 35
-#define TOKEN_RPAREN 36
-#define TOKEN_ASSIGN 37
-#define TOKEN_SEMI 38
-#define TOKEN_COMMA 39
-#define TOKEN_LSQUARE 40
-#define TOKEN_RSQUARE 41
-#define TOKEN_NOT 42
-#define TOKEN_MINUS 43
-#define TOKEN_TIMES 44
-#define TOKEN_DIV 45
-#define TOKEN_MOD 46
-#define TOKEN_PLUS 47
-#define TOKEN_GT 48
-#define TOKEN_GE 49
-#define TOKEN_LT 50
-#define TOKEN_LE 51
-#define TOKEN_EQ 52
-#define TOKEN_NE 53
-#define TOKEN_AND 54
-#define TOKEN_OR 55
+#define TOKEN_EXTERN 13
+#define TOKEN_FALSE 14
+#define TOKEN_FI 15
+#define TOKEN_FREE 16
+#define TOKEN_FST 17
+#define TOKEN_IF 18
+#define TOKEN_INT 19
+#define TOKEN_IS 20
+#define TOKEN_LEN 21
+#define TOKEN_NEWPAIR 22
+#define TOKEN_NULL 23
+#define TOKEN_ORD 24
+#define TOKEN_PAIR 25
+#define TOKEN_PRINT 26
+#define TOKEN_PRINTLN 27
+#define TOKEN_READ 28
+#define TOKEN_RETURN 29
+#define TOKEN_SKIP 30
+#define TOKEN_SND 31
+#define TOKEN_STRING 32
+#define TOKEN_THEN 33
+#define TOKEN_TRUE 34
+#define TOKEN_WHILE 35
+#define TOKEN_LPAREN 36
+#define TOKEN_RPAREN 37
+#define TOKEN_ASSIGN 38
+#define TOKEN_SEMI 39
+#define TOKEN_COMMA 40
+#define TOKEN_LSQUARE 41
+#define TOKEN_RSQUARE 42
+#define TOKEN_NOT 43
+#define TOKEN_MINUS 44
+#define TOKEN_TIMES 45
+#define TOKEN_DIV 46
+#define TOKEN_MOD 47
+#define TOKEN_PLUS 48
+#define TOKEN_GT 49
+#define TOKEN_GE 50
+#define TOKEN_LT 51
+#define TOKEN_LE 52
+#define TOKEN_EQ 53
+#define TOKEN_NE 54
+#define TOKEN_AND 55
+#define TOKEN_OR 56
 string token_type_str(TOKEN_TYPE __e) is
     if __e < 28 then
         if __e < 14 then
@@ -171,7 +173,7 @@ string token_type_str(TOKEN_TYPE __e) is
                         if __e < 13 then
                             if __e == 12 then return "exit" ENDIF
                         else
-                            if __e == 13 then return "false" ENDIF
+                            if __e == 13 then return "extern" ENDIF
                         fi
                     fi
                 fi
@@ -180,52 +182,52 @@ string token_type_str(TOKEN_TYPE __e) is
             if __e < 21 then
                 if __e < 17 then
                     if __e < 15 then
-                        if __e == 14 then return "fi" ENDIF
+                        if __e == 14 then return "false" ENDIF
                     else
                         if __e < 16 then
-                            if __e == 15 then return "free" ENDIF
+                            if __e == 15 then return "fi" ENDIF
                         else
-                            if __e == 16 then return "fst" ENDIF
+                            if __e == 16 then return "free" ENDIF
                         fi
                     fi
                 else
                     if __e < 19 then
                         if __e < 18 then
-                            if __e == 17 then return "if" ENDIF
+                            if __e == 17 then return "fst" ENDIF
                         else
-                            if __e == 18 then return "int" ENDIF
+                            if __e == 18 then return "if" ENDIF
                         fi
                     else
                         if __e < 20 then
-                            if __e == 19 then return "is" ENDIF
+                            if __e == 19 then return "int" ENDIF
                         else
-                            if __e == 20 then return "len" ENDIF
+                            if __e == 20 then return "is" ENDIF
                         fi
                     fi
                 fi
             else
                 if __e < 24 then
                     if __e < 22 then
-                        if __e == 21 then return "newpair" ENDIF
+                        if __e == 21 then return "len" ENDIF
                     else
                         if __e < 23 then
-                            if __e == 22 then return "null" ENDIF
+                            if __e == 22 then return "newpair" ENDIF
                         else
-                            if __e == 23 then return "ord" ENDIF
+                            if __e == 23 then return "null" ENDIF
                         fi
                     fi
                 else
                     if __e < 26 then
                         if __e < 25 then
-                            if __e == 24 then return "pair" ENDIF
+                            if __e == 24 then return "ord" ENDIF
                         else
-                            if __e == 25 then return "print" ENDIF
+                            if __e == 25 then return "pair" ENDIF
                         fi
                     else
                         if __e < 27 then
-                            if __e == 26 then return "println" ENDIF
+                            if __e == 26 then return "print" ENDIF
                         else
-                            if __e == 27 then return "read" ENDIF
+                            if __e == 27 then return "println" ENDIF
                         fi
                     fi
                 fi
@@ -236,52 +238,52 @@ string token_type_str(TOKEN_TYPE __e) is
             if __e < 35 then
                 if __e < 31 then
                     if __e < 29 then
-                        if __e == 28 then return "return" ENDIF
+                        if __e == 28 then return "read" ENDIF
                     else
                         if __e < 30 then
-                            if __e == 29 then return "skip" ENDIF
+                            if __e == 29 then return "return" ENDIF
                         else
-                            if __e == 30 then return "snd" ENDIF
+                            if __e == 30 then return "skip" ENDIF
                         fi
                     fi
                 else
                     if __e < 33 then
                         if __e < 32 then
-                            if __e == 31 then return "string" ENDIF
+                            if __e == 31 then return "snd" ENDIF
                         else
-                            if __e == 32 then return "then" ENDIF
+                            if __e == 32 then return "string" ENDIF
                         fi
                     else
                         if __e < 34 then
-                            if __e == 33 then return "true" ENDIF
+                            if __e == 33 then return "then" ENDIF
                         else
-                            if __e == 34 then return "while" ENDIF
+                            if __e == 34 then return "true" ENDIF
                         fi
                     fi
                 fi
             else
                 if __e < 38 then
                     if __e < 36 then
-                        if __e == 35 then return "lparen" ENDIF
+                        if __e == 35 then return "while" ENDIF
                     else
                         if __e < 37 then
-                            if __e == 36 then return "rparen" ENDIF
+                            if __e == 36 then return "lparen" ENDIF
                         else
-                            if __e == 37 then return "assign" ENDIF
+                            if __e == 37 then return "rparen" ENDIF
                         fi
                     fi
                 else
                     if __e < 40 then
                         if __e < 39 then
-                            if __e == 38 then return "semi" ENDIF
+                            if __e == 38 then return "assign" ENDIF
                         else
-                            if __e == 39 then return "comma" ENDIF
+                            if __e == 39 then return "semi" ENDIF
                         fi
                     else
                         if __e < 41 then
-                            if __e == 40 then return "lsquare" ENDIF
+                            if __e == 40 then return "comma" ENDIF
                         else
-                            if __e == 41 then return "rsquare" ENDIF
+                            if __e == 41 then return "lsquare" ENDIF
                         fi
                     fi
                 fi
@@ -290,52 +292,56 @@ string token_type_str(TOKEN_TYPE __e) is
             if __e < 49 then
                 if __e < 45 then
                     if __e < 43 then
-                        if __e == 42 then return "not" ENDIF
+                        if __e == 42 then return "rsquare" ENDIF
                     else
                         if __e < 44 then
-                            if __e == 43 then return "minus" ENDIF
+                            if __e == 43 then return "not" ENDIF
                         else
-                            if __e == 44 then return "times" ENDIF
+                            if __e == 44 then return "minus" ENDIF
                         fi
                     fi
                 else
                     if __e < 47 then
                         if __e < 46 then
-                            if __e == 45 then return "div" ENDIF
+                            if __e == 45 then return "times" ENDIF
                         else
-                            if __e == 46 then return "mod" ENDIF
+                            if __e == 46 then return "div" ENDIF
                         fi
                     else
                         if __e < 48 then
-                            if __e == 47 then return "plus" ENDIF
+                            if __e == 47 then return "mod" ENDIF
                         else
-                            if __e == 48 then return "gt" ENDIF
+                            if __e == 48 then return "plus" ENDIF
                         fi
                     fi
                 fi
             else
-                if __e < 52 then
-                    if __e < 50 then
-                        if __e == 49 then return "ge" ENDIF
-                    else
-                        if __e < 51 then
-                            if __e == 50 then return "lt" ENDIF
+                if __e < 53 then
+                    if __e < 51 then
+                        if __e < 50 then
+                            if __e == 49 then return "gt" ENDIF
                         else
-                            if __e == 51 then return "le" ENDIF
+                            if __e == 50 then return "ge" ENDIF
+                        fi
+                    else
+                        if __e < 52 then
+                            if __e == 51 then return "lt" ENDIF
+                        else
+                            if __e == 52 then return "le" ENDIF
                         fi
                     fi
                 else
-                    if __e < 54 then
-                        if __e < 53 then
-                            if __e == 52 then return "eq" ENDIF
+                    if __e < 55 then
+                        if __e < 54 then
+                            if __e == 53 then return "eq" ENDIF
                         else
-                            if __e == 53 then return "ne" ENDIF
+                            if __e == 54 then return "ne" ENDIF
                         fi
                     else
-                        if __e < 55 then
-                            if __e == 54 then return "and" ENDIF
+                        if __e < 56 then
+                            if __e == 55 then return "and" ENDIF
                         else
-                            if __e == 55 then return "or" ENDIF
+                            if __e == 56 then return "or" ENDIF
                         fi
                     fi
                 fi
