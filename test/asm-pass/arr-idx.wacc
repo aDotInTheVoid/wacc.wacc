@@ -1,0 +1,15 @@
+begin skip;
+
+int[] a = [1,2,3];
+
+int i=0;
+while i < len a do
+    a[i]=-a[i];
+    i=i+1
+done;
+
+println a[0];
+println a[1];
+println a[2];
+
+skip end

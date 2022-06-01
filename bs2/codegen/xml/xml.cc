@@ -163,18 +163,10 @@ void XmlCodegen::assign_addr_local(std::string_view name) {
   line(name);
   close("addr_local");
 }
-void XmlCodegen::assign_addr_fst() {
-  open("addr_fst");
-  close("addr_fst");
-}
-void XmlCodegen::assign_addr_snd() {
-  open("addr_snd");
-  close("addr_snd");
-}
-void XmlCodegen::assign_do() {
-  open("assign_do");
-  close("assign_do");
-}
+void XmlCodegen::assign_addr_fst() { open_close("addr_fst"); }
+void XmlCodegen::assign_addr_snd() { open_close("addr_snd"); }
+void XmlCodegen::assign_addr_array() { open_close("addr_array"); }
+void XmlCodegen::assign_do() { open_close("assign_do"); }
 /* #endregion */
 
 /* #region internal */

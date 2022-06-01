@@ -1,0 +1,18 @@
+begin 
+
+int ppair(pair(int, int) a) is
+    int f = fst a;
+    int s = snd a;
+    println f;
+    println s
+end
+skip;
+
+pair(int, int) p = newpair(1,2);
+int _nop = call ppair(p);
+
+fst p = -10;
+snd p = -20;
+_nop = call ppair(p);
+
+skip end

@@ -67,6 +67,7 @@ struct X64Codegen : Codegen {
   void assign_do() override;                         // Pop value and address.
   void assign_addr_fst() override;
   void assign_addr_snd() override;
+  void assign_addr_array() override;
   void call_func(std::string_view, int32_t nargs) override;
 
   void add_dir(std::string_view);

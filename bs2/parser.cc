@@ -208,6 +208,7 @@ void Parser::s_while() {
   codegen_->while_end(j_cond, j_body);
 }
 void Parser::s_block() {
+  // fatal("Who uses blocks?"); // TODO
   codegen_->start_block();
   stmts();
   expect(TokenType::End);
@@ -215,8 +216,14 @@ void Parser::s_block() {
 }
 void Parser::s_assign_local(std::string_view name) {
   // TODO: Arrays
-  expect(TokenType::Assign);
   codegen_->assign_addr_local(name);
+  while (match(TokenType::Lsquare)) {
+    expr();
+    codegen_->assign_addr_array();
+    expect(TokenType::Rsquare);
+  }
+
+  expect(TokenType::Assign);
   assign_rhs();
   codegen_->assign_do();
 }

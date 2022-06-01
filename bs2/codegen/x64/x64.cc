@@ -17,7 +17,7 @@
 
 static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
 
-#define MAX_LOCS 10
+#define MAX_LOCS 50
 #define LOC_SIZE 8
 
 static int32_t addr_of(int32_t locno) { return LOC_SIZE * (locno + 1); }
@@ -91,7 +91,10 @@ void X64Codegen::pop_return() {
   add_pop("rax");
   add_instr(fmt::format("jmp .ret_{}", cur_func_));
 }
-void X64Codegen::pop_exit() { assert(0); }
+void X64Codegen::pop_exit() {
+  add_pop(rnames[0]);
+  add_call("waccrt_exit");
+}
 void X64Codegen::if_cond() {} // nop
 int32_t X64Codegen::if_when() {
   int32_t j = jno();
@@ -136,11 +139,11 @@ void X64Codegen::e_push_local(std::string_view name) {
   add_push("rax # e_push_local");
 }
 void X64Codegen::e_push_char(std::string_view c) {
-  assert(c.size() == 3); // TODO: Escape
-  // https://sourceware.org/binutils/docs-2.38/as/Strings.html
-  // GAS syntax is probably a superset of wacc syntax
-  int cno = c[1];
-  add_instr(fmt::format("mov rax, {}", cno));
+  // assert(c.size() == 3); // TODO: Escape
+  // // https://sourceware.org/binutils/docs-2.38/as/Strings.html
+  // // GAS syntax is probably a superset of wacc syntax
+  // int cno = c[1];
+  add_instr(fmt::format("mov rax, {}", c));
   add_push("rax"); // TODO: x64 Imm version??
 }
 void X64Codegen::e_push_bool(bool b) {
@@ -267,7 +270,10 @@ void X64Codegen::e_pop_op(Op op) {
 void X64Codegen::add_var(std::string_view name, const Type &_) {
   int32_t locno = n_locs_++;
   if (n_locs_ > MAX_LOCS) {
-    throw std::runtime_error("Too many locals");
+    std::cerr << fmt::format(
+        "Too many locals in {}, now have {}, the latest being {}\n", cur_func_,
+        n_locs_, name);
+    exit(1);
   }
   locs_[name] = locno;
 }
@@ -282,8 +288,26 @@ void X64Codegen::assign_do() {
   add_pop("rax # assign_do addr"); // Address
   add_instr("mov [rax], rdi");
 } // Pop value and address.
-void X64Codegen::assign_addr_fst() { assert(0); }
-void X64Codegen::assign_addr_snd() { assert(0); }
+void X64Codegen::assign_addr_fst() {
+  add_pop("rax");
+  add_instr("mov rbx, [rax]");
+  // add_instr("lea rbx, [rax]");
+  add_push("rbx");
+}
+void X64Codegen::assign_addr_snd() {
+  add_pop("rax");
+  add_instr("mov rbx, [rax]"); // Fo
+  add_instr("add rbx, 8");
+  // add_instr("lea rbx, [rax+8]");
+  add_push("rbx");
+}
+void X64Codegen::assign_addr_array() {
+  add_pop("rbx # array index"); // rbx = index
+  add_pop("rax # array base");  // rax = array
+  add_instr("mov rax, [rax]");
+  add_instr("lea rcx, [rax+rbx*8]");
+  add_push("rcx");
+}
 
 void X64Codegen::add_dir(std::string_view s) {
   buff_ += s;

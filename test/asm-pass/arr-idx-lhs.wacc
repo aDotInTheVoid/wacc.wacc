@@ -1,0 +1,7 @@
+begin skip;
+
+int[] a = [1,2,3];
+a[0]=0;
+println a[0];
+
+skip end

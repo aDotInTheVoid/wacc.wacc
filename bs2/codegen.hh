@@ -55,6 +55,7 @@ struct Codegen {
   virtual void assign_addr_local(std::string_view) = 0; // Push address of local
   virtual void assign_addr_fst() = 0;
   virtual void assign_addr_snd() = 0;
+  virtual void assign_addr_array() = 0;
   virtual void assign_do() = 0; // Pop value and address.
 
   virtual void call_func(std::string_view, int32_t nargs) = 0;

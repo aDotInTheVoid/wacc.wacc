@@ -1,0 +1,5 @@
+begin skip;
+pair(int, int) x = newpair(1, 2);
+fst x = 3;
+free x;
+skip end
