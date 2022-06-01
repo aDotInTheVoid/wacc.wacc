@@ -70,6 +70,7 @@
         "typeindex": "cpp",
         "variant": "cpp",
         "bitset": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "charconv": "cpp"
     }
 }

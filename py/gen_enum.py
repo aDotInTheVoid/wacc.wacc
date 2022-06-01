@@ -56,6 +56,7 @@ def gen_enum(e: Enum, i: int):
             f.write(f"#define {prefix}_{opt.upper()} {eno}\n")
 
         f.write(f"string {e.name}_str({name} __e) is\n")
+        # TODO: Look into using an array here.
         f.write(indent(gen_bsearch(gen_bsearch_tree(vals))))
         f.write("    ; exit 1\n")
         f.write("end\n")

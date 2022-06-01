@@ -47,7 +47,7 @@ LEXER_FN(VOID, skipComment)
     while true do
         bool is_at_end = call isAtEnd(self);
         if is_at_end then 
-            TRACE("END SK EOF");
+           // TRACE("END SK EOF");
             RETV 
         ENDIF ;
         char c = call advance(self);
