@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     lea rax, .str0[rip]
     push rax
     pop rdi # load print
@@ -326,7 +326,7 @@ main:
     call waccrt_println_bool
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata

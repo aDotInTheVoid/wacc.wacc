@@ -3,7 +3,7 @@
 hello:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     lea rax, .str0[rip]
     push rax
     pop rdi # load print
@@ -13,13 +13,13 @@ hello:
     pop rax
     jmp .ret_hello
 .ret_hello:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     lea rax, [rbp-8]
     push rax # assign_addr_local
     sub rsp, 8
@@ -31,7 +31,7 @@ main:
     mov [rax], rdi
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata

@@ -3,14 +3,14 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     lea rax, [rbp-8]
     push rax # assign_addr_local
-    mov rax, 49
+    mov rax, '1'
     push rax
-    mov rax, 50
+    mov rax, '2'
     push rax
-    mov rax, 51
+    mov rax, '3'
     push rax
     mov rdi, 3
     lea rsi, [rsp+16]
@@ -86,7 +86,7 @@ main:
     call waccrt_array_delete
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata

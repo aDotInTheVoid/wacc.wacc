@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     lea rax, [rbp-8]
     push rax # assign_addr_local
     mov eax, 1
@@ -20,7 +20,7 @@ main:
     mov [rax], rdi
     lea rax, [rbp-24]
     push rax # assign_addr_local
-    mov rax, 99
+    mov rax, 'c'
     push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
@@ -39,7 +39,7 @@ main:
     call waccrt_println_char
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata

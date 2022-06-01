@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     mov rax, 1
     push rax
     pop rax
@@ -18,7 +18,7 @@ main:
 .CF1:
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata

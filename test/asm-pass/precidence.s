@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     mov eax, 1
     push rax # e_push_number
     mov eax, 2
@@ -60,7 +60,7 @@ main:
     call waccrt_println_i32
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata

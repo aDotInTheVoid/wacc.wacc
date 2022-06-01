@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     lea rax, [rbp-8]
     push rax # assign_addr_local
     mov eax, 0
@@ -47,7 +47,7 @@ main:
 .CF1:
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata

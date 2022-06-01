@@ -3,7 +3,7 @@
 r1:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     mov [rbp-8], rdi
     mov rax, [rbp-8] # e_push_local
     push rax # e_push_local
@@ -47,13 +47,13 @@ r1:
     pop rax
     jmp .ret_r1
 .ret_r1:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 r2:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     mov [rbp-8], rdi
     lea rax, .str1[rip]
     push rax
@@ -86,13 +86,13 @@ r2:
     pop rax
     jmp .ret_r2
 .ret_r2:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 80
+    sub rsp, 400
     lea rax, [rbp-8]
     push rax # assign_addr_local
     mov eax, 0
@@ -114,7 +114,7 @@ main:
     mov [rax], rdi
     xor rax, rax
 .ret_main:
-    add rsp, 80
+    add rsp, 400
     pop rbp
     ret
 .section .rodata
