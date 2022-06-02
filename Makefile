@@ -1,6 +1,7 @@
 py_src := $(shell find py/ -name '*.py')
 go_src := $(shell find test/ -type f -name '*.go')
 wacc_src := $(shell find src/ gen/ -type f -name '*.wacc.in')
+bs2_src := bs2/README bs2/codegen bs2/codegen/x64 bs2/codegen/x64/x64.cc bs2/codegen/x64/x64.hh bs2/codegen/xml bs2/codegen/xml/xml.cc bs2/codegen/xml/xml.hh bs2/codegen.cc bs2/codegen.hh bs2/lex.cc bs2/lex.hh bs2/lexbuf.cc bs2/lexbuf.hh bs2/main.cc bs2/meson.build bs2/op.cc bs2/op.hh bs2/parser.cc bs2/parser.hh bs2/subprojects bs2/subprojects/.gitignore bs2/subprojects/fmt.wrap bs2/type.cc bs2/type.hh bs2/util.cc bs2/util.hh
 
 objdir := _build
 timestamp := $(objdir)/.timestamp
@@ -56,8 +57,7 @@ $(objdir)/asm-pass/%: $(objdir)/asm-pass/%.o $(objdir)/rt.o
 
 tools: $(kgt) $(tp) $(test)
 
-.PHONY: $(bs2)
-$(bs2):
+$(bs2): $(bs2_src)
 	ninja -C bs2/_build/default
 bs2: $(bs2)
 

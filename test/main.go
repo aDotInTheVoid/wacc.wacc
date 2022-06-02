@@ -4,298 +4,110 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"sync"
+	"time"
 
 	"github.com/aDotInTheVoid/wacc.wacc/test/runner"
 	"github.com/adotinthevoid/xmlpp"
-	"github.com/fatih/color"
 )
-
-var isBlessEnabled = os.Getenv("WACC_UPDATE") == "1"
-
-type runResult int
-
-const (
-	runResultPass = iota
-	runResultFail
-
-	// Normal test
-	blessDisabled = iota
-	blessEnabledAuthoritative
-	blessEnabledNonAuthoritative
-)
-
-type blessMode = int
-
-type runData struct {
-	Path     string
-	Compiler string
-	Result   runResult
-	Message  string
-}
-
-var compilers = []runner.Compiler{runner.BS2, runner.WaccWacc{}, runner.WaccToC{}}
 
 func main() {
-	log.SetFlags(0)
-	gotoTestDir()
-
-	for _, c := range compilers {
-		runner.Must(c.Ensure())
+	start := time.Now()
+	// cwd to root
+	for {
+		if runner.DirExists("test") &&
+			runner.DirExists("bs2") &&
+			runner.DirExists("gen") &&
+			runner.DirExists("gram") {
+			break
+		}
+		cwd, err := os.Getwd()
+		if err != nil {
+			log.Fatal("Cannot get cwd", err)
+		} else if cwd == "/" {
+			log.Fatal("Cannot find root directory")
+		}
+		err = os.Chdir("..")
+		if err != nil {
+			log.Fatal("Cannot change directory", err)
+		}
 	}
+
+	here, err := os.Getwd()
+	if err != nil {
+		log.Fatal("Cannot get cwd", err)
+	}
+	log.Println("In dir", here)
 
 	var wg sync.WaitGroup
-	c := make(chan runData)
+	c := make(chan runner.TestResult)
 	done := make(chan struct{})
+	bless := os.Getenv("WACC_UPDATE") == "1"
 
-	bs2LexPass := LexPassConfig{runner.BS2, blessDisabled}
-	waccWaccLexPass := LexPassConfig{runner.WaccWacc{}, blessDisabled}
-	asmPassOut := AsmRunConfig{blessDisabled}
-
-	if isBlessEnabled {
-		bs2LexPass.blessMode = blessEnabledAuthoritative
-		waccWaccLexPass.blessMode = blessEnabledNonAuthoritative
-		asmPassOut.blessMode = blessEnabledAuthoritative
+	lexers := runner.CompilerGroup[runner.Lexer]{
+		Authoritative:    runner.BS2Lexer,
+		NonAuthoritative: []runner.Lexer{runner.WaccBs2Lexer, runner.WaccTpLexer},
 	}
-	bs2ParsePass := bs2LexPass
-	bs2AsmPass := bs2LexPass
+	parsers := runner.CompilerGroup[runner.Parser]{Authoritative: runner.BS2Parser}
+	e := lexers.Ensure()
+	if e.IsError() {
+		log.Fatalf("Command `%s` exited with %d\n", e.Invocation, e.ExitCode)
+	}
+	e = parsers.Ensure()
+	if e.IsError() {
+		log.Fatalf("Command `%s` exited with %d\n", e.Invocation, e.ExitCode)
+	}
 
-	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, bs2LexPass))
-	filepath.Walk("lex-pass", walkWrap(lexPass, c, &wg, waccWaccLexPass))
-	filepath.Walk("parse-pass", walkWrap(parsePass, c, &wg, bs2ParsePass))
-	filepath.Walk("asm-pass", walkWrap(asmPass, c, &wg, bs2AsmPass))
-	filepath.Walk("asm-pass", walkWrap(asmPassRun, c, &wg, asmPassOut))
+	runner.RunSuite("test/lex-pass", "stdout", &lexers, runLex, bless, c, &wg)
+	runner.RunSuite("test/parse-pass", "xml", &parsers, runParse, bless, c, &wg)
 
-	// Wait for all the tests to finish
-	// Must go this after all runs
+	// All tests are now launched
 	go func() {
 		wg.Wait()
 		done <- struct{}{}
 	}()
 
-	nPass := 0
 	nFail := 0
-	status := ""
-	statusFail := color.New(color.FgRed).Add(color.Bold).SprintFunc()("FAIL")
-	statusPass := color.GreenString("PASS")
-
-done:
+	nPass := 0
+results:
 	for {
 		select {
-		case r := <-c:
-			if r.Result == runResultFail {
+		case result := <-c:
+			if result.IsError() {
 				nFail++
-				status = statusFail
+				fmt.Fprintf(os.Stderr, "FAIL %10s %s\n%s\n", result.Compiler, result.TestName, result.Message)
 			} else {
+				fmt.Fprintf(os.Stderr, "PASS %10s %s\n", result.Compiler, result.TestName)
 				nPass++
-				status = statusPass
-			}
-			fmt.Printf("%s: %10s %s\n", status, filepath.Base(r.Compiler), r.Path)
-			if r.Result == runResultFail {
-				fmt.Println(r.Message)
 			}
 		case <-done:
-			break done
+			break results
 		}
 	}
 
-	log.Printf("%d passed, %d failed", nPass, nFail)
-	if nFail != 0 {
-		println("======== FAILED =========")
+	elapsed := time.Since(start)
+	if nFail == 0 {
+		fmt.Fprintf(os.Stderr, "Passed %d tests in %s\n", nPass, elapsed)
+	} else {
+		fmt.Fprintf(os.Stderr, "Failed %d tests (passed %d) in %s\n", nFail, nPass, elapsed)
 		os.Exit(1)
 	}
 }
 
-// Result is optional
-type TestOverallRunner[T any] func(path string, config T) *runData
-
-type LexPassConfig struct {
-	compiler  runner.Compiler
-	blessMode blessMode
+func runLex(l runner.Lexer, path string) runner.CommandResult {
+	return l.Lex(path)
 }
-type AsmRunConfig struct {
-	blessMode blessMode
-}
-
-func asmPassRun(path string, config AsmRunConfig) *runData {
-	if config.blessMode == blessEnabledNonAuthoritative {
-		return nil
+func runParse(p runner.Parser, path string) runner.CommandResult {
+	r := p.Parse(path)
+	if r.IsError() {
+		return r
 	}
-	target := withSuffix(path, "")
-	target = "_build/" + target[:len(target)-1]
-	out := runner.RunOutputGet("make", nil, "-C", "..", target)
-	var status runResult = runResultPass
-	message := ""
-	if out.StatusCode != 0 {
-		status = runResultFail
-		message = out.Stderr
-	} else {
-		out = runner.RunOutputGet("../"+target, nil)
-		if config.blessMode == blessEnabledAuthoritative {
-			os.WriteFile(withSuffix(path, "out"), []byte(out.Stdout), 0644)
-		} else {
-			c, err := os.ReadFile(withSuffix(path, "out"))
-			runner.Must(err)
-			if string(c) != out.Stdout {
-				status = runResultFail
-				message = "Expected:\n" + string(c) + "\nGot:\n" + out.Stdout
-			}
-		}
-	}
-	return &runData{path, "run", status, message}
-
-}
-
-func asmPass(path string, config LexPassConfig) *runData {
-	if config.blessMode == blessEnabledNonAuthoritative {
-		return nil
-	}
-	out := config.compiler.Assemble(path)
-	var status runResult
-	if out.StatusCode != 0 {
-		status = runResultFail
-	} else {
-		status = runResultPass
-	}
-	message := ""
-	if config.blessMode == blessEnabledAuthoritative {
-		os.WriteFile(withSuffix(path, "s"), []byte(out.Stdout), 0644)
-	} else {
-		c, err := os.ReadFile(withSuffix(path, "s"))
-		runner.Must(err)
-		if string(c) != out.Stdout {
-			status = runResultFail
-			// TODO: Message
-		}
-	}
-	return &runData{
-		path, config.compiler.Name(), status, message,
-	}
-}
-
-func parsePass(path string, config LexPassConfig) *runData {
-	if config.blessMode == blessEnabledNonAuthoritative {
-		return nil
-	}
-	out := config.compiler.Parse(path)
-	var status runResult
-	if out.StatusCode != 0 {
-		status = runResultFail
-	} else {
-		status = runResultPass
-	}
-
-	message := ""
-
-	outXmlT, err := xmlpp.BuildTree(out.Stdout)
+	tree, err := xmlpp.BuildTree(r.Output)
 	if err != nil {
-		status = runResultFail
-		message = "Expected XML, got ```" + out.Stdout + "```"
-	} else {
-		outXml := xmlpp.Pp(&outXmlT)
-		if config.blessMode == blessEnabledAuthoritative {
-			os.WriteFile(withSuffix(path, "xml"), []byte(outXml), 0644)
-		} else {
-			c, err := os.ReadFile(withSuffix(path, "xml"))
-			runner.Must(err)
-			if string(c) != outXml {
-				status = runResultFail
-			}
-			// TODO: Diff
-			message = "Expected ---\n" + string(c) + "\n--- got ---\n" + outXml + "\n---"
-		}
+		r.ExitCode = 1
+		r.Error = err.Error()
+		return r
 	}
-
-	return &runData{
-		path,
-		config.compiler.Name(),
-		status,
-		message,
-	}
-}
-
-func lexPass(path string, config LexPassConfig) *runData {
-	if config.blessMode == blessEnabledNonAuthoritative {
-		return nil
-	}
-
-	out := config.compiler.Lex(path)
-	var status runResult
-	if out.StatusCode != 0 {
-		status = runResultFail
-	} else {
-		status = runResultPass
-	}
-
-	message := ""
-
-	if config.blessMode == blessEnabledAuthoritative {
-		os.WriteFile(withSuffix(path, "stdout"), []byte(out.Stdout), 0644)
-	} else {
-		c, err := os.ReadFile(withSuffix(path, "stdout"))
-		runner.Must(err)
-		if string(c) != out.Stdout {
-			status = runResultFail
-		}
-		message = "Expected ```" + string(c) + "``` got ```" + out.Stdout + "```"
-	}
-
-	return &runData{
-		path,
-		config.compiler.Name(),
-		status,
-		message,
-	}
-}
-
-func walkWrap[T any](f TestOverallRunner[T], c chan runData, wg *sync.WaitGroup, config T) filepath.WalkFunc {
-	return func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if info.IsDir() {
-			return nil
-		}
-		if filepath.Ext(path) != ".wacc" {
-			return nil
-		}
-		wg.Add(1)
-		go func() {
-			result := f(path, config)
-			if result != nil {
-				c <- *result
-			}
-			wg.Done()
-		}()
-
-		return nil
-	}
-}
-
-func gotoTestDir() {
-	if td := os.Getenv("WACC_TEST_DIR"); td != "" {
-		runner.Must(os.Chdir(td))
-	} else {
-		for {
-			if runner.DirExists("test") {
-				runner.Must(os.Chdir("test"))
-				return
-			}
-			cwd, err := os.Getwd()
-			runner.Must(err)
-			if cwd == "/" {
-				break
-			}
-			runner.Must(os.Chdir(".."))
-		}
-	}
-	if !runner.DirExists("runner") {
-		log.Fatal("Failed to find test directory")
-	}
-}
-
-func withSuffix(path string, newExt string) string {
-	ext := filepath.Ext(path)
-	return path[:len(path)-len(ext)] + "." + newExt
+	r.Output = xmlpp.Pp(&tree)
+	return r
 }
