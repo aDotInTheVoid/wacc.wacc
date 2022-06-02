@@ -8,5 +8,5 @@ jobs:
   ci:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/setup-go@v3
+      - run: cd docs
       - run: ./gendocs.sh wacc
