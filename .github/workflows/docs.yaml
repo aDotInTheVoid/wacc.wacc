@@ -7,6 +7,8 @@ on:
 jobs:
   docs:
     runs-on: ubuntu-20.04
+    permissions:
+      contents: write
     steps:
       - run: sudo apt-get update && sudo apt-get install texlive-binaries
       - uses: actions/checkout@v3
