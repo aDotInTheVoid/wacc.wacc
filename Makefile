@@ -36,7 +36,7 @@ $(objdir)/wacc.wacc: $(wacc_src)
 $(objdir)/wacc-tp.c: $(tp) $(objdir)/wacc.wacc
 #	CGEN_LINE_CONTROL=1
 	$(tp) $(objdir)/wacc.wacc $@
-$(objdir)/wacc-tp: $(objdir)/wacc-tp.c
+$(objdir)/wacc: $(objdir)/wacc-tp.c #TODO: Rename
 	clang -g -o $@ $< -Wno-parentheses-equality -fsanitize=address
 $(objdir)/wacc-bs2.s: $(objdir)/wacc.wacc $(bs2)
 	$(bs2) asm $< > $@

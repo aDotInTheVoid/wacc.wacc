@@ -71,6 +71,7 @@
         "variant": "cpp",
         "bitset": "cpp",
         "cassert": "cpp",
-        "charconv": "cpp"
+        "charconv": "cpp",
+        "*.def": "c"
     }
 }

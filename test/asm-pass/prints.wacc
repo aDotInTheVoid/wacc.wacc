@@ -1,0 +1,22 @@
+begin
+
+skip;
+
+char a = 'a';
+int b = 1;
+bool c = true;
+pair(int, int) d = newpair(1, 2);
+string e = "str e";
+char[] f = ['a', 'b', 'f'];
+pair(pair, pair) g = null;
+
+println a;
+println b;
+println c;
+println d;
+println e;
+println f;
+println g
+
+
+end
