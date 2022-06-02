@@ -15,6 +15,11 @@ type Parser interface {
 	Parse(path string) CommandResult
 }
 
+type Assembler interface {
+	Compiler
+	Assemble(path string) CommandResult
+}
+
 type CompilerGroup[C Compiler] struct {
 	Authoritative    C
 	NonAuthoritative []C
