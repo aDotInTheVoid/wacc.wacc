@@ -8,5 +8,6 @@ jobs:
   docs:
     runs-on: ubuntu-20.04
     steps:
+      - run: sudo apt-get update && sudo apt-get install texlive-binaries
       - uses: actions/checkout@v3
       - run: cd doc && ./gendocs.sh wacc
