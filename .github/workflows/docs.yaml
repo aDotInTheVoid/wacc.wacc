@@ -1,0 +1,21 @@
+name: Docs
+
+on:
+  push:
+    branches: [trunk]
+
+jobs:
+  docs:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - run: sudo apt-get update && sudo apt-get install texlive-binaries
+      - uses: actions/checkout@v3
+      - run: cd doc && ./gendocs.sh wacc
+      - uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/trunk' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/manual/
+          force_orphan: true
