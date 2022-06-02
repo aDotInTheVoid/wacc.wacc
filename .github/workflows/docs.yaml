@@ -11,3 +11,8 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install texlive-binaries
       - uses: actions/checkout@v3
       - run: cd doc && ./gendocs.sh wacc
+      - uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./doc/manual/
+          force_orphan: true
