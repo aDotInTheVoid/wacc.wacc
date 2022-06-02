@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 )
 
@@ -53,6 +54,7 @@ func doRun[C Compiler](comp C, path string, out_ext string, f func(C, string) Co
 	result := TestResult{TestName: path, Compiler: comp.Name()}
 	if r.IsError() {
 		result.Status = StatusFail
+		result.Message = makeMessage(&r)
 		// TODO: Set message
 		return result
 	}
@@ -67,9 +69,26 @@ func doRun[C Compiler](comp C, path string, out_ext string, f func(C, string) Co
 		result.Status = StatusPass
 	} else {
 		result.Status = StatusFail
-		result.Message = "Output mismatch" // TODO: Give a diff
+		result.Message = fmt.Sprintf("Output mismatch: expected ---\n%s\n---, got ---\n%s\n---", r.Output, c)
+
 	}
 	return result
+}
+
+func makeMessage(r *CommandResult) string {
+	out := fmt.Sprintf("Command `%s` exited with %d\n", r.Invocation, r.ExitCode)
+	stderr := strings.TrimSpace(r.Error)
+	stdout := strings.TrimSpace(r.Output)
+
+	if stdout != "" && stderr != "" {
+		out += fmt.Sprintf("--- stdout ---\n%s\n--- stderr ---\n%s\n---", stdout, stderr)
+	} else if stdout != "" {
+		out += fmt.Sprintf("--- stdout ---\n%s\n---", stdout)
+	} else if stderr != "" {
+		out += fmt.Sprintf("--- stderr ---\n%s\n---", stderr)
+	}
+
+	return out
 }
 
 func withSuffix(path string, newExt string) string {

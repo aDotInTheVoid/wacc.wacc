@@ -33,6 +33,10 @@ ppair:
     push rax # e_push_local
     pop rdi # load print
     call waccrt_println_i32
+    mov eax, 0
+    push rax # e_push_number
+    pop rax
+    jmp .ret_ppair
 .ret_ppair:
     add rsp, 400
     pop rbp

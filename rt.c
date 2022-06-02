@@ -26,18 +26,8 @@ void waccrt_print_bool(bool x) {
     printf("false");
 }
 
-void waccrt_println_ptr(void *x) {
-  if (x)
-    printf("%p\n", x);
-  else
-    printf("(nil)\n");
-}
-void waccrt_print_ptr(void *x) {
-  if (x)
-    printf("%p", x);
-  else
-    printf("(nil)");
-}
+void waccrt_println_ptr(void *x) { printf("%p\n", x); }
+void waccrt_print_ptr(void *x) { printf("%p", x); }
 
 void waccrt_print_char_array(uint64_t *arr) {
   uint64_t len = arr[-1];

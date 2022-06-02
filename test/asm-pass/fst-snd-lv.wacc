@@ -4,7 +4,8 @@ int ppair(pair(int, int) a) is
     int f = fst a;
     int s = snd a;
     println f;
-    println s
+    println s;
+    return 0
 end
 skip;
 

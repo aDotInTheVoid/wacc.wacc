@@ -67,6 +67,10 @@ _build/bs2/%: %.wacc $(bs2) $(rt_obj)
 	@mkdir -p $(@D)
 	$(bs2) asm $< > $@.s
 	gcc $@.s $(rt_obj) -o $@
+_build/tp/%: %.wacc $(tp)
+	@mkdir -p $(@D)
+	$(tp) $< $@.c
+	gcc $@.c -o $@
 
 .PHONY: debug
 debug:

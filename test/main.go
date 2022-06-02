@@ -49,7 +49,7 @@ func main() {
 	lexers := runner.NewGroup(runner.BS2Lexer, runner.WaccBs2Lexer, runner.WaccTpLexer)
 	parsers := runner.NewGroup(runner.BS2Parser)
 	assembles := runner.NewGroup(runner.BS2Assembler)
-	runners := runner.NewGroup(runner.BS2Runner)
+	runners := runner.NewGroup(runner.BS2Runner, runner.TPRunner)
 
 	e := lexers.Ensure()
 	if e.IsError() {
