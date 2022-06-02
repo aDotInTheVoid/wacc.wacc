@@ -6,7 +6,7 @@ bs2_src = bs2/README bs2/codegen bs2/codegen/x64 bs2/codegen/x64/x64.cc bs2/code
 objdir = _build
 timestamp = $(objdir)/.timestamp
 tooldir = $(objdir)/tool
-bs2 = bs2/_build/default/bs2
+bs2 = bs2/_build/test/bs2
 
 kgt = $(tooldir)/kgt
 tp = $(tooldir)/tp
@@ -60,7 +60,7 @@ $(wacc_bs2): $(wacc_bs2_o) $(rt_obj)
 tools: $(kgt) $(tp) $(test)
 
 $(bs2): $(bs2_src)
-	ninja -C bs2/_build/default
+	ninja -C $(@D)
 bs2: $(bs2)
 
 _build/bs2/%: %.wacc $(bs2) $(rt_obj)
@@ -89,6 +89,9 @@ clean:
 .PHONY: clean-all
 clean-all:
 	rm -rf $(objdir)
+	rm -rf bs2/subprojects/fmt-8.1.1/
+	rm -rf bs2/subprojects/packagecache/
+	rm -rf bs2/_build
 
 .PHONY: test
 test: $(test)
