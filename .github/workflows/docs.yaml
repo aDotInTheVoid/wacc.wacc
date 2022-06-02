@@ -5,8 +5,8 @@ on:
     branches: [master, gha-docs] # TODO: Remove once done
 
 jobs:
-  ci:
+  docs:
     runs-on: ubuntu-20.04
     steps:
-      - run: cd docs
+      - run: cd doc
       - run: ./gendocs.sh wacc
