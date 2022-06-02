@@ -10,7 +10,7 @@ import (
 
 func RunSuite[C Compiler](suiteName string,
 	out_ext string,
-	comillers *CompilerGroup[C],
+	compilers *CompilerGroup[C],
 	f func(C, string) CommandResult,
 	bless bool,
 	c chan TestResult,
@@ -25,8 +25,8 @@ func RunSuite[C Compiler](suiteName string,
 		wg.Add(1)
 		go func() {
 			if bless {
-				output := f(comillers.Authoritative, path)
-				result := TestResult{TestName: path, Compiler: comillers.Authoritative.Name()}
+				output := f(compilers.Authoritative, path)
+				result := TestResult{TestName: path, Compiler: compilers.Authoritative.Name()}
 				if output.IsError() {
 					result.Status = StatusFail
 					result.Message = output.Error
@@ -37,8 +37,8 @@ func RunSuite[C Compiler](suiteName string,
 					c <- result
 				}
 			} else {
-				c <- doRun(comillers.Authoritative, path, out_ext, f)
-				for _, comp := range comillers.NonAuthoritative {
+				c <- doRun(compilers.Authoritative, path, out_ext, f)
+				for _, comp := range compilers.NonAuthoritative {
 					c <- doRun(comp, path, out_ext, f)
 				}
 			}

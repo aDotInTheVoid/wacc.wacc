@@ -20,9 +20,19 @@ type Assembler interface {
 	Assemble(path string) CommandResult
 }
 
+type Runner interface {
+	Compiler
+	// the status of building, and the path to the exe
+	Run(path string) (CommandResult, string)
+}
+
 type CompilerGroup[C Compiler] struct {
 	Authoritative    C
 	NonAuthoritative []C
+}
+
+func NewGroup[C Compiler](auth C, nonAuth ...C) CompilerGroup[C] {
+	return CompilerGroup[C]{auth, nonAuth}
 }
 
 func (c *CompilerGroup[C]) Ensure() CommandResult {

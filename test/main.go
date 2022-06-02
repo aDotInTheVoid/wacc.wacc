@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"regexp"
 	"sync"
 	"time"
 
@@ -45,12 +46,11 @@ func main() {
 	done := make(chan struct{})
 	bless := os.Getenv("WACC_UPDATE") == "1"
 
-	lexers := runner.CompilerGroup[runner.Lexer]{
-		Authoritative:    runner.BS2Lexer,
-		NonAuthoritative: []runner.Lexer{runner.WaccBs2Lexer, runner.WaccTpLexer},
-	}
-	parsers := runner.CompilerGroup[runner.Parser]{Authoritative: runner.BS2Parser}
-	assembles := runner.CompilerGroup[runner.Assembler]{Authoritative: runner.BS2Assembler}
+	lexers := runner.NewGroup(runner.BS2Lexer, runner.WaccBs2Lexer, runner.WaccTpLexer)
+	parsers := runner.NewGroup(runner.BS2Parser)
+	assembles := runner.NewGroup(runner.BS2Assembler)
+	runners := runner.NewGroup(runner.BS2Runner)
+
 	e := lexers.Ensure()
 	if e.IsError() {
 		log.Fatalf("Command `%s` exited with %d\n", e.Invocation, e.ExitCode)
@@ -60,6 +60,7 @@ func main() {
 	runner.RunSuite("test/lex-pass", "stdout", &lexers, runLex, bless, c, &wg)
 	runner.RunSuite("test/parse-pass", "xml", &parsers, runParse, bless, c, &wg)
 	runner.RunSuite("test/asm-pass", "s", &assembles, runAsm, bless, c, &wg)
+	runner.RunSuite("test/asm-pass", "out", &runners, runRun, bless, c, &wg)
 
 	// All tests are now launched
 	go func() {
@@ -100,6 +101,23 @@ func runLex(l runner.Lexer, path string) runner.CommandResult {
 }
 func runAsm(a runner.Assembler, path string) runner.CommandResult {
 	return a.Assemble(path)
+}
+
+func runRun(a runner.Runner, path string) runner.CommandResult {
+	res, path := a.Run(path)
+	if res.IsError() {
+		return res
+	}
+	exeRes := runner.RunOutputGet(path, nil)
+	res.Output = sanitizeOutput(exeRes.Output)
+	res.ExitCode = exeRes.ExitCode
+	return res
+}
+
+var ptrRe = regexp.MustCompile("0x[0-9a-fA-F]{8,16}")
+
+func sanitizeOutput(s string) string {
+	return ptrRe.ReplaceAllLiteralString(s, "0x{{PTR}}")
 }
 
 func runParse(p runner.Parser, path string) runner.CommandResult {

@@ -25,6 +25,9 @@ all: $(wacc_tp) $(wacc_bs2)
 gen/%.wacc.in: $(py_src)
 	python3.10 py/gen.py
 
+# No default nonsense
+.SUFFIXES:
+
 $(timestamp):
 	@mkdir -p $(objdir)
 	@mkdir -p $(tooldir)
@@ -59,6 +62,11 @@ tools: $(kgt) $(tp) $(test)
 $(bs2): $(bs2_src)
 	ninja -C bs2/_build/default
 bs2: $(bs2)
+
+_build/bs2/%: %.wacc $(bs2) $(rt_obj)
+	@mkdir -p $(@D)
+	$(bs2) asm $< > $@.s
+	gcc $@.s $(rt_obj) -o $@
 
 .PHONY: debug
 debug:
