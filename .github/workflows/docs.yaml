@@ -1,0 +1,12 @@
+name: Docs
+
+on:
+  push:
+    branches: [master, gha-docs] # TODO: Remove once done
+
+jobs:
+  ci:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/setup-go@v3
+      - run: ./gendocs.sh wacc
