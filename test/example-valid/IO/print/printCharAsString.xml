@@ -1,0 +1,20 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'f'</char>
+    <char>'o'</char>
+    <char>'o'</char>
+    <array_lit>3</array_lit>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>char_array</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <char>'b'</char>
+    <char>'a'</char>
+    <char>'r'</char>
+    <array_lit>3</array_lit>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>char_array</kind><newline>true</newline></print>
+  </main>
+</unit>

@@ -1,0 +1,26 @@
+<unit>
+  <fn>
+    <name>returnInWhile</name>
+    <args/>
+    <body>
+      <while>
+        <cond><true/></cond>
+        <body>
+          <num>1</num>
+          <return/>
+          <str>"How on Earth did we get here?"</str>
+          <print><kind>str</kind><newline>true</newline></print>
+        </body>
+      </while>
+      <num>2</num>
+      <return/>
+    </body>
+  </fn>
+  <main>
+    <addr_local>0</addr_local>
+    <call_func><name>returnInWhile</name><nargs>0</nargs></call_func>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

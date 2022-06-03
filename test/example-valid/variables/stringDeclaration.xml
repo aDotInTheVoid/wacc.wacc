@@ -1,0 +1,3 @@
+<unit>
+  <main><addr_local>0</addr_local><str>"Hello World!"</str><assign_do/></main>
+</unit>

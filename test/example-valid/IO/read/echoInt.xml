@@ -1,0 +1,13 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>1</num>
+    <assign_do/>
+    <str>"enter an integer to echo"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <read><ty>int</ty></read>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

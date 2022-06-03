@@ -1,0 +1,66 @@
+<unit>
+  <fn>
+    <name>doSomething</name>
+    <args>
+      <arg>0</arg>
+      <arg>1</arg>
+      <arg>2</arg>
+      <arg>3</arg>
+      <arg>4</arg>
+      <arg>5</arg>
+    </args>
+    <body>
+      <str>"a is "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>0</local>
+      <print><kind>i32</kind><newline>true</newline></print>
+      <str>"b is "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>1</local>
+      <print><kind>bool</kind><newline>true</newline></print>
+      <str>"c is "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>2</local>
+      <print><kind>char</kind><newline>true</newline></print>
+      <str>"d is "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>3</local>
+      <print><kind>str</kind><newline>true</newline></print>
+      <str>"e is "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>4</local>
+      <print><kind>ptr</kind><newline>true</newline></print>
+      <str>"f is "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>5</local>
+      <print><kind>ptr</kind><newline>true</newline></print>
+      <char>'g'</char>
+      <return/>
+    </body>
+  </fn>
+  <main>
+    <addr_local>0</addr_local>
+    <false/>
+    <true/>
+    <array_lit>2</array_lit>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>1</num>
+    <num>2</num>
+    <array_lit>2</array_lit>
+    <assign_do/>
+    <addr_local>2</addr_local>
+    <num>42</num>
+    <true/>
+    <char>'u'</char>
+    <str>"hello"</str>
+    <local>0</local>
+    <local>1</local>
+    <call_func><name>doSomething</name><nargs>6</nargs></call_func>
+    <assign_do/>
+    <str>"answer is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>2</local>
+    <print><kind>char</kind><newline>true</newline></print>
+  </main>
+</unit>

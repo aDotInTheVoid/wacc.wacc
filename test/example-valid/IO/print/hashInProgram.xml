@@ -1,0 +1,13 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <str>"We can print the hash character: "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <char>'#'</char>
+    <print><kind>char</kind><newline>true</newline></print>
+    <str>"We can also print # when its in a string."</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

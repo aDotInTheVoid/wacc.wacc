@@ -1,0 +1,8 @@
+<unit>
+  <main>
+    <str>"An example integer is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <num>189</num>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

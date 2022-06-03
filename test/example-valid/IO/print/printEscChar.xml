@@ -1,0 +1,8 @@
+<unit>
+  <main>
+    <str>"An escaped character example is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <char>'\"'</char>
+    <print><kind>char</kind><newline>true</newline></print>
+  </main>
+</unit>

@@ -1,0 +1,36 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'h'</char>
+    <char>'e'</char>
+    <char>'l'</char>
+    <char>'l'</char>
+    <char>'o'</char>
+    <char>' '</char>
+    <char>'w'</char>
+    <char>'o'</char>
+    <char>'r'</char>
+    <char>'l'</char>
+    <char>'d'</char>
+    <char>'!'</char>
+    <array_lit>12</array_lit>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>char_array</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <num>0</num>
+    <addr_array/>
+    <char>'H'</char>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>char_array</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <char>'H'</char>
+    <char>'i'</char>
+    <char>'!'</char>
+    <array_lit>3</array_lit>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>char_array</kind><newline>true</newline></print>
+  </main>
+</unit>

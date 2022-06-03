@@ -1,0 +1,19 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <while>
+      <cond><local>0</local><num>1</num><op>ne</op></cond>
+      <body>
+        <addr_local>0</addr_local>
+        <num>1</num>
+        <assign_do/>
+        <str>"Change n"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </body>
+    </while>
+    <str>"Should print \"Change n\" once before."</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

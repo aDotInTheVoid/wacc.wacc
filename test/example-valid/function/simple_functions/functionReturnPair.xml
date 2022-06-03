@@ -1,0 +1,26 @@
+<unit>
+  <fn>
+    <name>getPair</name>
+    <args/>
+    <body>
+      <addr_local>0</addr_local>
+      <num>10</num>
+      <num>15</num>
+      <newpair/>
+      <assign_do/>
+      <local>0</local>
+      <return/>
+    </body>
+  </fn>
+  <main>
+    <addr_local>0</addr_local>
+    <call_func><name>getPair</name><nargs>0</nargs></call_func>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <local>0</local>
+    <fst/>
+    <assign_do/>
+    <local>1</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

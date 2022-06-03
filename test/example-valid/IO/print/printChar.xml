@@ -1,0 +1,8 @@
+<unit>
+  <main>
+    <str>"A simple character example is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <char>'f'</char>
+    <print><kind>char</kind><newline>true</newline></print>
+  </main>
+</unit>

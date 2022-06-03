@@ -1,0 +1,12 @@
+<unit>
+  <main>
+    <str>"True is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <true/>
+    <print><kind>bool</kind><newline>true</newline></print>
+    <str>"False is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <false/>
+    <print><kind>bool</kind><newline>true</newline></print>
+  </main>
+</unit>

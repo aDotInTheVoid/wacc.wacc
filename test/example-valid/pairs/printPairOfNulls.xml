@@ -1,0 +1,29 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <null/>
+    <null/>
+    <newpair/>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>ptr</kind><newline>false</newline></print>
+    <str>" = ("</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>1</addr_local>
+    <local>0</local>
+    <fst/>
+    <assign_do/>
+    <local>1</local>
+    <print><kind>ptr</kind><newline>false</newline></print>
+    <str>","</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>2</addr_local>
+    <local>0</local>
+    <snd/>
+    <assign_do/>
+    <local>2</local>
+    <print><kind>ptr</kind><newline>false</newline></print>
+    <str>")"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

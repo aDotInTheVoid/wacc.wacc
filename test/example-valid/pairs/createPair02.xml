@@ -1,0 +1,9 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'a'</char>
+    <char>'b'</char>
+    <newpair/>
+    <assign_do/>
+  </main>
+</unit>

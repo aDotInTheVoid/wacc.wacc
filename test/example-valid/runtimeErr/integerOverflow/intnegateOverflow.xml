@@ -1,0 +1,16 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>1472682640</num>
+    <neg/>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <local>0</local>
+    <neg/>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

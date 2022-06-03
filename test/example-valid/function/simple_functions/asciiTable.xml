@@ -1,0 +1,79 @@
+<unit>
+  <fn>
+    <name>printLine</name>
+    <args><arg>0</arg></args>
+    <body>
+      <addr_local>1</addr_local>
+      <num>0</num>
+      <assign_do/>
+      <while>
+        <cond><local>1</local><local>0</local><op>lt</op></cond>
+        <body>
+          <str>"-"</str>
+          <print><kind>str</kind><newline>false</newline></print>
+          <addr_local>1</addr_local>
+          <local>1</local>
+          <num>1</num>
+          <op>add</op>
+          <assign_do/>
+        </body>
+      </while>
+      <str>""</str>
+      <print><kind>str</kind><newline>true</newline></print>
+      <true/>
+      <return/>
+    </body>
+  </fn>
+  <fn>
+    <name>printMap</name>
+    <args><arg>0</arg></args>
+    <body>
+      <str>"|  "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <if>
+        <cond><local>0</local><num>100</num><op>lt</op></cond>
+        <when><str>" "</str><print><kind>str</kind><newline>false</newline></print></when>
+        <else/>
+      </if>
+      <local>0</local>
+      <print><kind>i32</kind><newline>false</newline></print>
+      <str>" = "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>0</local>
+      <print><kind>char</kind><newline>false</newline></print>
+      <str>"  |"</str>
+      <print><kind>str</kind><newline>true</newline></print>
+      <true/>
+      <return/>
+    </body>
+  </fn>
+  <main>
+    <str>"Ascii character lookup table:"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <num>13</num>
+    <call_func><name>printLine</name><nargs>1</nargs></call_func>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <char>' '</char>
+    <assign_do/>
+    <while>
+      <cond><local>1</local><num>127</num><op>lt</op></cond>
+      <body>
+        <addr_local>0</addr_local>
+        <local>1</local>
+        <call_func><name>printMap</name><nargs>1</nargs></call_func>
+        <assign_do/>
+        <addr_local>1</addr_local>
+        <local>1</local>
+        <num>1</num>
+        <op>add</op>
+        <assign_do/>
+      </body>
+    </while>
+    <addr_local>0</addr_local>
+    <num>13</num>
+    <call_func><name>printLine</name><nargs>1</nargs></call_func>
+    <assign_do/>
+  </main>
+</unit>

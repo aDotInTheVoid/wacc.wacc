@@ -1,0 +1,32 @@
+<unit>
+  <fn>
+    <name>inc</name>
+    <args><arg>0</arg></args>
+    <body><local>0</local><num>1</num><op>add</op><return/></body>
+  </fn>
+  <main>
+    <addr_local>0</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <addr_local>0</addr_local>
+    <local>0</local>
+    <call_func><name>inc</name><nargs>1</nargs></call_func>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <local>0</local>
+    <call_func><name>inc</name><nargs>1</nargs></call_func>
+    <assign_do/>
+    <addr_local>0</addr_local>
+    <local>0</local>
+    <call_func><name>inc</name><nargs>1</nargs></call_func>
+    <assign_do/>
+    <addr_local>0</addr_local>
+    <local>0</local>
+    <call_func><name>inc</name><nargs>1</nargs></call_func>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

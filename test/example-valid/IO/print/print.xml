@@ -1,0 +1,6 @@
+<unit>
+  <main>
+    <str>"Hello World!\n"</str>
+    <print><kind>str</kind><newline>false</newline></print>
+  </main>
+</unit>

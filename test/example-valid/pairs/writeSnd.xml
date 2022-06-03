@@ -1,0 +1,25 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>10</num>
+    <char>'a'</char>
+    <newpair/>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <local>0</local>
+    <snd/>
+    <assign_do/>
+    <local>1</local>
+    <print><kind>char</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <addr_snd/>
+    <char>'Z'</char>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <local>0</local>
+    <snd/>
+    <assign_do/>
+    <local>1</local>
+    <print><kind>char</kind><newline>true</newline></print>
+  </main>
+</unit>

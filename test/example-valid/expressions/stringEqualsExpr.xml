@@ -1,0 +1,28 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <str>"Hello"</str>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <str>"foo"</str>
+    <assign_do/>
+    <addr_local>2</addr_local>
+    <str>"bar"</str>
+    <assign_do/>
+    <addr_local>3</addr_local>
+    <local>0</local>
+    <local>0</local>
+    <op>eq</op>
+    <assign_do/>
+    <local>3</local>
+    <print><kind>bool</kind><newline>true</newline></print>
+    <local>0</local>
+    <local>1</local>
+    <op>eq</op>
+    <print><kind>bool</kind><newline>true</newline></print>
+    <local>1</local>
+    <local>2</local>
+    <op>eq</op>
+    <print><kind>bool</kind><newline>true</newline></print>
+  </main>
+</unit>

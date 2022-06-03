@@ -1,0 +1,24 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>10</num>
+    <num>1</num>
+    <op>mul</op>
+    <num>2</num>
+    <num>15</num>
+    <op>mul</op>
+    <op>add</op>
+    <assign_do/>
+    <if>
+      <cond><local>0</local><num>40</num><op>eq</op></cond>
+      <when>
+        <str>"Correct"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </when>
+      <else>
+        <str>"Wrong"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </else>
+    </if>
+  </main>
+</unit>

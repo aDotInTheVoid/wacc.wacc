@@ -1,0 +1,34 @@
+<unit>
+  <fn>
+    <name>f</name>
+    <args/>
+    <body>
+      <str>"go"</str>
+      <print><kind>str</kind><newline>true</newline></print>
+      <num>1</num>
+      <return/>
+      <if>
+        <cond><true/></cond>
+        <when>
+          <str>"a"</str>
+          <print><kind>str</kind><newline>true</newline></print>
+          <num>2</num>
+          <return/>
+        </when>
+        <else>
+          <str>"b"</str>
+          <print><kind>str</kind><newline>true</newline></print>
+          <num>3</num>
+          <return/>
+        </else>
+      </if>
+    </body>
+  </fn>
+  <main>
+    <addr_local>0</addr_local>
+    <call_func><name>f</name><nargs>0</nargs></call_func>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

@@ -1,0 +1,30 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>5</num>
+    <assign_do/>
+    <while>
+      <cond><local>0</local><num>0</num><op>gt</op></cond>
+      <body>
+        <block>
+          <addr_local>1</addr_local>
+          <str>"counting... "</str>
+          <assign_do/>
+          <local>1</local>
+          <print><kind>str</kind><newline>false</newline></print>
+        </block>
+        <local>0</local>
+        <print><kind>i32</kind><newline>true</newline></print>
+        <addr_local>0</addr_local>
+        <local>0</local>
+        <num>1</num>
+        <op>sub</op>
+        <assign_do/>
+      </body>
+    </while>
+    <local>0</local>
+    <print><kind>i32</kind><newline>false</newline></print>
+    <str>" Boom!"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

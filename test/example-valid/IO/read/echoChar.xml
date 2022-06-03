@@ -1,0 +1,13 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'\0'</char>
+    <assign_do/>
+    <str>"enter a character to echo"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <read><ty>char</ty></read>
+    <local>0</local>
+    <print><kind>char</kind><newline>true</newline></print>
+  </main>
+</unit>

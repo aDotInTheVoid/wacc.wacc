@@ -1,0 +1,22 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>43</num>
+    <num>2</num>
+    <num>18</num>
+    <num>1</num>
+    <array_lit>4</array_lit>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>1</num>
+    <num>2</num>
+    <num>3</num>
+    <array_lit>3</array_lit>
+    <assign_do/>
+    <local>0</local>
+    <num>2</num>
+    <neg/>
+    <array_elem/>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

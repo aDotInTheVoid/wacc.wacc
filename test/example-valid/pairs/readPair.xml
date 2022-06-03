@@ -1,0 +1,54 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'\0'</char>
+    <num>0</num>
+    <newpair/>
+    <assign_do/>
+    <str>"Please enter the first element (char): "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>1</addr_local>
+    <char>'0'</char>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <read><ty>char</ty></read>
+    <addr_local>0</addr_local>
+    <addr_fst/>
+    <local>1</local>
+    <assign_do/>
+    <str>"Please enter the second element (int): "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>2</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <addr_local>2</addr_local>
+    <read><ty>int</ty></read>
+    <addr_local>0</addr_local>
+    <addr_snd/>
+    <local>2</local>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <char>'\0'</char>
+    <assign_do/>
+    <addr_local>2</addr_local>
+    <num>1</num>
+    <neg/>
+    <assign_do/>
+    <str>"The first element was "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>1</addr_local>
+    <local>0</local>
+    <fst/>
+    <assign_do/>
+    <local>1</local>
+    <print><kind>char</kind><newline>true</newline></print>
+    <str>"The second element was "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>2</addr_local>
+    <local>0</local>
+    <snd/>
+    <assign_do/>
+    <local>2</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

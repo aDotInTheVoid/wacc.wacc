@@ -1,0 +1,16 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <true/>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <false/>
+    <assign_do/>
+    <local>0</local>
+    <not/>
+    <print><kind>bool</kind><newline>true</newline></print>
+    <local>1</local>
+    <not/>
+    <print><kind>bool</kind><newline>true</newline></print>
+  </main>
+</unit>

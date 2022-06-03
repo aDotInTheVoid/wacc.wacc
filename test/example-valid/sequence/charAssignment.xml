@@ -1,0 +1,10 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'a'</char>
+    <assign_do/>
+    <addr_local>0</addr_local>
+    <char>'Z'</char>
+    <assign_do/>
+  </main>
+</unit>

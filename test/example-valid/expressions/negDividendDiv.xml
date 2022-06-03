@@ -1,0 +1,15 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>4</num>
+    <neg/>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>2</num>
+    <assign_do/>
+    <local>0</local>
+    <local>1</local>
+    <op>div</op>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

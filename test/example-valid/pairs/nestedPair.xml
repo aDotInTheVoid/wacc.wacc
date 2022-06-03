@@ -1,0 +1,14 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>2</num>
+    <num>3</num>
+    <newpair/>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>1</num>
+    <local>0</local>
+    <newpair/>
+    <assign_do/>
+  </main>
+</unit>

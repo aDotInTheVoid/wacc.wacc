@@ -1,0 +1,45 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>10</num>
+    <assign_do/>
+    <addr_local>2</addr_local>
+    <num>17</num>
+    <assign_do/>
+    <while>
+      <cond>
+        <local>2</local>
+        <num>0</num>
+        <op>gt</op>
+        <local>1</local>
+        <num>0</num>
+        <op>gt</op>
+        <op>and</op>
+      </cond>
+      <body>
+        <addr_local>1</addr_local>
+        <local>1</local>
+        <num>1</num>
+        <op>sub</op>
+        <assign_do/>
+        <addr_local>2</addr_local>
+        <local>2</local>
+        <num>1</num>
+        <op>sub</op>
+        <assign_do/>
+        <addr_local>0</addr_local>
+        <local>0</local>
+        <num>1</num>
+        <op>add</op>
+        <assign_do/>
+      </body>
+    </while>
+    <str>"min value = "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

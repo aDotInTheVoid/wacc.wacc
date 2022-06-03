@@ -1,0 +1,8 @@
+<unit>
+  <main>
+    <num>42</num>
+    <exit/>
+    <str>"Should not print this."</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

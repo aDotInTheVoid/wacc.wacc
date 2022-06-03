@@ -1,0 +1,16 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>12</num>
+    <assign_do/>
+    <block>
+      <addr_local>1</addr_local>
+      <true/>
+      <assign_do/>
+      <local>1</local>
+      <print><kind>bool</kind><newline>true</newline></print>
+    </block>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

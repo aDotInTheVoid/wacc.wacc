@@ -1,0 +1,11 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>10</num>
+    <num>0</num>
+    <op>div</op>
+    <assign_do/>
+    <str>"should not reach here"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

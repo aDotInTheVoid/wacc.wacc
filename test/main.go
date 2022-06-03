@@ -65,8 +65,7 @@ func main() {
 	runner.RunSuite("test/parse-pass", "xml", &parsers, runParse, bless, c, &wg)
 	runner.RunSuite("test/asm-pass", "s", &assembles, runAsm, bless, c, &wg)
 	runner.RunSuite("test/asm-pass", "out", &runners, runRun, bless, c, &wg)
-
-	// runner.RunSuite("test/example-valid", "xml", &parsers, runParse, bless, c, &wg)
+	runner.RunSuite("test/example-valid", "xml", &parsers, runParse, bless, c, &wg)
 
 	// runner.RunSuite("test/example-valid", "out", &runners, runRun, bless, c, &wg)
 

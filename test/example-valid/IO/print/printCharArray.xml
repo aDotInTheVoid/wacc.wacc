@@ -1,0 +1,12 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'h'</char>
+    <char>'i'</char>
+    <char>'!'</char>
+    <array_lit>3</array_lit>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>char_array</kind><newline>true</newline></print>
+  </main>
+</unit>

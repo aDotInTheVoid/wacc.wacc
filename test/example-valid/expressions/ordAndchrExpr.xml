@@ -1,0 +1,22 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'a'</char>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>99</num>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>char</kind><newline>false</newline></print>
+    <str>" is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+    <local>1</local>
+    <print><kind>i32</kind><newline>false</newline></print>
+    <str>" is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>1</local>
+    <print><kind>char</kind><newline>true</newline></print>
+  </main>
+</unit>

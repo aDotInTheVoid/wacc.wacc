@@ -1,0 +1,13 @@
+<unit>
+  <main>
+    <while>
+      <cond><false/></cond>
+      <body>
+        <str>"looping..."</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </body>
+    </while>
+    <str>"end of loop"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

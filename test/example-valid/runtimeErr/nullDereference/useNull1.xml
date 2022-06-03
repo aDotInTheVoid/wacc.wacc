@@ -1,0 +1,11 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <null/>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <local>0</local>
+    <fst/>
+    <assign_do/>
+  </main>
+</unit>

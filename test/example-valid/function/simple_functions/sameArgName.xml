@@ -1,0 +1,15 @@
+<unit>
+  <fn>
+    <name>f</name>
+    <args><arg>0</arg></args>
+    <body><local>0</local><return/></body>
+  </fn>
+  <main>
+    <addr_local>0</addr_local>
+    <num>99</num>
+    <call_func><name>f</name><nargs>1</nargs></call_func>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

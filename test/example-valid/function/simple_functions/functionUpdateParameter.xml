@@ -1,0 +1,38 @@
+<unit>
+  <fn>
+    <name>f</name>
+    <args><arg>0</arg></args>
+    <body>
+      <str>"x is "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>0</local>
+      <print><kind>i32</kind><newline>true</newline></print>
+      <addr_local>0</addr_local>
+      <num>5</num>
+      <assign_do/>
+      <str>"x is now "</str>
+      <print><kind>str</kind><newline>false</newline></print>
+      <local>0</local>
+      <print><kind>i32</kind><newline>true</newline></print>
+      <local>0</local>
+      <return/>
+    </body>
+  </fn>
+  <main>
+    <addr_local>0</addr_local>
+    <num>1</num>
+    <assign_do/>
+    <str>"y is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+    <addr_local>1</addr_local>
+    <local>0</local>
+    <call_func><name>f</name><nargs>1</nargs></call_func>
+    <assign_do/>
+    <str>"y is still "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

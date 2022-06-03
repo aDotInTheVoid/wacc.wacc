@@ -1,0 +1,20 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <true/>
+    <assign_do/>
+    <while>
+      <cond><local>0</local></cond>
+      <body>
+        <str>"flip b!"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+        <addr_local>0</addr_local>
+        <local>0</local>
+        <not/>
+        <assign_do/>
+      </body>
+    </while>
+    <str>"end of loop"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

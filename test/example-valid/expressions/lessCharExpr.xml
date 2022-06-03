@@ -1,0 +1,21 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'a'</char>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <char>'e'</char>
+    <assign_do/>
+    <addr_local>2</addr_local>
+    <char>'c'</char>
+    <assign_do/>
+    <local>0</local>
+    <local>1</local>
+    <op>lt</op>
+    <print><kind>bool</kind><newline>true</newline></print>
+    <local>1</local>
+    <local>2</local>
+    <op>lt</op>
+    <print><kind>bool</kind><newline>true</newline></print>
+  </main>
+</unit>

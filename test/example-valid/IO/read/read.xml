@@ -1,0 +1,11 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>10</num>
+    <assign_do/>
+    <str>"input an integer to continue..."</str>
+    <print><kind>str</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <read><ty>int</ty></read>
+  </main>
+</unit>

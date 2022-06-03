@@ -1,0 +1,56 @@
+<unit>
+  <fn>
+    <name>fibonacci</name>
+    <args><arg>0</arg><arg>1</arg></args>
+    <body>
+      <if>
+        <cond><local>0</local><num>1</num><op>le</op></cond>
+        <when><local>0</local><return/></when>
+        <else/>
+      </if>
+      <addr_local>2</addr_local>
+      <local>0</local>
+      <num>1</num>
+      <op>sub</op>
+      <local>1</local>
+      <call_func><name>fibonacci</name><nargs>2</nargs></call_func>
+      <assign_do/>
+      <if>
+        <cond><local>1</local></cond>
+        <when>
+          <local>2</local>
+          <print><kind>i32</kind><newline>false</newline></print>
+          <str>", "</str>
+          <print><kind>str</kind><newline>false</newline></print>
+        </when>
+        <else/>
+      </if>
+      <addr_local>3</addr_local>
+      <local>0</local>
+      <num>2</num>
+      <op>sub</op>
+      <false/>
+      <call_func><name>fibonacci</name><nargs>2</nargs></call_func>
+      <assign_do/>
+      <local>2</local>
+      <local>3</local>
+      <op>add</op>
+      <return/>
+    </body>
+  </fn>
+  <main>
+    <str>"The first 20 fibonacci numbers are:"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+    <str>"0, "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>0</addr_local>
+    <num>19</num>
+    <true/>
+    <call_func><name>fibonacci</name><nargs>2</nargs></call_func>
+    <assign_do/>
+    <local>0</local>
+    <print><kind>i32</kind><newline>false</newline></print>
+    <str>"..."</str>
+    <print><kind>str</kind><newline>true</newline></print>
+  </main>
+</unit>

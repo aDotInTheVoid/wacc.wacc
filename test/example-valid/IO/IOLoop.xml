@@ -1,0 +1,29 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <char>'Y'</char>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <while>
+      <cond><local>0</local><char>'N'</char><op>ne</op></cond>
+      <body>
+        <str>"Please input an integer: "</str>
+        <print><kind>str</kind><newline>false</newline></print>
+        <addr_local>1</addr_local>
+        <read><ty>int</ty></read>
+        <str>"echo input: "</str>
+        <print><kind>str</kind><newline>false</newline></print>
+        <local>1</local>
+        <print><kind>i32</kind><newline>true</newline></print>
+        <str>"Do you want to continue entering input?"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+        <str>"(enter Y for \'yes\' and N for \'no\')"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+        <addr_local>0</addr_local>
+        <read><ty>char</ty></read>
+      </body>
+    </while>
+  </main>
+</unit>

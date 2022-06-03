@@ -1,0 +1,15 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <str>"Please input an integer: "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <addr_local>0</addr_local>
+    <read><ty>int</ty></read>
+    <str>"You input: "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>0</local>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

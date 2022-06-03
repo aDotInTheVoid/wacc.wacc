@@ -1,0 +1,25 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <true/>
+    <false/>
+    <op>and</op>
+    <true/>
+    <false/>
+    <op>and</op>
+    <op>or</op>
+    <not/>
+    <assign_do/>
+    <if>
+      <cond><local>0</local><true/><op>eq</op></cond>
+      <when>
+        <str>"Correct"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </when>
+      <else>
+        <str>"Wrong"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </else>
+    </if>
+  </main>
+</unit>

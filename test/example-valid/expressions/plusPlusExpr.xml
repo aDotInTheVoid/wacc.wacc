@@ -1,0 +1,8 @@
+<unit>
+  <main>
+    <num>1</num>
+    <num>2</num>
+    <op>add</op>
+    <print><kind>i32</kind><newline>true</newline></print>
+  </main>
+</unit>

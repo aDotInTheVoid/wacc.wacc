@@ -1,0 +1,15 @@
+<unit>
+  <main>
+    <if>
+      <cond><true/></cond>
+      <when>
+        <str>"here"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </when>
+      <else>
+        <str>"not here"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </else>
+    </if>
+  </main>
+</unit>

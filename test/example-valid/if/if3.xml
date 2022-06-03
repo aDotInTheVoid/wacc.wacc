@@ -1,0 +1,21 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <num>13</num>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <num>37</num>
+    <assign_do/>
+    <if>
+      <cond><local>0</local><local>1</local><op>lt</op></cond>
+      <when>
+        <str>"correct"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </when>
+      <else>
+        <str>"incorrect"</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </else>
+    </if>
+  </main>
+</unit>

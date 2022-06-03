@@ -1,0 +1,53 @@
+<unit>
+  <main>
+    <addr_local>0</addr_local>
+    <str>"Hi"</str>
+    <assign_do/>
+    <addr_local>1</addr_local>
+    <str>"Hello"</str>
+    <assign_do/>
+    <str>"s1 is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>0</local>
+    <print><kind>str</kind><newline>true</newline></print>
+    <str>"s2 is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>1</local>
+    <print><kind>str</kind><newline>true</newline></print>
+    <if>
+      <cond><local>0</local><local>1</local><op>eq</op></cond>
+      <when>
+        <str>"They are the same string."</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </when>
+      <else>
+        <str>"They are not the same string."</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </else>
+    </if>
+    <str>"Now make s1 = s2"</str>
+    <print><kind>str</kind><newline>true</newline></print>
+    <addr_local>0</addr_local>
+    <local>1</local>
+    <assign_do/>
+    <str>"s1 is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>0</local>
+    <print><kind>str</kind><newline>true</newline></print>
+    <str>"s2 is "</str>
+    <print><kind>str</kind><newline>false</newline></print>
+    <local>1</local>
+    <print><kind>str</kind><newline>true</newline></print>
+    <if>
+      <cond><local>0</local><local>1</local><op>eq</op></cond>
+      <when>
+        <str>"They are the same string."</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </when>
+      <else>
+        <str>"They are not the same string."</str>
+        <print><kind>str</kind><newline>true</newline></print>
+      </else>
+    </if>
+  </main>
+</unit>
