@@ -19,15 +19,17 @@ def genOut(path):
             # breakpoint()
             output += i[2:]
 
-        # output = fixup(output)
+        output = fixup(output)
 
         with open(pathlib.Path(path).with_suffix(".out"), "w") as f:
             f.write(output)
 
 
-# def fixup(output):
-#     if "#empty#" in output:
-#         output = ""
+def fixup(output):
+    if "#empty#" in output:
+        return ""
+    return output
+
 
 if __name__ == "__main__":
     assert "example-valid" in os.listdir()
