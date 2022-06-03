@@ -11,34 +11,46 @@ void Parser::unit() {
 
   // TODO: Keep parsing functions, until we reach stmts in main.
   std::optional<Type> t;
+  bool opened_main = false;
 
   for (;;) {
     if ((t = ty())) {
       Token name = expect(TokenType::Identifier);
       // TODO: Handle case where int foo = 1; and start of main,
       // not int foo() is ...
-      function(name.value_, t.value());
+      if (match(TokenType::Lparen))
+        function(name.value_, t.value());
+      else {
+        codegen_->start_main();
+        opened_main = true;
+        s_decl_2(std::move(t.value()), name.value_);
+        if (match(TokenType::Semi))
+          break;
+        else
+          goto end;
+      }
     } else if (match(TokenType::Extern)) {
       extern_fn();
     } else {
       break;
     }
   }
+  if (!opened_main)
+    codegen_->start_main();
+
   main();
+end:
+  codegen_->end_main();
   expect(TokenType::End);
   expect(TokenType::Eof);
 }
 
-void Parser::main() {
-  codegen_->start_main();
-  stmts();
-  codegen_->end_main();
-}
+void Parser::main() { stmts(); }
 
 void Parser::function(std::string_view name, const Type &ret) {
   codegen_->start_function(name, ret);
 
-  expect(TokenType::Lparen);
+  // expect(TokenType::Lparen);
   std::optional<Type> oty;
   if ((oty = ty())) {
     Token name = expect(TokenType::Identifier);
@@ -155,10 +167,13 @@ void Parser::s_read() {
 void Parser::s_decl(Type ty) {
   //  type, ident, "=", assign-rhs
   Token ident = expect(TokenType::Identifier);
+  s_decl_2(std::move(ty), ident.value_);
+}
+void Parser::s_decl_2(Type ty, std::string_view name) {
   expect(TokenType::Assign);
-  codegen_->add_var(ident.value_, ty);
-  loc_tys_[ident.value_] = std::move(ty);
-  codegen_->assign_addr_local(ident.value_);
+  codegen_->add_var(name, ty);
+  loc_tys_[name] = std::move(ty);
+  codegen_->assign_addr_local(name);
   assign_rhs();
   codegen_->assign_do();
 }

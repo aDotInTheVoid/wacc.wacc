@@ -49,7 +49,7 @@ func main() {
 	lexers := runner.NewGroup(runner.BS2Lexer, runner.WaccBs2Lexer, runner.WaccTpLexer)
 	parsers := runner.NewGroup(runner.BS2Parser)
 	assembles := runner.NewGroup(runner.BS2Assembler)
-	runners := runner.NewGroup(runner.BS2Runner, runner.TPRunner)
+	runners := runner.NewGroup(runner.TPRunner, runner.BS2Runner)
 
 	e := lexers.Ensure()
 	if e.IsError() {
@@ -61,6 +61,10 @@ func main() {
 	runner.RunSuite("test/parse-pass", "xml", &parsers, runParse, bless, c, &wg)
 	runner.RunSuite("test/asm-pass", "s", &assembles, runAsm, bless, c, &wg)
 	runner.RunSuite("test/asm-pass", "out", &runners, runRun, bless, c, &wg)
+
+	// runner.RunSuite("test/example-valid", "xml", &parsers, runParse, bless, c, &wg)
+
+	// runner.RunSuite("test/example-valid", "out", &runners, runRun, bless, c, &wg)
 
 	// All tests are now launched
 	go func() {

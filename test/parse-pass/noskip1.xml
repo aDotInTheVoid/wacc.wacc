@@ -1,0 +1,8 @@
+<unit>
+  <main>
+    <var><name>a</name><ty>int</ty></var>
+    <addr_local>a</addr_local>
+    <num>0</num>
+    <assign_do/>
+  </main>
+</unit>
