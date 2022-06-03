@@ -28,7 +28,7 @@ def genOut(path):
 def fixup(output):
     if "#empty#" in output:
         return ""
-    return output
+    return output.replace("#addrs#", "0x{{PTR}}")
 
 
 if __name__ == "__main__":

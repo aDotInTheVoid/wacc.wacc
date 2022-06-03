@@ -1,5 +1,5 @@
 ( [1, 2, 3] , [a, b, c] )
-[ #addrs# = (a, true), #addrs# = (b, false) ]
+[ 0x{{PTR}} = (a, true), 0x{{PTR}} = (b, false) ]
 1, 2
 array, of, strings
 true, false, true

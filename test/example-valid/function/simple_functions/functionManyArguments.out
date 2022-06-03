@@ -2,6 +2,6 @@ a is 42
 b is true
 c is u
 d is hello
-e is #addrs#
-f is #addrs#
+e is 0x{{PTR}}
+f is 0x{{PTR}}
 answer is g
