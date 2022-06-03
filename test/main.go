@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -13,8 +14,11 @@ import (
 	"github.com/fatih/color"
 )
 
+var verbose = flag.Bool("v", false, "Verbose")
+
 func main() {
 	start := time.Now()
+	flag.Parse()
 	// cwd to root
 	for {
 		if runner.DirExists("test") &&
@@ -82,7 +86,9 @@ results:
 				nFail++
 				fmt.Fprintf(os.Stderr, "%s %10s %s\n%s\n", color.RedString("FAIL"), result.Compiler, result.TestName, result.Message)
 			} else {
-				fmt.Fprintf(os.Stderr, "PASS %10s %s\n", result.Compiler, result.TestName)
+				if *verbose {
+					fmt.Fprintf(os.Stderr, "PASS %10s %s\n", result.Compiler, result.TestName)
+				}
 				nPass++
 			}
 		case <-done:
