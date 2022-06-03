@@ -4,8 +4,8 @@
 #include "lex.hh"
 #include "type.hh"
 
-#include <map>
 #include <optional>
+#include <vector>
 
 // The parser takes a stream of tokens, and converts it into instructions
 // for the code generator.
@@ -15,6 +15,7 @@
 
 struct Local {
   Type ty;
+  std::string_view name;
   int32_t offset;
   int32_t scope_depth;
 };
@@ -23,10 +24,12 @@ struct Parser {
   Lexer lexer_;
   Codegen *codegen_;
   const char *filename_;
-  std::map<std::string_view, Local> locals_; // TODO: Reset on new func
+  std::vector<Local> locals_; // TODO: Reset on new func
   int32_t scope_depth_ = 0;
 
   Token current_;
+  void scope_begin();
+  void scope_end();
 
   Parser(Lexer lexer, Codegen *codegen, const char *filename) : lexer_(lexer) {
     codegen_ = codegen;

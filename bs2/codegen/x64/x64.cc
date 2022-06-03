@@ -16,6 +16,7 @@
  */
 
 static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
+const int nreges = sizeof(rnames) / sizeof(rnames[0]);
 
 #define MAX_LOCS 50
 #define LOC_SIZE 8
@@ -43,7 +44,7 @@ void X64Codegen::end_main() {
 std::string X64Codegen::finish() { return buff_; }
 // Function
 void X64Codegen::start_function(std::string_view name) {
-  nargs_ = 0;
+  // nargs_ = 0;
   cur_func_ = name;
   n_locs_ = 0;
   // locs_.clear();
@@ -57,6 +58,7 @@ void X64Codegen::start_function(std::string_view name) {
 }
 
 void X64Codegen::add_arg(int32_t argno) {
+  assert(argno < nreges);
   add_instr(fmt::format("mov [rbp-{}], {}", addr_of(argno), rnames[argno]));
 }
 void X64Codegen::call_func(std::string_view name, int32_t nargs) {
@@ -128,8 +130,9 @@ void X64Codegen::while_end(int32_t j_cond, int32_t j_body) {
   add_instr(fmt::format("jmp .CF{}", j_cond));
   add_dir(fmt::format(".CF{}:", j_body));
 }
-void X64Codegen::start_block() { assert(0); }
-void X64Codegen::end_block() { assert(0); }
+// Scope handled by parser
+void X64Codegen::start_block() {}
+void X64Codegen::end_block() {}
 // Expr
 void X64Codegen::e_push_number(int32_t n) {
   add_instr(fmt::format("mov eax, {}", n));

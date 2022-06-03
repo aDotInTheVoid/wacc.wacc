@@ -11,7 +11,7 @@ struct X64Codegen : Codegen {
   std::string buff_;
   int32_t n_locs_ = 0;
   int32_t jno_ = 0;
-  int32_t nargs_ = 0;
+  // int32_t nargs_ = 0;
   int32_t npush_ = 0;
   std::vector<std::string_view> strs_;
   std::string_view cur_func_;

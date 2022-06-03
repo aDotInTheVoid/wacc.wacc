@@ -44,6 +44,9 @@ void Parser::unit() {
 
   main();
 end:
+  scope_end();
+  assert(scope_depth_ == 0);
+  assert(locals_.size() == 0);
   codegen_->end_main();
   expect(TokenType::End);
   expect(TokenType::Eof);
@@ -51,25 +54,27 @@ end:
 
 void Parser::main() { stmts(); }
 
-void Parser::start_function() { locals_.clear(); }
+void Parser::start_function() { scope_begin(); }
 
 void Parser::function(std::string_view name) {
   start_function();
   codegen_->start_function(name);
 
+  assert(locals_.size() == 0);
+
   // expect(TokenType::Lparen);
   std::optional<Type> oty;
   if ((oty = ty())) {
-    Token name = expect(TokenType::Identifier);
+    Token argname = expect(TokenType::Identifier);
     Type aty = std::move(oty.value());
-    int32_t offset = add_local(name.value_, std::move(aty));
+    int32_t offset = add_local(argname.value_, std::move(aty));
 
     codegen_->add_arg(offset);
 
     while (match(TokenType::Comma)) {
       aty = ty().value();
-      name = expect(TokenType::Identifier);
-      offset = add_local(name.value_, std::move(aty));
+      argname = expect(TokenType::Identifier);
+      offset = add_local(argname.value_, std::move(aty));
       codegen_->add_arg(offset);
     }
   }
@@ -81,7 +86,7 @@ void Parser::function(std::string_view name) {
   stmts();
 
   expect(TokenType::End);
-
+  scope_end();
   codegen_->end_function();
 }
 
@@ -93,9 +98,11 @@ void Parser::extern_fn() {
 }
 
 void Parser::stmts() {
+  scope_begin();
   do {
     stmt();
   } while (match(TokenType::Semi));
+  scope_end();
 }
 
 void Parser::stmt() {
@@ -568,13 +575,27 @@ std::optional<Token> Parser::match4(TokenType a, TokenType b, TokenType c,
 
 int32_t Parser::add_local(std::string_view name, Type ty) {
   int32_t offset = locals_.size();
-  Local l = Local{std::move(ty), offset, scope_depth_};
-  auto i = locals_.insert_or_assign(name, std::move(l));
-  // if (!i.second)
-  //   fatal(fmt::format("Duplicate local {}", name));
-
+  Local l = Local{std::move(ty), name, offset, scope_depth_};
+  locals_.push_back(std::move(l));
   return offset;
 }
 const Local &Parser::get_local(std::string_view name) {
-  return locals_.at(name);
+  // return locals_.at(name);
+  for (int i = locals_.size() - 1; i >= 0; i--) {
+    if (locals_[i].name == name) {
+      return locals_[i];
+    }
+  }
+  fatal(fmt::format("Local {} not found", name));
+}
+
+void Parser::scope_begin() { scope_depth_++; }
+void Parser::scope_end() {
+  scope_depth_--;
+  if (scope_depth_ < 0)
+    fatal("Scope depth < 0");
+
+  // Remove all locals that are now out of scope
+  while (!locals_.empty() && locals_.back().scope_depth > scope_depth_)
+    locals_.pop_back();
 }
