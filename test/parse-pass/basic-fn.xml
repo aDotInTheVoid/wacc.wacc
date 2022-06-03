@@ -1,5 +1,5 @@
 <unit>
-  <fn><name>foo</name><ret>int</ret><args/><body/></fn>
-  <fn><name>bar</name><ret>int</ret><args/><body/></fn>
+  <fn><name>foo</name><args/><body/></fn>
+  <fn><name>bar</name><args/><body/></fn>
   <main/>
 </unit>

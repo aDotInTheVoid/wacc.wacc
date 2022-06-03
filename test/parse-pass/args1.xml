@@ -1,30 +1,6 @@
 <unit>
-  <fn>
-    <name>oneint</name>
-    <ret>int</ret>
-    <args><arg><name>a</name><ty>int</ty></arg></args>
-    <body/>
-  </fn>
-  <fn>
-    <name>twoints</name>
-    <ret>int</ret>
-    <args>
-      <arg><name>a</name><ty>int</ty></arg>
-      <arg><name>b</name><ty>int</ty></arg>
-    </args>
-    <body/>
-  </fn>
-  <fn>
-    <name>arrays</name>
-    <ret><array><array>char</array></array></ret>
-    <args>
-      <arg><name>a</name><ty><array><array>int</array></array></ty></arg>
-      <arg>
-        <name>b</name>
-        <ty><array><array><array>bool</array></array></array></ty>
-      </arg>
-    </args>
-    <body/>
-  </fn>
+  <fn><name>oneint</name><args><arg>0</arg></args><body/></fn>
+  <fn><name>twoints</name><args><arg>0</arg><arg>1</arg></args><body/></fn>
+  <fn><name>arrays</name><args><arg>0</arg><arg>1</arg></args><body/></fn>
   <main/>
 </unit>

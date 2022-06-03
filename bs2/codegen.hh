@@ -15,9 +15,9 @@ struct Codegen {
   virtual void start_main() = 0;
   virtual void end_main() = 0;
   // Function
-  virtual void start_function(std::string_view name, const Type &ret) = 0;
-  virtual void add_arg(std::string_view name, const Type &ty) = 0;
-  virtual void start_function_body() = 0;
+  virtual void start_function(std::string_view name) = 0;
+  virtual void add_arg(int32_t) = 0;
+  virtual void start_function_body() = 0; // TODO: Remove
   virtual void end_function() = 0;
   // Stmt
   virtual void pop_free(FreeKind) = 0;
@@ -39,7 +39,7 @@ struct Codegen {
   virtual void e_push_bool(bool) = 0;
   virtual void e_push_string(std::string_view) = 0;
   virtual void e_push_char(std::string_view) = 0;
-  virtual void e_push_local(std::string_view) = 0;
+  virtual void e_push_local(int32_t) = 0;
   virtual void e_push_null() = 0;
   virtual void e_push_newpair() = 0;
   virtual void e_fst() = 0;
@@ -52,8 +52,8 @@ struct Codegen {
 
   virtual void e_pop_op(Op) = 0;
   // Assignment
-  virtual void add_var(std::string_view name, const Type &ty) = 0;
-  virtual void assign_addr_local(std::string_view) = 0; // Push address of local
+  //  virtual void add_var(std::string_view name, const Type &ty) = 0;
+  virtual void assign_addr_local(int32_t) = 0; // Push address of local
   virtual void assign_addr_fst() = 0;
   virtual void assign_addr_snd() = 0;
   virtual void assign_addr_array() = 0;

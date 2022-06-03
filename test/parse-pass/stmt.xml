@@ -1,7 +1,6 @@
 <unit>
   <fn>
     <name>do_if</name>
-    <ret>bool</ret>
     <args/>
     <body>
       <if>
@@ -13,7 +12,6 @@
   </fn>
   <fn>
     <name>do_while</name>
-    <ret>bool</ret>
     <args/>
     <body>
       <while>
@@ -26,7 +24,6 @@
   </fn>
   <fn>
     <name>do_signles</name>
-    <ret>bool</ret>
     <args/>
     <body>
       <num>1</num>

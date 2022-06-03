@@ -28,8 +28,9 @@ FreeKind Type::free_kind() {
     return FreeKind::Pair;
   case TypeKind::Array:
     return FreeKind::Array;
+  default:
+    assert(0 && "invalid free kind");
   }
-  assert(0 && "invalid free kind");
 }
 
 PrintKind Type::print_kind() {

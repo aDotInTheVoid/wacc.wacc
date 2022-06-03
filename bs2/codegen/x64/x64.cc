@@ -20,14 +20,17 @@ static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
 #define MAX_LOCS 50
 #define LOC_SIZE 8
 
-static int32_t addr_of(int32_t locno) { return LOC_SIZE * (locno + 1); }
+static int32_t addr_of(int32_t locno) {
+  assert(locno < MAX_LOCS);
+  return LOC_SIZE * (locno + 1);
+}
 
 X64Codegen::X64Codegen() {
   add_dir(".intel_syntax noprefix");
   add_dir(".global main");
 }
 
-void X64Codegen::start_main() { start_function("main", type_int()); }
+void X64Codegen::start_main() { start_function("main"); }
 void X64Codegen::end_main() {
   add_instr("xor rax, rax");
   end_function();
@@ -39,11 +42,11 @@ void X64Codegen::end_main() {
 }
 std::string X64Codegen::finish() { return buff_; }
 // Function
-void X64Codegen::start_function(std::string_view name, const Type &ret) {
+void X64Codegen::start_function(std::string_view name) {
   nargs_ = 0;
   cur_func_ = name;
   n_locs_ = 0;
-  locs_.clear();
+  // locs_.clear();
   assert(npush_ == 0);
 
   add_dir(fmt::format("{}:", name));
@@ -51,11 +54,9 @@ void X64Codegen::start_function(std::string_view name, const Type &ret) {
   add_instr("push rbp"); // This doesn't get counted in npush_
   add_instr("mov rbp, rsp");
   add_instr(fmt::format("sub rsp, {}", MAX_LOCS * LOC_SIZE));
-  // TODO: Reserve stack space?
 }
-void X64Codegen::add_arg(std::string_view name, const Type &ty) {
-  add_var(name, ty);
-  auto argno = locs_[name];
+
+void X64Codegen::add_arg(int32_t argno) {
   add_instr(fmt::format("mov [rbp-{}], {}", addr_of(argno), rnames[argno]));
 }
 void X64Codegen::call_func(std::string_view name, int32_t nargs) {
@@ -134,8 +135,7 @@ void X64Codegen::e_push_number(int32_t n) {
   add_instr(fmt::format("mov eax, {}", n));
   add_push("rax # e_push_number");
 }
-void X64Codegen::e_push_local(std::string_view name) {
-  int32_t locno = locs_[name];
+void X64Codegen::e_push_local(int32_t locno) {
   add_instr(fmt::format("mov rax, [rbp-{}] # e_push_local", addr_of(locno)));
   add_push("rax # e_push_local");
 }
@@ -268,19 +268,18 @@ void X64Codegen::e_pop_op(Op op) {
 }
 
 // Assignment
-void X64Codegen::add_var(std::string_view name, const Type &_) {
-  int32_t locno = n_locs_++;
-  if (n_locs_ > MAX_LOCS) {
-    std::cerr << fmt::format(
-        "Too many locals in {}, now have {}, the latest being {}\n", cur_func_,
-        n_locs_, name);
-    exit(1);
-  }
-  locs_[name] = locno;
-}
+// void X64Codegen::add_var(std::string_view name, const Type &_) {
+//   int32_t locno = n_locs_++;
+//   if (n_locs_ > MAX_LOCS) {
+//     std::cerr << fmt::format(
+//         "Too many locals in {}, now have {}, the latest being {}\n",
+//         cur_func_, n_locs_, name);
+//     exit(1);
+//   }
+//   locs_[name] = locno;
+// }
 // Push the addr of a local to the stack
-void X64Codegen::assign_addr_local(std::string_view name) {
-  int32_t locno = locs_[name];
+void X64Codegen::assign_addr_local(int32_t locno) {
   add_instr(fmt::format("lea rax, [rbp-{}]", addr_of(locno)));
   add_push("rax # assign_addr_local");
 } // Push address of local

@@ -1,14 +1,13 @@
 <unit>
   <main>
-    <var><name>foo</name><ty>int</ty></var>
-    <addr_local>foo</addr_local>
+    <addr_local>0</addr_local>
     <num>0</num>
     <assign_do/>
-    <addr_local>foo</addr_local>
+    <addr_local>0</addr_local>
     <addr_fst/>
     <num>1</num>
     <assign_do/>
-    <addr_local>foo</addr_local>
+    <addr_local>0</addr_local>
     <addr_snd/>
     <num>2</num>
     <assign_do/>

@@ -1,7 +1,6 @@
 <unit>
   <main>
-    <var><name>f</name><ty>int</ty></var>
-    <addr_local>f</addr_local>
+    <addr_local>0</addr_local>
     <call_func><name>f</name><nargs>0</nargs></call_func>
     <assign_do/>
   </main>

@@ -13,11 +13,18 @@
 // These are designed to be amenable to a signle-pass stack based code
 // generation. Note that we don't do any type checking.
 
+struct Local {
+  Type ty;
+  int32_t offset;
+  int32_t scope_depth;
+};
+
 struct Parser {
   Lexer lexer_;
   Codegen *codegen_;
   const char *filename_;
-  std::map<std::string_view, Type> loc_tys_; // TODO: Reset on new func
+  std::map<std::string_view, Local> locals_; // TODO: Reset on new func
+  int32_t scope_depth_ = 0;
 
   Token current_;
 
@@ -32,7 +39,7 @@ struct Parser {
   void main();
   void stmts();
   void stmt();
-  void function(std::string_view name, const Type &ret);
+  void function(std::string_view name);
   void extern_fn();
   std::optional<Type> ty();
 
@@ -52,6 +59,10 @@ struct Parser {
   void s_assign_fst();
   void s_assign_snd();
   void s_assign_local(std::string_view);
+
+  int32_t add_local(std::string_view name, Type ty);
+  const Local &get_local(std::string_view name);
+  void start_function();
 
   // Expr
   Type expr();

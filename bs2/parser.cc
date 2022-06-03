@@ -3,6 +3,7 @@
 #include <fmt/core.h>
 #include <iostream>
 #include <optional>
+#include <tuple>
 
 #include "parser.hh"
 
@@ -19,9 +20,10 @@ void Parser::unit() {
       // TODO: Handle case where int foo = 1; and start of main,
       // not int foo() is ...
       if (match(TokenType::Lparen))
-        function(name.value_, t.value());
+        function(name.value_);
       else {
         codegen_->start_main();
+        start_function();
         opened_main = true;
         s_decl_2(std::move(t.value()), name.value_);
         if (match(TokenType::Semi))
@@ -35,8 +37,10 @@ void Parser::unit() {
       break;
     }
   }
-  if (!opened_main)
+  if (!opened_main) {
     codegen_->start_main();
+    start_function();
+  }
 
   main();
 end:
@@ -47,22 +51,26 @@ end:
 
 void Parser::main() { stmts(); }
 
-void Parser::function(std::string_view name, const Type &ret) {
-  codegen_->start_function(name, ret);
+void Parser::start_function() { locals_.clear(); }
+
+void Parser::function(std::string_view name) {
+  start_function();
+  codegen_->start_function(name);
 
   // expect(TokenType::Lparen);
   std::optional<Type> oty;
   if ((oty = ty())) {
     Token name = expect(TokenType::Identifier);
     Type aty = std::move(oty.value());
-    codegen_->add_arg(name.value_, aty);
-    loc_tys_[name.value_] = std::move(aty);
+    int32_t offset = add_local(name.value_, std::move(aty));
+
+    codegen_->add_arg(offset);
 
     while (match(TokenType::Comma)) {
       aty = ty().value();
-      Token name = expect(TokenType::Identifier);
-      codegen_->add_arg(name.value_, aty);
-      loc_tys_[name.value_] = std::move(aty);
+      name = expect(TokenType::Identifier);
+      offset = add_local(name.value_, std::move(aty));
+      codegen_->add_arg(offset);
     }
   }
 
@@ -171,9 +179,9 @@ const Type &Parser::assign_lhs() {
   std::optional<Token> otk;
   if ((otk = match(TokenType::Identifier))) {
     std::string_view name = otk.value().value_;
-    const Type &t = loc_tys_.at(name);
-    codegen_->assign_addr_local(name);
-    return t;
+    const Local &l = get_local(name);
+    codegen_->assign_addr_local(l.offset);
+    return l.ty;
   } else if (match(TokenType::Fst)) {
     const Type &t = assign_lhs();
     codegen_->assign_addr_fst();
@@ -193,9 +201,9 @@ void Parser::s_decl(Type ty) {
 }
 void Parser::s_decl_2(Type ty, std::string_view name) {
   expect(TokenType::Assign);
-  codegen_->add_var(name, ty);
-  loc_tys_[name] = std::move(ty);
-  codegen_->assign_addr_local(name);
+  // codegen_->add_var(name, ty);
+  int32_t offset = add_local(name, std::move(ty));
+  codegen_->assign_addr_local(offset);
   assign_rhs();
   codegen_->assign_do();
 }
@@ -252,7 +260,7 @@ void Parser::s_block() {
   codegen_->end_block();
 }
 void Parser::s_assign_local(std::string_view name) {
-  codegen_->assign_addr_local(name);
+  codegen_->assign_addr_local(get_local(name).offset);
   while (match(TokenType::Lsquare)) {
     expr();
     codegen_->assign_addr_array();
@@ -265,7 +273,7 @@ void Parser::s_assign_local(std::string_view name) {
 void Parser::s_assign_fst() {
   Token ident = expect(TokenType::Identifier);
   expect(TokenType::Assign);
-  codegen_->assign_addr_local(ident.value_);
+  codegen_->assign_addr_local(get_local(ident.value_).offset);
   codegen_->assign_addr_fst();
   assign_rhs();
   codegen_->assign_do();
@@ -273,7 +281,7 @@ void Parser::s_assign_fst() {
 void Parser::s_assign_snd() {
   Token ident = expect(TokenType::Identifier);
   expect(TokenType::Assign);
-  codegen_->assign_addr_local(ident.value_);
+  codegen_->assign_addr_local(get_local(ident.value_).offset);
   codegen_->assign_addr_snd();
   assign_rhs();
   codegen_->assign_do();
@@ -406,10 +414,11 @@ Type Parser::expr_base() {
     codegen_->e_push_string(ot.value().value_);
     return type_string();
   } else if ((ot = match(TokenType::Identifier))) {
-    codegen_->e_push_local(ot.value().value_);
-    auto ty = loc_tys_.find(ot.value().value_);
-    assert(ty != loc_tys_.end());
-    return expr_array_elem(ty->second.clone());
+    auto name = ot.value().value_;
+    const auto &loc = get_local(name);
+    codegen_->e_push_local(loc.offset);
+    const Type &ty = get_local(ot.value().value_).ty;
+    return expr_array_elem(ty.clone());
   } else if (match(TokenType::Lparen)) {
     auto ty = expr();
     expect(TokenType::Rparen);
@@ -555,4 +564,17 @@ std::optional<Token> Parser::match4(TokenType a, TokenType b, TokenType c,
     return t;
   }
   return {};
+}
+
+int32_t Parser::add_local(std::string_view name, Type ty) {
+  int32_t offset = locals_.size();
+  Local l = Local{std::move(ty), offset, scope_depth_};
+  auto i = locals_.insert_or_assign(name, std::move(l));
+  // if (!i.second)
+  //   fatal(fmt::format("Duplicate local {}", name));
+
+  return offset;
+}
+const Local &Parser::get_local(std::string_view name) {
+  return locals_.at(name);
 }

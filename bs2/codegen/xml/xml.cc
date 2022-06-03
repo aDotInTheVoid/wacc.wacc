@@ -10,25 +10,17 @@ void XmlCodegen::end_main() { close("main"); }
 /* #endregion main */
 
 /* #region function */
-void XmlCodegen::start_function(std::string_view name, const Type &ret) {
+void XmlCodegen::start_function(std::string_view name) {
   open("fn");
   open("name");
   line(name);
   close("name");
-  open("ret");
-  type(ret);
-  close("ret");
   open("args");
 }
 
-void XmlCodegen::add_arg(std::string_view name, const Type &ty) {
+void XmlCodegen::add_arg(int32_t offset) {
   open("arg");
-  open("name");
-  line(name);
-  close("name");
-  open("ty");
-  type(ty);
-  close("ty");
+  line(fmt::format("{}", offset));
   close("arg");
 }
 
@@ -140,9 +132,9 @@ void XmlCodegen::e_push_char(std::string_view c) {
   line(c);
   close("char");
 }
-void XmlCodegen::e_push_local(std::string_view name) {
+void XmlCodegen::e_push_local(int32_t locno) {
   open("local");
-  line(name);
+  line(fmt::format("{}", locno));
   close("local");
 }
 void XmlCodegen::e_pop_op(Op op) {
@@ -154,20 +146,20 @@ void XmlCodegen::e_pop_op(Op op) {
 /* endregion */
 
 /* #region assign */
-void XmlCodegen::add_var(std::string_view name, const Type &ty) {
-  open("var");
-  open("name");
-  line(name);
-  close("name");
-  open("ty");
-  type(ty);
-  close("ty");
-  close("var");
-}
+// void XmlCodegen::add_var(std::string_view name, const Type &ty) {
+//   open("var");
+//   open("name");
+//   line(name);
+//   close("name");
+//   open("ty");
+//   type(ty);
+//   close("ty");
+//   close("var");
+// }
 
-void XmlCodegen::assign_addr_local(std::string_view name) {
+void XmlCodegen::assign_addr_local(int32_t name) {
   open("addr_local");
-  line(name);
+  line(fmt::format("{}", name));
   close("addr_local");
 }
 void XmlCodegen::assign_addr_fst() { open_close("addr_fst"); }

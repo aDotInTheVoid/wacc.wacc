@@ -1,16 +1,15 @@
 <unit>
   <fn>
     <name>print_arr</name>
-    <ret>int</ret>
-    <args><arg><name>x</name><ty><array><array>char</array></array></ty></arg></args>
+    <args><arg>0</arg></args>
     <body>
-      <local>x</local>
+      <local>0</local>
       <print><kind>ptr</kind><newline>true</newline></print>
-      <local>x</local>
+      <local>0</local>
       <num>0</num>
       <array_elem/>
       <print><kind>char_array</kind><newline>true</newline></print>
-      <local>x</local>
+      <local>0</local>
       <num>0</num>
       <array_elem/>
       <num>0</num>
