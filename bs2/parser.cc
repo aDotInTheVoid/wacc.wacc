@@ -161,9 +161,31 @@ std::optional<Type> Parser::ty() {
 
 /* #region stmt */
 void Parser::s_read() {
-  // TODO
-  assert(0);
+  // Token name = expect(TokenType::Identifier);
+  // Type &t = loc_tys_.at(name.value_);
+  // codegen_->assign_addr_local(name.value_);
+  const Type &t = Parser::assign_lhs();
+  codegen_->do_read(t);
 }
+const Type &Parser::assign_lhs() {
+  std::optional<Token> otk;
+  if ((otk = match(TokenType::Identifier))) {
+    std::string_view name = otk.value().value_;
+    const Type &t = loc_tys_.at(name);
+    codegen_->assign_addr_local(name);
+    return t;
+  } else if (match(TokenType::Fst)) {
+    const Type &t = assign_lhs();
+    codegen_->assign_addr_fst();
+    return type_pair_fst(t);
+  } else if (match(TokenType::Snd)) {
+    const Type &t = assign_lhs();
+    codegen_->assign_addr_snd();
+    return type_pair_snd(t);
+  }
+  Parser::fatal("Expected lhs of assignment");
+}
+
 void Parser::s_decl(Type ty) {
   //  type, ident, "=", assign-rhs
   Token ident = expect(TokenType::Identifier);
@@ -230,14 +252,12 @@ void Parser::s_block() {
   codegen_->end_block();
 }
 void Parser::s_assign_local(std::string_view name) {
-  // TODO: Arrays
   codegen_->assign_addr_local(name);
   while (match(TokenType::Lsquare)) {
     expr();
     codegen_->assign_addr_array();
     expect(TokenType::Rsquare);
   }
-
   expect(TokenType::Assign);
   assign_rhs();
   codegen_->assign_do();

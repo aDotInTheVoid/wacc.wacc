@@ -48,6 +48,7 @@ struct Parser {
   void s_block();
   void s_decl(Type);
   void s_decl_2(Type ty, std::string_view name);
+  const Type &assign_lhs();
   void s_assign_fst();
   void s_assign_snd();
   void s_assign_local(std::string_view);

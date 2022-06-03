@@ -48,5 +48,7 @@ Type type_eraised_pair();
 Type type_pair(Type, Type);
 Type type_array(Type);
 Type type_array_inner(Type);
+const Type &type_pair_fst(const Type &);
+const Type &type_pair_snd(const Type &);
 
 #endif

@@ -1,0 +1,10 @@
+begin
+
+    int a = 0;
+    char b = 'b';
+    pair(int, char) p = newpair(a, b);
+    read fst p;
+    read snd p;
+    read a;
+    read b;
+skip end

@@ -1,0 +1,31 @@
+<unit>
+  <main>
+    <var><name>a</name><ty>int</ty></var>
+    <addr_local>a</addr_local>
+    <num>0</num>
+    <assign_do/>
+    <var><name>b</name><ty>char</ty></var>
+    <addr_local>b</addr_local>
+    <char>'b'</char>
+    <assign_do/>
+    <var>
+      <name>p</name>
+      <ty><pair><left>int</left><right>char</right></pair></ty>
+    </var>
+    <addr_local>p</addr_local>
+    <local>a</local>
+    <local>b</local>
+    <newpair/>
+    <assign_do/>
+    <addr_local>p</addr_local>
+    <addr_fst/>
+    <read><ty>int</ty></read>
+    <addr_local>p</addr_local>
+    <addr_snd/>
+    <read><ty>char</ty></read>
+    <addr_local>a</addr_local>
+    <read><ty>int</ty></read>
+    <addr_local>b</addr_local>
+    <read><ty>char</ty></read>
+  </main>
+</unit>

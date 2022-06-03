@@ -57,6 +57,13 @@ void XmlCodegen::pop_print(PrintKind pk, bool nl) {
   close("newline");
   close("print");
 }
+void XmlCodegen::do_read(const Type &ty) {
+  open("read");
+  open("ty");
+  type(ty);
+  close("ty");
+  close("read");
+}
 
 void XmlCodegen::if_cond() {
   open("if");

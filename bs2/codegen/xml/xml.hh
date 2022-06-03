@@ -23,6 +23,7 @@ struct XmlCodegen : Codegen {
   void pop_return() override;
   void pop_exit() override;
   void pop_print(PrintKind, bool) override;
+  void do_read(const Type &ty) override;
   void if_cond() override;
   int32_t if_when() override;
   int32_t if_else(int32_t) override;

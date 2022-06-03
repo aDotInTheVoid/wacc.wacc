@@ -80,6 +80,16 @@ Type type_array_inner(Type t) {
   return std::move(*t.p1_);
 }
 
+const Type &type_pair_fst(const Type &t) {
+  assert(t.kind_ == TypeKind::Pair);
+  return *t.p1_;
+}
+
+const Type &type_pair_snd(const Type &t) {
+  assert(t.kind_ == TypeKind::Pair);
+  return *t.p2_;
+}
+
 const char *print_kind_name(PrintKind pk) {
   switch (pk) {
   case PrintKind::Int:

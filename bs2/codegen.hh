@@ -24,6 +24,7 @@ struct Codegen {
   virtual void pop_return() = 0;
   virtual void pop_exit() = 0;
   virtual void pop_print(PrintKind, bool) = 0;
+  virtual void do_read(const Type &ty) = 0;
   virtual void if_cond() = 0;
   virtual int32_t if_when() = 0;
   virtual int32_t if_else(int32_t) = 0;
