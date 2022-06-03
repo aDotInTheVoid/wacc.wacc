@@ -350,6 +350,9 @@ Type Parser::expr_unary() {
     expr_unary();
     codegen_->e_neg();
     return type_int();
+  } else if (match(TokenType::Plus)) {
+    expr_unary();
+    return type_int();
   } else
     return expr_base();
 }
