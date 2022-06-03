@@ -207,12 +207,12 @@ void XmlCodegen::call_func(std::string_view name, int32_t nargs) {
   open("nargs");
   line(fmt::format("{}", nargs));
   close("nargs");
-  open("args");
+  close("call_func");
 }
 
 std::string XmlCodegen::finish() {
   close("unit");
-  assert(indent == 0);
+  // assert(indent == 0);
   return buff;
 }
 

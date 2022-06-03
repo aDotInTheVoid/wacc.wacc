@@ -1,0 +1,3 @@
+begin
+    int f = call f()
+end

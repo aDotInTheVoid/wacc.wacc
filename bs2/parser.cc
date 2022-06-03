@@ -162,7 +162,7 @@ std::optional<Type> Parser::ty() {
 /* #region stmt */
 void Parser::s_read() {
   // TODO
-  exit(-1);
+  assert(0);
 }
 void Parser::s_decl(Type ty) {
   //  type, ident, "=", assign-rhs
