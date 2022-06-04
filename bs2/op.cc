@@ -68,3 +68,13 @@ Op token_to_op(TokenType tt) {
     std::exit(-1);
   }
 }
+
+bool is_op_eq(Op op) {
+  switch (op) {
+  case Op::Eq:
+  case Op::Ne:
+    return true;
+  default:
+    return false;
+  }
+}

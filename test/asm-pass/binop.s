@@ -76,7 +76,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setl bl
     push rbx
     pop rdi # load print
@@ -89,7 +89,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setl bl
     push rbx
     pop rdi # load print
@@ -102,7 +102,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setl bl
     push rbx
     pop rdi # load print
@@ -119,7 +119,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setle bl
     push rbx
     pop rdi # load print
@@ -132,7 +132,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setle bl
     push rbx
     pop rdi # load print
@@ -145,7 +145,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setle bl
     push rbx
     pop rdi # load print
@@ -162,7 +162,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setg bl
     push rbx
     pop rdi # load print
@@ -175,7 +175,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setg bl
     push rbx
     pop rdi # load print
@@ -188,7 +188,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setg bl
     push rbx
     pop rdi # load print
@@ -205,7 +205,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setge bl
     push rbx
     pop rdi # load print
@@ -218,7 +218,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setge bl
     push rbx
     pop rdi # load print
@@ -231,7 +231,7 @@ main:
     pop rbx
     mov rcx, rbx
     xor ebx, ebx
-    cmp rcx, rax
+    cmp ecx, eax
     setge bl
     push rbx
     pop rdi # load print

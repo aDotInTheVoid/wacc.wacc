@@ -264,7 +264,11 @@ void X64Codegen::e_pop_op(Op op) {
     // rbx := rbx < rax
     add_instr("mov rcx, rbx");
     add_instr("xor ebx, ebx");
-    add_instr("cmp rcx, rax");
+    if (is_op_eq(op))
+      add_instr("cmp rcx, rax"); // Equality instructions must compare the whole
+                                 // of the value
+    else
+      add_instr("cmp ecx, eax"); // But comparison
     add_instr(fmt::format("set{} bl", test_name(op)));
     break;
   default:

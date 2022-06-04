@@ -1,0 +1,7 @@
+begin
+
+int a = -12;
+bool b = a < 0;
+println b
+
+end

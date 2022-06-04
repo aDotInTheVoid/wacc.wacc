@@ -21,5 +21,6 @@ enum class Op {
 
 const char *op_name(Op);
 Op token_to_op(TokenType);
+bool is_op_eq(Op);
 
 #endif

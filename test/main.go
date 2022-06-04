@@ -111,7 +111,7 @@ results:
 			fmt.Fprintf(os.Stderr, "Exiting becuase I thing all are done\n")
 			break results
 		case <-time.After(10 * time.Second):
-			fmt.Fprintf(os.Stderr, "%s", color.RedString("TIMEOUT"))
+			fmt.Fprintf(os.Stderr, "%s\n", color.RedString("TIMEOUT"))
 
 			for a := range running {
 				fmt.Fprintf(os.Stderr, "Still running %s\n", a)
