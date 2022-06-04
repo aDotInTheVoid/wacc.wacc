@@ -108,7 +108,7 @@ results:
 
 			}
 		case <-done:
-			fmt.Fprintf(os.Stderr, "Exiting becuase I thing all are done")
+			fmt.Fprintf(os.Stderr, "Exiting becuase I thing all are done\n")
 			break results
 		case <-time.After(10 * time.Second):
 			fmt.Fprintf(os.Stderr, "%s", color.RedString("TIMEOUT"))
@@ -122,7 +122,7 @@ results:
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "Realy done for real")
+	fmt.Fprintf(os.Stderr, "Realy done for real\n")
 
 	if len(running) != 0 {
 		for a := range running {
