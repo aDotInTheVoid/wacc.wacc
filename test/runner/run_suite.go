@@ -9,6 +9,8 @@ import (
 	"sync"
 )
 
+var mu sync.Mutex
+
 func RunSuite[C Compiler](suiteName string,
 	out_ext string,
 	compilers *CompilerGroup[C],

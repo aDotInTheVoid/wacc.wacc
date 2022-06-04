@@ -62,10 +62,10 @@ func RunOutputGet(compiller_path string, stdin_path *string, args ...string) Com
 			result.ExitCode = 1
 			return result
 		}
+		defer file.Close()
 
 		fbuf := bufio.NewReader(file)
 		cmd.Stdin = fbuf
-
 	}
 
 	err := cmd.Run()
