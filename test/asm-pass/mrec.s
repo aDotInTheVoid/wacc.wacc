@@ -9,13 +9,12 @@ r1:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp rcx, rax
-    sete bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp rdi, rsi
+    sete al
+    push rax
     pop rax
     test rax, rax
     je .CF0
@@ -69,10 +68,11 @@ r2:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    sub ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    mov eax, edi
+    sub eax, esi
+    push rax
     pop rdi
     sub rsp, 8
     call r1

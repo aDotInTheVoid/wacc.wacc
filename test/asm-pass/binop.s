@@ -12,26 +12,24 @@ main:
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp rcx, rax
-    sete bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp rdi, rsi
+    sete al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 1
     push rax # e_push_number
     mov eax, 2
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp rcx, rax
-    sete bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp rdi, rsi
+    sete al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     lea rax, .str1[rip]
@@ -42,26 +40,24 @@ main:
     push rax # e_push_number
     mov eax, 2
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp rcx, rax
-    setne bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp rdi, rsi
+    setne al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 7
     push rax # e_push_number
     mov eax, 7
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp rcx, rax
-    setne bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp rdi, rsi
+    setne al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     lea rax, .str2[rip]
@@ -72,39 +68,36 @@ main:
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setl bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setl al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 1
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setl bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setl al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 2
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setl bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setl al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     lea rax, .str3[rip]
@@ -115,39 +108,36 @@ main:
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setle bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setle al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 1
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setle bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setle al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 2
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setle bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setle al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     lea rax, .str4[rip]
@@ -158,39 +148,36 @@ main:
     push rax # e_push_number
     mov eax, 0
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setg bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setg al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 1
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setg bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setg al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 1
     push rax # e_push_number
     mov eax, 2
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setg bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setg al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     lea rax, .str5[rip]
@@ -201,39 +188,36 @@ main:
     push rax # e_push_number
     mov eax, 0
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setge bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setge al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 1
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setge bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setge al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov eax, 1
     push rax # e_push_number
     mov eax, 2
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setge bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setge al
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     lea rax, .str6[rip]
@@ -244,40 +228,44 @@ main:
     push rax
     mov rax, 1
     push rax
-    pop rax
-    pop rbx
-    and ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    and esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov rax, 1
     push rax
     mov rax, 0
     push rax
-    pop rax
-    pop rbx
-    and ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    and esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov rax, 0
     push rax
     mov rax, 0
     push rax
-    pop rax
-    pop rbx
-    and ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    and esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov rax, 0
     push rax
     mov rax, 1
     push rax
-    pop rax
-    pop rbx
-    and ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    and esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     lea rax, .str7[rip]
@@ -288,40 +276,44 @@ main:
     push rax
     mov rax, 1
     push rax
-    pop rax
-    pop rbx
-    or ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    or esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov rax, 1
     push rax
     mov rax, 0
     push rax
-    pop rax
-    pop rbx
-    or ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    or esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov rax, 0
     push rax
     mov rax, 0
     push rax
-    pop rax
-    pop rbx
-    or ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    or esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov rax, 0
     push rax
     mov rax, 1
     push rax
-    pop rax
-    pop rbx
-    or ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    or esi, edi
+    movzx eax, sil
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     xor rax, rax

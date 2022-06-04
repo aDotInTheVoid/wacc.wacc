@@ -237,45 +237,112 @@ static const char *test_name(Op op) {
 }
 
 void X64Codegen::e_pop_op(Op op) {
-  add_pop("rax"); // rax = rhs
-  add_pop("rbx"); // rbx = lhs
+  add_pop("rsi"); // rsi = snd arg = rhs
+  add_pop("rdi"); // rdi = fst arg = lhs
+  // output = rax
+
+  // https://godbolt.org/z/P19PhsrEG
+  // switch (op) {
+  // case Op::Mod:
+  //   // TODO: This codegen could probably be better
+
+  // case Op::Add:
+  //   add_instr("add ebx, eax");
+  //   break;
+  // case Op::Sub:
+  //   add_instr("sub ebx, eax");
+  //   break;
+  // case Op::Mul:
+  //   add_instr("imul ebx, eax");
+  //   break;
+  // case Op::And:
+  //   add_instr("and ebx, eax"); // TODO: Merge and,sub,mul,and
+  //   break;
+  // case Op::Or:
+  //   add_instr("or ebx, eax"); // TODO: is bitwize OK here?
+  //   break;
+  // case Op::Lt:
+  // case Op::Le:
+  // case Op::Gt:
+  // case Op::Ge:
+  // case Op::Eq:
+  // case Op::Ne:
+  //   // rbx := rbx < rax
+  //   add_instr("mov rcx, rbx");
+  //   add_instr("xor ebx, ebx");
+  //   if (is_op_eq(op))
+  //     add_instr("cmp rcx, rax"); // Equality instructions must compare the
+  //     whole
+  //                                // of the value
+  //   else
+  //     add_instr("cmp ecx, eax"); // But comparison
+  //   add_instr(fmt::format("set{} bl", test_name(op)));
+  //   break;
+
+  // }
   switch (op) {
   case Op::Add:
-    add_instr("add ebx, eax");
-    break;
-  case Op::Sub:
-    add_instr("sub ebx, eax");
-    break;
-  case Op::Mul:
-    add_instr("imul ebx, eax");
+    add_instr("lea eax, [rdi+rsi]");
     break;
   case Op::And:
-    add_instr("and ebx, eax"); // TODO: Merge and,sub,mul,and
+    add_instr("and esi, edi");
+    add_instr("movzx eax, sil");
     break;
-  case Op::Or:
-    add_instr("or ebx, eax"); // TODO: is bitwize OK here?
+  case Op::Div:
+    add_instr("mov eax, edi");
+    add_instr("cdq");
+    add_instr("idiv esi");
+    break;
+  case Op::Eq:
+    add_instr("xor eax, eax");
+    add_instr("cmp rdi, rsi");
+    add_instr("sete al");
+    break;
+  case Op::Ge:
+    add_instr("xor eax, eax");
+    add_instr("cmp edi, esi");
+    add_instr("setge al");
+    break;
+  case Op::Gt:
+    add_instr("xor eax, eax");
+    add_instr("cmp edi, esi");
+    add_instr("setg al");
+    break;
+  case Op::Le:
+    add_instr("xor eax, eax");
+    add_instr("cmp edi, esi");
+    add_instr("setle al");
     break;
   case Op::Lt:
-  case Op::Le:
-  case Op::Gt:
-  case Op::Ge:
-  case Op::Eq:
-  case Op::Ne:
-    // rbx := rbx < rax
-    add_instr("mov rcx, rbx");
-    add_instr("xor ebx, ebx");
-    if (is_op_eq(op))
-      add_instr("cmp rcx, rax"); // Equality instructions must compare the whole
-                                 // of the value
-    else
-      add_instr("cmp ecx, eax"); // But comparison
-    add_instr(fmt::format("set{} bl", test_name(op)));
+    add_instr("xor eax, eax");
+    add_instr("cmp edi, esi");
+    add_instr("setl al");
     break;
-  default:
-    fprintf(stderr, "Unhandled op: %s\n", op_name(op));
-    assert(0);
+  case Op::Mod:
+    add_instr("mov eax, edi");
+    add_instr("cdq");
+    add_instr("idiv esi");
+    add_instr("mov eax, edx");
+    break;
+  case Op::Mul:
+    add_instr("mov eax, edi");
+    add_instr("imul eax, esi");
+    break;
+  case Op::Ne:
+    add_instr("xor eax, eax");
+    add_instr("cmp rdi, rsi");
+    add_instr("setne al");
+    break;
+  case Op::Or:
+    add_instr("or esi, edi");
+    add_instr("movzx eax, sil");
+    break;
+  case Op::Sub:
+    add_instr("mov eax, edi");
+    add_instr("sub eax, esi");
+    break;
   }
-  add_push("rbx");
+  add_push("rax");
 }
 
 // Assignment

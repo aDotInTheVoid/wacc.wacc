@@ -8,40 +8,42 @@ main:
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    add ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    lea eax, [rdi+rsi]
+    push rax
     pop rdi # load print
     call waccrt_println_i32
     mov eax, 100
     push rax # e_push_number
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    sub ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    mov eax, edi
+    sub eax, esi
+    push rax
     pop rdi # load print
     call waccrt_println_i32
     mov eax, 1
     push rax # e_push_number
     mov eax, 100
     push rax # e_push_number
-    pop rax
-    pop rbx
-    sub ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    mov eax, edi
+    sub eax, esi
+    push rax
     pop rdi # load print
     call waccrt_println_i32
     mov eax, 2147483647
     push rax # e_push_number
     mov eax, 3
     push rax # e_push_number
-    pop rax
-    pop rbx
-    add ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    lea eax, [rdi+rsi]
+    push rax
     pop rdi # load print
     call waccrt_println_i32
     xor rax, rax

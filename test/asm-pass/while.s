@@ -16,13 +16,12 @@ main:
     push rax # e_push_local
     mov eax, 10
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setl bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setl al
+    push rax
     pop rax
     test rax, rax
     je .CF1
@@ -36,10 +35,10 @@ main:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rax
-    pop rbx
-    add ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    lea eax, [rdi+rsi]
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi

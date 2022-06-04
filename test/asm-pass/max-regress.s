@@ -20,13 +20,12 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp ecx, eax
-    setl bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp edi, esi
+    setl al
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi

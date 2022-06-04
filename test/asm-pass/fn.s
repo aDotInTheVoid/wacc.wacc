@@ -26,10 +26,10 @@ add:
     push rax # e_push_local
     mov rax, [rbp-16] # e_push_local
     push rax # e_push_local
-    pop rax
-    pop rbx
-    add ebx, eax
-    push rbx
+    pop rsi
+    pop rdi
+    lea eax, [rdi+rsi]
+    push rax
     pop rax
     jmp .ret_add
 .ret_add:

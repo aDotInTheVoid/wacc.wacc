@@ -64,13 +64,12 @@ main:
     push rdi
     mov eax, 3
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp rcx, rax
-    sete bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp rdi, rsi
+    sete al
+    push rax
     pop rax
     xor rax, 1
     push rax
@@ -83,13 +82,12 @@ main:
     push rdi
     mov eax, 4
     push rax # e_push_number
-    pop rax
-    pop rbx
-    mov rcx, rbx
-    xor ebx, ebx
-    cmp rcx, rax
-    setne bl
-    push rbx
+    pop rsi
+    pop rdi
+    xor eax, eax
+    cmp rdi, rsi
+    setne al
+    push rax
     pop rax
     xor rax, 1
     push rax
