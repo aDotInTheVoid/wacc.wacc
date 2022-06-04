@@ -39,7 +39,7 @@ func (*bs2) Assemble(path string) CommandResult {
 
 // Run implements Runner
 func (*bs2) Run(path string) (CommandResult, string) {
-	almostExeName := withSuffix(path, "")
+	almostExeName := WithSuffix(path, "")
 	exeName := "_build/bs2/" + almostExeName[:len(almostExeName)-1]
 	cr := RunOutputGet("make", nil, exeName)
 	return cr, exeName

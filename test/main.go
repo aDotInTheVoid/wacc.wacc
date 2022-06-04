@@ -54,6 +54,7 @@ func main() {
 	parsers := runner.NewGroup(runner.BS2Parser)
 	assembles := runner.NewGroup(runner.BS2Assembler)
 	runners := runner.NewGroup(runner.TPRunner, runner.BS2Runner)
+	tpRunner := runner.NewGroup(runner.TPRunner)
 
 	e := lexers.Ensure()
 	if e.IsError() {
@@ -67,7 +68,7 @@ func main() {
 	runner.RunSuite("test/asm-pass", "out", &runners, runRun, bless, c, &wg)
 	runner.RunSuite("test/example-valid", "xml", &parsers, runParse, bless, c, &wg)
 
-	// runner.RunSuite("test/example-valid", "out", &runners, runRun, bless, c, &wg)
+	runner.RunSuite("test/example-valid", "out", &tpRunner, runRun, bless, c, &wg)
 
 	// All tests are now launched
 	go func() {
@@ -112,12 +113,18 @@ func runAsm(a runner.Assembler, path string) runner.CommandResult {
 	return a.Assemble(path)
 }
 
-func runRun(a runner.Runner, path string) runner.CommandResult {
-	res, path := a.Run(path)
+func runRun(a runner.Runner, waccPath string) runner.CommandResult {
+	res, exePath := a.Run(waccPath)
 	if res.IsError() {
 		return res
 	}
-	exeRes := runner.RunOutputGet(path, nil)
+	inFilePath := runner.WithSuffix(waccPath, "in")
+	var inFile *string
+	if runner.FileExists(inFilePath) {
+		inFile = &inFilePath
+	}
+	exeRes := runner.RunOutputGet(exePath, inFile)
+	// spew.Dump(exeRes)
 	res.Output = sanitizeOutput(exeRes.Output)
 	res.ExitCode = exeRes.ExitCode
 	return res

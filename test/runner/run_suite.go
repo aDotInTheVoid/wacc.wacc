@@ -36,7 +36,7 @@ func RunSuite[C Compiler](suiteName string,
 					c <- result
 				} else {
 					result.Status = StatusPass
-					os.WriteFile(withSuffix(path, out_ext), []byte(output.Output), 0644)
+					os.WriteFile(WithSuffix(path, out_ext), []byte(output.Output), 0644)
 					c <- result
 				}
 			} else {
@@ -60,18 +60,18 @@ func doRun[C Compiler](comp C, path string, out_ext string, f func(C, string) Co
 		// TODO: Set message
 		return result
 	}
-	outFile := withSuffix(path, out_ext)
-	c, err := os.ReadFile(outFile)
+	outFile := WithSuffix(path, out_ext)
+	expectedOut, err := os.ReadFile(outFile)
 	if err != nil {
 		result.Status = StatusFail
 		result.Message = fmt.Sprintf("Cannot read output file: %s", err)
 		return result
 	}
-	if string(c) == r.Output {
+	if string(expectedOut) == r.Output {
 		result.Status = StatusPass
 	} else {
 		result.Status = StatusFail
-		result.Message = fmt.Sprintf("Output mismatch: expected ---\n%s\n---, got ---\n%s\n---", r.Output, c)
+		result.Message = fmt.Sprintf("Output mismatch: expected ---\n%s\n--- got ---\n%s\n---", expectedOut, r.Output)
 
 	}
 	return result
@@ -91,9 +91,4 @@ func makeMessage(r *CommandResult) string {
 	}
 
 	return out
-}
-
-func withSuffix(path string, newExt string) string {
-	ext := filepath.Ext(path)
-	return path[:len(path)-len(ext)] + "." + newExt
 }

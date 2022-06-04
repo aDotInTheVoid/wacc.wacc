@@ -1,4 +1,3 @@
 This program calculates the nth fibonacci number iteratively.
-Please enter n (should not be too large): #input#
-The input n is #output#
-The nth fibonacci number is #output#
+Please enter n (should not be too large): The input n is 15
+The nth fibonacci number is 610

@@ -16,7 +16,7 @@ func (*tp) Name() string {
 // Run implements Runner
 func (*tp) Run(path string) (CommandResult, string) {
 	// TODO: Factor out this common with bs2.Run
-	almostExeName := withSuffix(path, "")
+	almostExeName := WithSuffix(path, "")
 	exeName := "_build/tp/" + almostExeName[:len(almostExeName)-1]
 	cr := RunOutputGet("make", nil, exeName)
 	return cr, exeName
