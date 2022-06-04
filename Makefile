@@ -96,6 +96,9 @@ clean-all:
 .PHONY: test
 test: $(test)
 	$(test)
+.PHONY: testv
+testv: $(test)
+	$(test) -v
 
 .PHONY: bless
 bless:

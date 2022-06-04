@@ -31,8 +31,8 @@ func RunSuite[C Compiler](suitePath string,
 
 		wg.Add(1)
 		go func() {
-			mu.Lock()
-			defer mu.Unlock()
+			// mu.Lock()
+			// defer mu.Unlock()
 			if bless {
 				send(TestResult{Compiler: compilers.Authoritative.Name(), TestName: path, Status: StatusStart})
 
