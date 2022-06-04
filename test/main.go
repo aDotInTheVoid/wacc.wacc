@@ -159,9 +159,15 @@ func runRun(a runner.Runner, waccPath string) runner.CommandResult {
 	}
 	exeRes := runner.RunOutputGet(exePath, inFile)
 	// spew.Dump(exeRes)
-	res.Output = sanitizeOutput(exeRes.Output)
-	res.ExitCode = exeRes.ExitCode
-	return res
+	exeRes.Output = sanitizeOutput(exeRes.Output)
+	if exeRes.ExitCode == -1 {
+		exeRes.ExitCode = 255
+	}
+	if exeRes.ExitCode != 0 {
+		exeRes.Output += fmt.Sprintf("\n\n---\nExit: %d\n", exeRes.ExitCode)
+		exeRes.ExitCode = 0
+	}
+	return exeRes
 }
 
 var ptrRe = regexp.MustCompile("0x[0-9a-fA-F]{8,16}")
