@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"regexp"
 	"sync"
@@ -19,6 +21,11 @@ var verbose = flag.Bool("v", false, "Verbose")
 func main() {
 	start := time.Now()
 	flag.Parse()
+
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
+
 	// cwd to root
 	for {
 		if runner.DirExists("test") &&
@@ -49,6 +56,7 @@ func main() {
 	c := make(chan runner.TestResult)
 	done := make(chan struct{})
 	bless := os.Getenv("WACC_UPDATE") == "1"
+	running := make(map[string]struct{})
 
 	lexers := runner.NewGroup(runner.BS2Lexer, runner.WaccBs2Lexer, runner.WaccTpLexer)
 	parsers := runner.NewGroup(runner.BS2Parser)
@@ -62,13 +70,13 @@ func main() {
 	}
 	// The bs2 parser and assembler were ensured by the lexer.
 
-	runner.RunSuite("test/lex-pass", "stdout", &lexers, runLex, bless, c, &wg)
-	runner.RunSuite("test/parse-pass", "xml", &parsers, runParse, bless, c, &wg)
-	runner.RunSuite("test/asm-pass", "s", &assembles, runAsm, bless, c, &wg)
-	runner.RunSuite("test/asm-pass", "out", &runners, runRun, bless, c, &wg)
-	runner.RunSuite("test/example-valid", "xml", &parsers, runParse, bless, c, &wg)
+	runner.RunSuite("test/lex-pass", "lex", "stdout", &lexers, runLex, bless, c, &wg)
+	runner.RunSuite("test/parse-pass", "parse", "xml", &parsers, runParse, bless, c, &wg)
+	runner.RunSuite("test/asm-pass", "asm", "s", &assembles, runAsm, bless, c, &wg)
+	runner.RunSuite("test/asm-pass", "run", "out", &runners, runRun, bless, c, &wg)
+	runner.RunSuite("test/example-valid", "parse", "xml", &parsers, runParse, bless, c, &wg)
 
-	runner.RunSuite("test/example-valid", "out", &tpRunner, runRun, bless, c, &wg)
+	runner.RunSuite("test/example-valid", "run", "out", &tpRunner, runRun, bless, c, &wg)
 
 	// All tests are now launched
 	go func() {
@@ -82,17 +90,43 @@ results:
 	for {
 		select {
 		case result := <-c:
-			if result.IsError() {
-				nFail++
-				fmt.Fprintf(os.Stderr, "%s %10s %s\n%s\n", color.RedString("FAIL"), result.Compiler, result.TestName, result.Message)
-			} else {
+			switch result.Status {
+			case runner.StatusStart:
+				running[result.RunName()] = struct{}{}
+			case runner.StatusPass:
 				if *verbose {
-					fmt.Fprintf(os.Stderr, "PASS %10s %s\n", result.Compiler, result.TestName)
+					fmt.Fprintf(os.Stderr, "PASS %10s %4s %40s (%d running)\n", result.Compiler,
+						result.SuiteName, result.TestName, len(running))
 				}
 				nPass++
+				delete(running, result.RunName())
+			case runner.StatusFail:
+				nFail++
+				fmt.Fprintf(os.Stderr, "%s %10s %4s %40s (%d running)\n%s\n", color.RedString("FAIL"), result.Compiler,
+					result.SuiteName, result.TestName, len(running), result.Message)
+				delete(running, result.RunName())
+
 			}
 		case <-done:
+			fmt.Fprintf(os.Stderr, "Exiting becuase I thing all are done")
 			break results
+		case <-time.After(10 * time.Second):
+			fmt.Fprintf(os.Stderr, "%s", color.RedString("TIMEOUT"))
+
+			for a := range running {
+				fmt.Fprintf(os.Stderr, "Still running %s\n", a)
+			}
+			nFail++ // hack
+			//			panic("timeout") // Show other goroutines
+			break results
+		}
+	}
+
+	fmt.Fprintf(os.Stderr, "Realy done for real")
+
+	if len(running) != 0 {
+		for a := range running {
+			fmt.Fprintf(os.Stderr, "Still running %s\n", a)
 		}
 	}
 

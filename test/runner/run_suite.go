@@ -9,9 +9,8 @@ import (
 	"sync"
 )
 
-var mu sync.Mutex
-
-func RunSuite[C Compiler](suiteName string,
+func RunSuite[C Compiler](suitePath string,
+	suiteName string,
 	out_ext string,
 	compilers *CompilerGroup[C],
 	f func(C, string) CommandResult,
@@ -19,30 +18,43 @@ func RunSuite[C Compiler](suiteName string,
 	c chan TestResult,
 	wg *sync.WaitGroup) {
 
-	filepath.Walk(suiteName, func(path string, info fs.FileInfo, err error) error {
+	filepath.Walk(suitePath, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
 			return err
 		} else if info.IsDir() || filepath.Ext(path) != ".wacc" {
 			return nil
 		}
+		send := func(result TestResult) {
+			result.SuiteName = suiteName
+			c <- result
+		}
+
 		wg.Add(1)
 		go func() {
+			mu.Lock()
+			defer mu.Unlock()
 			if bless {
+				send(TestResult{Compiler: compilers.Authoritative.Name(), TestName: path, Status: StatusStart})
+
 				output := f(compilers.Authoritative, path)
 				result := TestResult{TestName: path, Compiler: compilers.Authoritative.Name()}
 				if output.IsError() {
 					result.Status = StatusFail
 					result.Message = output.Error
-					c <- result
+					send(result)
 				} else {
 					result.Status = StatusPass
 					os.WriteFile(WithSuffix(path, out_ext), []byte(output.Output), 0644)
-					c <- result
+					send(result)
 				}
 			} else {
-				c <- doRun(compilers.Authoritative, path, out_ext, f)
+				send(TestResult{Compiler: compilers.Authoritative.Name(), TestName: path, Status: StatusStart})
+
+				send(doRun(compilers.Authoritative, path, out_ext, f))
 				for _, comp := range compilers.NonAuthoritative {
-					c <- doRun(comp, path, out_ext, f)
+					send(TestResult{Compiler: comp.Name(), TestName: path, Status: StatusStart})
+
+					send(doRun(comp, path, out_ext, f))
 				}
 			}
 			wg.Done()
@@ -51,7 +63,11 @@ func RunSuite[C Compiler](suiteName string,
 	})
 }
 
+var mu sync.Mutex
+
 func doRun[C Compiler](comp C, path string, out_ext string, f func(C, string) CommandResult) TestResult {
+	// mu.Lock()
+	// defer mu.Unlock()
 	r := f(comp, path)
 	result := TestResult{TestName: path, Compiler: comp.Name()}
 	if r.IsError() {
