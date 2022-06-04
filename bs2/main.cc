@@ -11,7 +11,18 @@
 #include "lex.hh"
 #include "parser.hh"
 
+static void san_check() {
+  int *a = (int *)NULL + 0;
+  int b[3] = {1, 2, 3};
+  int c = b[4];
+  int d;
+  int e = d;
+}
+
 int main(int argc, char **argv) {
+
+  san_check();
+
   if (!(argc == 2 || argc == 3)) {
     char *name = argv[0];
     fprintf(stderr, "Usage: %s (parse|lex|asm) file?\n", name);

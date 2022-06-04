@@ -135,7 +135,11 @@ void X64Codegen::start_block() {}
 void X64Codegen::end_block() {}
 // Expr
 void X64Codegen::e_push_number(int32_t n) {
-  add_instr(fmt::format("mov eax, {}", n));
+  // Number is inverted for overflow reasons
+  if (n == INT32_MIN)
+    add_instr(fmt::format("mov eax, {}", n));
+  else
+    add_instr(fmt::format("mov eax, {}", -n));
   add_push("rax # e_push_number");
 }
 void X64Codegen::e_push_local(int32_t locno) {

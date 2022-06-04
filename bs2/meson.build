@@ -17,7 +17,7 @@ bs2_source = [
   'util.cc',
 ]
 
-if get_option('b_sanitize') == 'memory'
+if ['address', 'memory', 'undefined'].contains(get_option('b_sanitize'))
   if meson.get_compiler('cpp').get_id() != 'clang'
     error('msan only suported on clang')
   else

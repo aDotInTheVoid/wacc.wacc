@@ -391,6 +391,17 @@ Type Parser::expr_unary() {
   } else
     return expr_base();
 }
+
+static int32_t strtoint(std::string_view s) {
+  int32_t res = 0;
+  for (char c : s) {
+    res *= 10;
+    // To avoid overflow with INT_MIN
+    res -= c - '0';
+  }
+  return res;
+}
+
 Type Parser::expr_base() {
   /*
 
@@ -403,9 +414,8 @@ Type Parser::expr_base() {
 
   std::optional<Token> ot;
   if ((ot = match(TokenType::Number))) {
-    int32_t n;
     Token t = ot.value();
-    std::from_chars(t.value_.data(), t.value_.end(), n);
+    int n = strtoint(t.value_);
     codegen_->e_push_number(n);
     return type_int();
   } else if ((ot = match(TokenType::True))) {

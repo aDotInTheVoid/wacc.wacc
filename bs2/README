@@ -3,4 +3,7 @@ SETTING UP BUILDS
 -----------------
 
 meson _build/default
+
+CXX=clang++ meson _build/asan -D b_sanitize=address -D b_lundef=false
 CXX=clang++ meson _build/msan -D b_sanitize=memory -D b_lundef=false
+CXX=clang++ meson _build/ubsan -D b_sanitize=undefined -D b_lundef=false

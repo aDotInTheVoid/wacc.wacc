@@ -94,8 +94,10 @@ void XmlCodegen::end_block() { close("block"); }
 /* #endregion stmt */
 
 /* #region expr */
-void XmlCodegen::e_push_number(int32_t n) {
-  std::string s = fmt::format("{}", n);
+void XmlCodegen::e_push_number(int32_t n_neg) {
+  int64_t n = n_neg;
+  int64_t n2 = -n;
+  std::string s = fmt::format("{}", n2);
   open("num");
   line(s);
   close("num");
