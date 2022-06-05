@@ -1,0 +1,8 @@
+#ifndef TOKEN_WACC_IN
+#include TOKEN_WACC_IN
+
+TOKEN_FN(TOKEN_TYPE, token_type)
+    return type
+end
+
+#endif

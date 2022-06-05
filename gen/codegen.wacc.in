@@ -1,0 +1,104 @@
+#ifndef GEN_CODEGEN_WACC_IN
+#define GEN_CODEGEN_WACC_IN
+
+#include "../src/utils.wacc.in"
+
+// struct codegen {
+//     n_locs_: int,
+//     jno_: int,
+//     npust_: int,
+//     curfno_: int,
+//     strs_arr_: char[][],
+//     strs_len_: int[],
+// }
+
+// [
+//     [
+//         jno_: int
+//         curfno_: int
+//     ]
+//     [
+//         [
+//             strs_len_: int[]
+//             strs_arr_: char[][]
+//         ]
+//         [
+//             n_locs_: int
+//             npust_: int
+//         ]
+//     ]
+// ]
+#define CODEGEN_T pair(pair, pair)
+
+CODEGEN_T codegen_ctor(
+    int n_locs_,
+    int jno_,
+    int npust_,
+    int curfno_,
+    char[][] strs_arr_,
+    int[] strs_len_
+) is
+    int ll__ctor = jno_;
+    int rl__ctor = curfno_;
+    pair(int, int) l__ctor = newpair(ll__ctor, rl__ctor);
+    int[] llr__ctor = strs_len_;
+    char[][] rlr__ctor = strs_arr_;
+    pair(int[], char[][]) lr__ctor = newpair(llr__ctor, rlr__ctor);
+    int lrr__ctor = n_locs_;
+    int rrr__ctor = npust_;
+    pair(int, int) rr__ctor = newpair(lrr__ctor, rrr__ctor);
+    pair(pair, pair) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(pair, pair) __ctor = newpair(l__ctor, r__ctor);
+    return __ctor
+end
+
+VOID codegen_dtor(CODEGEN_T self) is
+    pair(int, int) lself = fst self;
+    pair(pair, pair) rself = snd self;
+    int llself = fst lself;
+    int rlself = snd lself;
+    free lself;
+    pair(int[], char[][]) lrself = fst rself;
+    pair(int, int) rrself = snd rself;
+    int[] llrself = fst lrself;
+    char[][] rlrself = snd lrself;
+    free lrself;
+    int lrrself = fst rrself;
+    int rrrself = snd rrself;
+    free rrself;
+    free rself;
+    free self;
+    
+ENDV
+
+#define CODEGEN_FN(__rtype, __fname, ...) \
+    __rtype __fname(CODEGEN_T self __VA_ARGS__) is \
+    pair(pair, pair) __self = self; \
+    pair(int, int) __fstself = fst __self; \
+    int jno_ = fst __fstself; \
+    int curfno_ = snd __fstself; \
+    pair(pair, pair) __sndself = snd __self; \
+    pair(int[], char[][]) __fstsndself = fst __sndself; \
+    int[] strs_len_ = fst __fstsndself; \
+    char[][] strs_arr_ = snd __fstsndself; \
+    pair(int, int) __sndsndself = snd __sndself; \
+    int n_locs_ = fst __sndsndself; \
+    int npust_ = snd __sndsndself;
+
+
+#define CODEGEN_REFRESH \
+    jno_ = fst __fstself; \
+    curfno_ = snd __fstself; \
+    strs_len_ = fst __fstsndself; \
+    strs_arr_ = snd __fstsndself; \
+    n_locs_ = fst __sndsndself; \
+    npust_ = snd __sndsndself
+
+#define CODEGEN_SET_N_LOCS_(__val) fst __sndsndself = __val; n_locs_ = __val
+#define CODEGEN_SET_JNO_(__val) fst __fstself = __val; jno_ = __val
+#define CODEGEN_SET_NPUST_(__val) snd __sndsndself = __val; npust_ = __val
+#define CODEGEN_SET_CURFNO_(__val) snd __fstself = __val; curfno_ = __val
+#define CODEGEN_SET_STRS_ARR_(__val) snd __fstsndself = __val; strs_arr_ = __val
+#define CODEGEN_SET_STRS_LEN_(__val) fst __fstsndself = __val; strs_len_ = __val
+
+#endif

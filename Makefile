@@ -12,15 +12,29 @@ kgt = $(tooldir)/kgt
 tp = $(tooldir)/tp
 test = $(tooldir)/test
 
-wacc_wacc = $(objdir)/wacc.wacc
-wacc_tp_c = $(objdir)/wacc_tp.c
-wacc_tp = $(objdir)/wacc-tp
-wacc_bs2 = $(objdir)/wacc-bs2
-wacc_bs2_s = $(objdir)/wacc-bs2.s 
-wacc_bs2_o = $(objdir)/wacc-bs2.o
+wacc_lex_src = src/wacc-lex.wacc.in
+wacc_asm_src = src/wacc-asm.wacc.in
+
+wacc_lex_wacc = $(objdir)/wacc-lex.wacc
+wacc_lex_tp_c = $(objdir)/wacc_lex_tp.c
+wacc_lex_tp = $(objdir)/wacc-lex-tp
+wacc_lex_bs2 = $(objdir)/wacc-lex-bs2
+wacc_lex_bs2_s = $(objdir)/wacc-lex-bs2.s 
+wacc_lex_bs2_o = $(objdir)/wacc-lex-bs2.o
+wacc_asm_wacc = $(objdir)/wacc-asm.wacc
+wacc_asm_tp_c = $(objdir)/wacc_asm_tp.c
+wacc_asm_tp = $(objdir)/wacc-asm-tp
+wacc_asm_bs2 = $(objdir)/wacc-asm-bs2
+wacc_asm_bs2_s = $(objdir)/wacc-asm-bs2.s 
+wacc_asm_bs2_o = $(objdir)/wacc-asm-bs2.o
 rt_obj = $(objdir)/rt.o
 
-all: $(wacc_tp) $(wacc_bs2)
+all: wacc_lex_tp wacc_asm_tp wacc_lex_bs2 wacc_asm_bs2
+wacc_lex_tp: $(wacc_lex_tp)
+wacc_asm_tp: $(wacc_asm_tp)
+wacc_lex_bs2: $(wacc_lex_bs2)
+wacc_asm_bs2: $(wacc_asm_bs2)
+
 
 gen/%.wacc.in: $(py_src)
 	python3.10 py/gen.py
@@ -31,7 +45,6 @@ gen/%.wacc.in: $(py_src)
 $(timestamp):
 	@mkdir -p $(objdir)
 	@mkdir -p $(tooldir)
-	@mkdir -p $(objdir)/asm-pass
 	touch $(timestamp)
 
 $(kgt): $(timestamp) ./regen-kgt.sh
@@ -42,20 +55,39 @@ $(test): $(timestamp) $(go_src)
 	cd test && go build
 	mv test/test $(test)
 
-$(wacc_wacc): $(wacc_src)
-	cpp -undef -nostdinc src/wacc.wacc.in -o $@
-$(wacc_tp_c): $(wacc_wacc) $(tp)  
-	$(tp) $< $@
-$(wacc_tp): $(wacc_tp_c)
-	clang $< -o $@ -Wno-parentheses-equality -fsanitize=address
-$(wacc_bs2_s): $(wacc_wacc) $(bs2)
-	$(bs2) asm $< > $@
-$(wacc_bs2_o): $(wacc_bs2_s)
-	gcc -c $< -o $@
 $(rt_obj): rt.c
 	gcc -Wall -c $< -o $@
-$(wacc_bs2): $(wacc_bs2_o) $(rt_obj)
-	gcc $^ -o $@
+
+# Preprocess
+$(wacc_lex_wacc): $(wacc_lex_src)
+	cpp -undef -nostdinc $< -o $@
+$(wacc_asm_wacc): $(wacc_asm_src)
+	cpp -undef -nostdinc $< -o $@
+# Transpile to c
+$(wacc_lex_tp_c): $(wacc_lex_wacc) $(tp)  
+	$(tp) $< $@
+$(wacc_asm_tp_c): $(wacc_asm_wacc) $(tp)  
+	$(tp) $< $@
+# Compile C
+$(wacc_lex_tp): $(wacc_lex_tp_c)
+	clang $< -o $@ -Wno-parentheses-equality -fsanitize=address
+$(wacc_asm_tp): $(wacc_asm_tp_c)
+	clang $< -o $@ -Wno-parentheses-equality -fsanitize=address
+# Assemble with bs2
+$(wacc_lex_bs2_s): $(wacc_lex_wacc) $(bs2)
+	$(bs2) asm $< > $@
+$(wacc_asm_bs2_s): $(wacc_asm_wacc) $(bs2)
+	$(bs2) asm $< > $@
+# Build bs2 object files
+$(wacc_lex_bs2_o): $(wacc_lex_bs2_s)
+	gcc -g -c $< -o $@
+$(wacc_asm_bs2_o): $(wacc_asm_bs2_s)
+	gcc -g -c $< -o $@
+$(wacc_lex_bs2): $(wacc_lex_bs2_o) $(rt_obj)
+	gcc -g -o $@ $^
+$(wacc_asm_bs2): $(wacc_asm_bs2_o) $(rt_obj)
+	gcc -g -o $@ $^
+
 
 tools: $(kgt) $(tp) $(test)
 
@@ -84,7 +116,7 @@ debug:
 
 .PHONY: clean
 clean:
-	rm -rf $(wacc_wacc) $(wacc_tp_c) $(wacc_tp) $(wacc_bs2) $(wacc_bs2_s) $(wacc_bs2_o) $(rt_obj) $(test)
+	rm -rf $(rt_obj) $(test) $(objdir)/wacc* $(objdir)/bs2 $(objdir)/tp
 
 .PHONY: clean-all
 clean-all:

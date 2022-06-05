@@ -73,7 +73,7 @@ uint64_t waccrt_array_get(uint64_t *array, uint32_t index) {
   if (0 <= index && index < len) {
     return array[index];
   } else {
-    printf("Index out of bounds: %d, len is %d\n", index, len);
+    printf("Index out of bounds: %d, len is %ld\n", index, len);
     exit(-1);
   }
 }

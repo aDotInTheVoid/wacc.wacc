@@ -71,5 +71,14 @@ def main():
         token_names.append(i)
     assert len(token_names) == len(set(token_names))
 
-    for idx, e in enumerate([Enum("token_type", "token", token_names)]):
+    for idx, e in enumerate(
+        [
+            Enum("token_type", "token", token_names),
+            Enum(
+                "type_kind",
+                "type",
+                ["int", "char", "string", "bool", "pair", "array", "eraised_pair"],
+            ),
+        ]
+    ):
         gen_enum(e, idx)

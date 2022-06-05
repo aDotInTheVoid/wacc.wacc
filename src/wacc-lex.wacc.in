@@ -1,0 +1,49 @@
+begin
+
+#include "lexer.wacc.in"
+#include "io.wacc.in"
+
+LEXER_FN(VOID, lexer_print)
+    print "Lexer{current: ";
+    print current;
+    print ", start: ";
+    print start;
+    print ", logical_line: ";
+    print logical_line;
+    println "}";
+ENDV
+
+// ============= Main function ==============
+skip; // Load bearing, tells bad (mine) parser functions are over
+      // and main has started.
+DISCARD_INIT;
+
+char[] end_of_input = [];
+char[] blank_line = [];
+char[][] input = call read_all(end_of_input, blank_line);
+
+LEXER_T lexer = call lexer_new(input, end_of_input);
+
+bool run = true;
+while run do
+    TOKEN_T t = call next_token(lexer);
+    DISCARD_ print_token(t);
+    TOKEN_TYPE tt = call token_type(t);
+    run = tt != TOKEN_EOF;
+    DISCARD_ token_dtor(t)
+done ;
+
+DISCARD_ lexer_dtor(lexer);
+int i = 0;
+while i < len input do
+    if len input[i] != 0 then
+        free input[i]
+    ENDIF ;
+    i = i+1
+done ;
+free input;
+free end_of_input;
+free blank_line;
+
+skip
+end

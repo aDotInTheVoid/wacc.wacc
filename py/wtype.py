@@ -38,6 +38,10 @@ class Pair(Type):
     left: Type
     right: Type
 
+    def __str__(self) -> str:
+        return f"pair({self.left}, {self.right})"
+
 
 class EraisedPair(Type):
-    pass
+    def __str__(self) -> str:
+        return "pair"

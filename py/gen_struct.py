@@ -184,5 +184,34 @@ def main():
                 StructField("source", wtype.Array(wtype.Char())),
             ],
         ),
+        Struct(
+            "codegen",
+            [
+                StructField("n_locs_", wtype.Int()),
+                StructField("jno_", wtype.Int()),
+                StructField("npust_", wtype.Int()),
+                StructField("curfno_", wtype.Int()),
+                StructField("strs_arr_", wtype.Array(wtype.Array(wtype.Char()))),
+                StructField("strs_len_", wtype.Array(wtype.Int())),
+            ],
+        ),
+        Struct(
+            "parser",
+            [
+                StructField(
+                    "current_", wtype.Pair(wtype.EraisedPair(), wtype.EraisedPair())
+                ),
+                StructField("scope_depth_", wtype.Int()),
+                StructField("lexer_", wtype.EraisedPair()),
+                StructField("codegen_", wtype.EraisedPair()),
+                StructField("local_name_arr_", wtype.Array(wtype.Array(wtype.Char()))),
+                StructField("local_name_len_", wtype.Array(wtype.Int())),
+                StructField("local_depth_", wtype.Array(wtype.Int())),
+                StructField(
+                    "local_type_",
+                    wtype.Array(wtype.Pair(wtype.Int(), wtype.EraisedPair())),
+                ),
+            ],
+        ),
     ]:
         gen_struct(s)

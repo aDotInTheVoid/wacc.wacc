@@ -1,0 +1,53 @@
+#ifndef GEN_TYPE_KIND_WACC_IN
+#define GEN_TYPE_KIND_WACC_IN
+
+#include "../src/utils.wacc.in"
+
+// enum type_kind (base=1) {
+//     int = 1000,
+//     char = 1001,
+//     string = 1002,
+//     bool = 1003,
+//     pair = 1004,
+//     array = 1005,
+//     eraised_pair = 1006,
+// }
+
+#define TYPE_KIND int
+
+#define TYPE_INT 1000
+#define TYPE_CHAR 1001
+#define TYPE_STRING 1002
+#define TYPE_BOOL 1003
+#define TYPE_PAIR 1004
+#define TYPE_ARRAY 1005
+#define TYPE_ERAISED_PAIR 1006
+string type_kind_str(TYPE_KIND __e) is
+    if __e < 1003 then
+        if __e < 1001 then
+            if __e == 1000 then return "int" ENDIF
+        else
+            if __e < 1002 then
+                if __e == 1001 then return "char" ENDIF
+            else
+                if __e == 1002 then return "string" ENDIF
+            fi
+        fi
+    else
+        if __e < 1005 then
+            if __e < 1004 then
+                if __e == 1003 then return "bool" ENDIF
+            else
+                if __e == 1004 then return "pair" ENDIF
+            fi
+        else
+            if __e < 1006 then
+                if __e == 1005 then return "array" ENDIF
+            else
+                if __e == 1006 then return "eraised_pair" ENDIF
+            fi
+        fi
+    fi    ; exit 1
+end
+
+#endif

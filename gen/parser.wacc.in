@@ -1,0 +1,118 @@
+#ifndef GEN_PARSER_WACC_IN
+#define GEN_PARSER_WACC_IN
+
+#include "../src/utils.wacc.in"
+
+// struct parser {
+//     scope_depth_: int,
+//     lexer_: pair,
+//     codegen_: pair,
+//     local_name_arr_: char[][],
+//     local_name_len_: int[],
+//     local_depth_: int[],
+//     local_type_: pair(int, pair)[],
+// }
+
+// [
+//     [
+//         local_name_len_: int[]
+//         [
+//             scope_depth_: int
+//             codegen_: pair
+//         ]
+//     ]
+//     [
+//         [
+//             local_depth_: int[]
+//             local_type_: pair(int, pair)[]
+//         ]
+//         [
+//             lexer_: pair
+//             local_name_arr_: char[][]
+//         ]
+//     ]
+// ]
+#define PARSER_T pair(pair, pair)
+
+PARSER_T parser_ctor(
+    int scope_depth_,
+    pair lexer_,
+    pair codegen_,
+    char[][] local_name_arr_,
+    int[] local_name_len_,
+    int[] local_depth_,
+    pair(int, pair)[] local_type_
+) is
+    int[] ll__ctor = local_name_len_;
+    int lrl__ctor = scope_depth_;
+    pair rrl__ctor = codegen_;
+    pair(int, pair) rl__ctor = newpair(lrl__ctor, rrl__ctor);
+    pair(int[], pair) l__ctor = newpair(ll__ctor, rl__ctor);
+    int[] llr__ctor = local_depth_;
+    pair(int, pair)[] rlr__ctor = local_type_;
+    pair(int[], pair(int, pair)[]) lr__ctor = newpair(llr__ctor, rlr__ctor);
+    pair lrr__ctor = lexer_;
+    char[][] rrr__ctor = local_name_arr_;
+    pair(pair, char[][]) rr__ctor = newpair(lrr__ctor, rrr__ctor);
+    pair(pair, pair) r__ctor = newpair(lr__ctor, rr__ctor);
+    pair(pair, pair) __ctor = newpair(l__ctor, r__ctor);
+    return __ctor
+end
+
+VOID parser_dtor(PARSER_T self) is
+    pair(int[], pair) lself = fst self;
+    pair(pair, pair) rself = snd self;
+    int[] llself = fst lself;
+    pair(int, pair) rlself = snd lself;
+    int lrlself = fst rlself;
+    pair rrlself = snd rlself;
+    free rlself;
+    free lself;
+    pair(int[], pair(int, pair)[]) lrself = fst rself;
+    pair(pair, char[][]) rrself = snd rself;
+    int[] llrself = fst lrself;
+    pair(int, pair)[] rlrself = snd lrself;
+    free lrself;
+    pair lrrself = fst rrself;
+    char[][] rrrself = snd rrself;
+    free rrself;
+    free rself;
+    free self;
+    
+ENDV
+
+#define PARSER_FN(__rtype, __fname, ...) \
+    __rtype __fname(PARSER_T self __VA_ARGS__) is \
+    pair(pair, pair) __self = self; \
+    pair(int[], pair) __fstself = fst __self; \
+    int[] local_name_len_ = fst __fstself; \
+    pair(int, pair) __sndfstself = snd __fstself; \
+    int scope_depth_ = fst __sndfstself; \
+    pair codegen_ = snd __sndfstself; \
+    pair(pair, pair) __sndself = snd __self; \
+    pair(int[], pair(int, pair)[]) __fstsndself = fst __sndself; \
+    int[] local_depth_ = fst __fstsndself; \
+    pair(int, pair)[] local_type_ = snd __fstsndself; \
+    pair(pair, char[][]) __sndsndself = snd __sndself; \
+    pair lexer_ = fst __sndsndself; \
+    char[][] local_name_arr_ = snd __sndsndself;
+
+
+#define PARSER_REFRESH \
+    local_name_len_ = fst __fstself; \
+    scope_depth_ = fst __sndfstself; \
+    codegen_ = snd __sndfstself; \
+    local_depth_ = fst __fstsndself; \
+    local_type_ = snd __fstsndself; \
+    lexer_ = fst __sndsndself; \
+    local_name_arr_ = snd __sndsndself
+
+#define PARSER_SET_SCOPE_DEPTH_(__val) fst __sndfstself = __val; scope_depth_ = __val
+#define PARSER_SET_LEXER_(__val) fst __sndsndself = __val; lexer_ = __val
+#define PARSER_SET_CODEGEN_(__val) snd __sndfstself = __val; codegen_ = __val
+#define PARSER_SET_LOCAL_NAME_ARR_(__val) snd __sndsndself = __val; local_name_arr_ = __val
+#define PARSER_SET_LOCAL_NAME_LEN_(__val) fst __fstself = __val; local_name_len_ = __val
+#define PARSER_SET_LOCAL_DEPTH_(__val) fst __fstsndself = __val; local_depth_ = __val
+#define PARSER_SET_LOCAL_TYPE_(__val) snd __fstsndself = __val; local_type_ = __val
+
+#endif

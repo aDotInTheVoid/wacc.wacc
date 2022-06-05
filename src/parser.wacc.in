@@ -1,0 +1,19 @@
+#ifndef PARSER_WACC_IN
+#define PARSER_WACC_IN
+
+#include "../gen/parser.wacc.in"
+
+
+PARSER_FN(TOKEN_T, expect,, TOKEN_TYPE kind)
+    TOKEN_TYPE curty = call token_type(current_);
+    if (curty != kind)
+        FAIL
+    ENDIF;
+
+    TOKEN_T t = current_;
+    TOKEN_T next = call next_token(lexer_);
+    PARSER_SET_CURRENT(next);
+    return t
+end
+
+#endif

@@ -21,5 +21,5 @@ func (w *waccLexer) Lex(path string) CommandResult {
 	return RunOutputGet(w.path, &path)
 }
 
-var WaccBs2Lexer Lexer = &waccLexer{path: "_build/wacc-bs2"}
-var WaccTpLexer Lexer = &waccLexer{path: "_build/wacc-tp"}
+var WaccBs2Lexer Lexer = &waccLexer{path: "_build/wacc-lex-bs2"}
+var WaccTpLexer Lexer = &waccLexer{path: "_build/wacc-lex-tp"}
