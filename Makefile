@@ -66,7 +66,7 @@ bs2: $(bs2)
 _build/bs2/%: %.wacc $(bs2) $(rt_obj)
 	@mkdir -p $(@D)
 	$(bs2) asm $< > $@.s
-	gcc $@.s $(rt_obj) -o $@
+	gcc -g $@.s $(rt_obj) -o $@
 _build/tp/%: %.wacc $(tp)
 	@mkdir -p $(@D)
 	$(tp) $< $@.c

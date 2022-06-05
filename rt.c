@@ -82,4 +82,6 @@ void waccrt_array_delete(void *array) {
 
 void waccrt_exit(int32_t x) { exit(x); }
 
-// TODO: waccrt_array_new
+// TODO: Is space before % needed?
+void waccrt_read_int(int32_t *x) { scanf(" %d", x); }
+void waccrt_read_char(char *x) { scanf(" %c", x); }

@@ -85,7 +85,20 @@ void X64Codegen::pop_print(PrintKind pk, bool multiline) {
   add_call(fmt::format("waccrt_print{}_{}", multiline ? "ln" : "",
                        print_kind_name(pk)));
 }
-void X64Codegen::do_read(const Type &ty) { assert(0); }
+void X64Codegen::do_read(const Type &ty) {
+  switch (ty.kind_) {
+  case TypeKind::Int:
+    add_pop(rnames[0]);
+    add_call("waccrt_read_int");
+    break;
+  case TypeKind::Char:
+    add_pop(rnames[0]);
+    add_call("waccrt_read_char");
+    break;
+  default:
+    assert(0);
+  }
+}
 
 void X64Codegen::pop_free(FreeKind fk) {
   add_pop("rdi");
