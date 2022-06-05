@@ -61,7 +61,8 @@ func main() {
 	lexers := runner.NewGroup(runner.BS2Lexer, runner.WaccBs2Lexer, runner.WaccTpLexer)
 	parsers := runner.NewGroup(runner.BS2Parser)
 	assembles := runner.NewGroup(runner.BS2Assembler)
-	runners := runner.NewGroup(runner.TPRunner, runner.BS2Runner)
+	// TPRunner can play when they fix array bounds
+	runners := runner.NewGroup( /*runner.TPRunner,*/ runner.BS2Runner)
 	// tpRunner := runner.NewGroup(runner.TPRunner)
 
 	e := lexers.Ensure()

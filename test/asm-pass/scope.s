@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 400
+    sub rsp, 2064
     lea rax, [rbp-8]
     push rax # assign_addr_local
     lea rax, .str0[rip]
@@ -252,10 +252,10 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_i32
     mov rax, [rbp-8] # e_push_local
@@ -266,10 +266,10 @@ main:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_i32
     mov rax, [rbp-8] # e_push_local
@@ -280,10 +280,10 @@ main:
     push rax # e_push_local
     mov eax, 2
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_i32
     lea rax, .str6[rip]
@@ -294,10 +294,10 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_char
     mov rax, [rbp-8] # e_push_local
@@ -308,10 +308,10 @@ main:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_char
     mov rax, [rbp-8] # e_push_local
@@ -322,10 +322,10 @@ main:
     push rax # e_push_local
     mov eax, 2
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_char
     lea rax, .str7[rip]
@@ -338,10 +338,12 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -371,10 +373,12 @@ main:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -488,10 +492,12 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -501,10 +507,12 @@ main:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -514,10 +522,12 @@ main:
     push rax # e_push_local
     mov eax, 2
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -545,10 +555,10 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_bool
     mov rax, [rbp-8] # e_push_local
@@ -559,10 +569,10 @@ main:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_print_bool
     mov rax, [rbp-8] # e_push_local
@@ -573,10 +583,10 @@ main:
     push rax # e_push_local
     mov eax, 2
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_println_bool
     mov rax, [rbp-56] # e_push_local
@@ -589,10 +599,12 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -602,10 +614,12 @@ main:
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -615,10 +629,12 @@ main:
     push rax # e_push_local
     mov eax, 2
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    sub rsp, 8
+    call waccrt_array_get
+    add rsp, 8
+    push rax
     pop rdi # assign_do val
     pop rax # assign_do addr
     mov [rax], rdi
@@ -660,7 +676,7 @@ main:
     call waccrt_println_i32
     xor rax, rax
 .ret_main:
-    add rsp, 400
+    add rsp, 2064
     pop rbp
     ret
 .section .rodata

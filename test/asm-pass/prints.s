@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 400
+    sub rsp, 2064
     lea rax, [rbp-8]
     push rax # assign_addr_local
     mov rax, 'a'
@@ -102,7 +102,7 @@ main:
     call waccrt_println_ptr
     xor rax, rax
 .ret_main:
-    add rsp, 400
+    add rsp, 2064
     pop rbp
     ret
 .section .rodata

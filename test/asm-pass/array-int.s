@@ -3,7 +3,7 @@
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 400
+    sub rsp, 2064
     lea rax, [rbp-8]
     push rax # assign_addr_local
     mov eax, 1
@@ -26,35 +26,35 @@ main:
     push rax # e_push_local
     mov eax, 0
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_println_i32
     mov rax, [rbp-8] # e_push_local
     push rax # e_push_local
     mov eax, 1
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_println_i32
     mov rax, [rbp-8] # e_push_local
     push rax # e_push_local
     mov eax, 2
     push rax # e_push_number
-    pop rbx
-    pop rax
-    mov rdi, [rax+rbx*8]
-    push rdi
+    pop rsi
+    pop rdi
+    call waccrt_array_get
+    push rax
     pop rdi # load print
     call waccrt_println_i32
     xor rax, rax
 .ret_main:
-    add rsp, 400
+    add rsp, 2064
     pop rbp
     ret
 .section .rodata

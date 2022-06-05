@@ -68,6 +68,15 @@ void waccrt_array_delete(void *array) {
   free(a - 1);
 }
 
+uint64_t waccrt_array_get(uint64_t *array, uint32_t index) {
+  uint64_t len = array[-1];
+  if (0 <= index && index < len) {
+    return array[index];
+  } else {
+    printf("Index out of bounds: %d, len is %d\n", index, len);
+    exit(-1);
+  }
+}
 // void *waccrt_string_new(char *str) {
 //   size_t l = strlen(str);
 

@@ -18,7 +18,9 @@
 static const char *rnames[] = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
 const int nreges = sizeof(rnames) / sizeof(rnames[0]);
 
-#define MAX_LOCS 50
+// Must be even, for stack alignment.
+// Test
+#define MAX_LOCS 258
 #define LOC_SIZE 8
 
 static int32_t addr_of(int32_t locno) {
@@ -207,11 +209,16 @@ void X64Codegen::e_neg() {
   add_push("rax");
 }
 void X64Codegen::e_array_elem() {
-  add_pop("rbx"); // rbx = index
-  add_pop("rax"); // rax = array
-  add_instr("mov rdi, [rax+rbx*8]");
-  add_push("rdi");
+  // add_pop("rbx"); // rbx = index
+  // add_pop("rax"); // rax = array
+  // add_instr("mov rdi, [rax+rbx*8]");
+  // add_push("rdi");
+  add_pop(rnames[1]); // index = snd arg
+  add_pop(rnames[0]); // array = fst arg
+  add_call("waccrt_array_get");
+  add_push("rax");
 }
+
 void X64Codegen::e_push_array_lit(int32_t nels) {
   add_instr(fmt::format("mov rdi, {}", nels));                 // arg1 = nels
   add_instr(fmt::format("lea rsi, [rsp+{}]", (nels - 1) * 8)); // arg2 = array
@@ -376,7 +383,7 @@ void X64Codegen::assign_addr_array() {
   add_pop("rbx # array index"); // rbx = index
   add_pop("rax # array base");  // rax = array
   add_instr("mov rax, [rax]");
-  add_instr("lea rcx, [rax+rbx*8]");
+  add_instr("lea rcx, [rax+rbx*8]"); // TODO: Bounds check
   add_push("rcx");
 }
 

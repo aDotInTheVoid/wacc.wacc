@@ -3,7 +3,7 @@
 ppair:
     push rbp
     mov rbp, rsp
-    sub rsp, 400
+    sub rsp, 2064
     mov [rbp-8], rdi
     lea rax, [rbp-16]
     push rax # assign_addr_local
@@ -38,13 +38,13 @@ ppair:
     pop rax
     jmp .ret_ppair
 .ret_ppair:
-    add rsp, 400
+    add rsp, 2064
     pop rbp
     ret
 main:
     push rbp
     mov rbp, rsp
-    sub rsp, 400
+    sub rsp, 2064
     lea rax, [rbp-8]
     push rax # assign_addr_local
     mov eax, 1
@@ -113,7 +113,7 @@ main:
     mov [rax], rdi
     xor rax, rax
 .ret_main:
-    add rsp, 400
+    add rsp, 2064
     pop rbp
     ret
 .section .rodata
