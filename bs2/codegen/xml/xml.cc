@@ -66,12 +66,12 @@ int32_t XmlCodegen::if_when() {
   open("when");
   return -1;
 }
-int32_t XmlCodegen::if_else(int32_t _) {
+int32_t XmlCodegen::if_else(int32_t) {
   close("when");
   open("else");
   return -1;
 }
-void XmlCodegen::if_end(int32_t _) {
+void XmlCodegen::if_end(int32_t) {
   close("else");
   close("if");
 }
@@ -85,7 +85,7 @@ int32_t XmlCodegen::while_body() {
   open("body");
   return -1;
 }
-void XmlCodegen::while_end(int32_t _a, int32_t _b) {
+void XmlCodegen::while_end(int32_t, int32_t) {
   close("body");
   close("while");
 }

@@ -229,26 +229,6 @@ void X64Codegen::e_push_string(std::string_view s) {
   add_push("rax");
 }
 
-static const char *test_name(Op op) {
-  switch (op) {
-  case Op::Eq:
-    return "e";
-  case Op::Ne:
-    return "ne";
-  case Op::Lt:
-    return "l";
-  case Op::Le:
-    return "le";
-  case Op::Gt:
-    return "g";
-  case Op::Ge:
-    return "ge";
-  default:
-    fprintf(stderr, "Unknown test op %s\n", op_name(op));
-    assert(0);
-  }
-}
-
 void X64Codegen::e_pop_op(Op op) {
   add_pop("rsi"); // rsi = snd arg = rhs
   add_pop("rdi"); // rdi = fst arg = lhs
