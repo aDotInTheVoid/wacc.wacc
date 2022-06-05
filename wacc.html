@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Wacc.wacc</title>
+
+<meta name="description" content="Wacc.wacc">
+<meta name="keywords" content="Wacc.wacc">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="#Top" rel="start" title="Top">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="/manual" rel="up" title="(dir)">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">Wacc.wacc</h1>
+
+
+
+<span id="SEC_Overview"></span>
+<h2 class="shortcontents-heading">Short Table of Contents</h2>
+
+<div class="shortcontents">
+<ul class="no-bullet">
+<li><a id="stoc-An-overview-of-the-Wacc" href="#toc-An-overview-of-the-Wacc">1 An overview of the Wacc</a></li>
+<li><a id="stoc-Limitations" href="#toc-Limitations">2 Limitations</a></li>
+<li><a id="stoc-The-build-system" href="#toc-The-build-system">3 The build system</a></li>
+<li><a id="stoc-BS2_003a-A-Expiramental-compiller" href="#toc-BS2_003a-A-Expiramental-compiller">4 BS2: A Expiramental compiller</a></li>
+<li><a id="stoc-Wacc_002dTo_002dC_003a-A-Bootstrap-compiller" href="#toc-Wacc_002dTo_002dC_003a-A-Bootstrap-compiller">5 Wacc-To-C: A Bootstrap compiller</a></li>
+<li><a id="stoc-Lexing" href="#toc-Lexing">6 Lexing</a></li>
+</ul>
+</div>
+
+<span id="SEC_Contents"></span>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a id="toc-An-overview-of-the-Wacc" href="#overview_002dwacc">1 An overview of the Wacc</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Extensions" href="#extensions">1.1 Extensions</a></li>
+  </ul></li>
+  <li><a id="toc-Limitations" href="#limitations">2 Limitations</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Lack-of-checks_002e" href="#lack_002dof_002dchecks">2.1 Lack of checks.</a></li>
+    <li><a id="toc-Input-file-size" href="#input_002dfile_002dsize">2.2 Input file size</a></li>
+  </ul></li>
+  <li><a id="toc-The-build-system" href="#build_002dsystem">3 The build system</a></li>
+  <li><a id="toc-BS2_003a-A-Expiramental-compiller" href="#bs2">4 BS2: A Expiramental compiller</a></li>
+  <li><a id="toc-Wacc_002dTo_002dC_003a-A-Bootstrap-compiller" href="#wacc_002dto_002dc">5 Wacc-To-C: A Bootstrap compiller</a></li>
+  <li><a id="toc-Lexing" href="#lexing">6 Lexing</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Reading-input" href="#input">6.1 Reading input</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+<span id="Top"></span><div class="header">
+<p>
+Up: <a href="/manual" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="wacc_002ewacc"></span><h1 class="top">wacc.wacc</h1>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#overview_002dwacc" accesskey="1">An overview of the Wacc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#limitations" accesskey="2">Limitations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#build_002dsystem" accesskey="3">The build system</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#bs2" accesskey="4">BS2: A Expiramental compiller</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#wacc_002dto_002dc" accesskey="5">Wacc-To-C: A Bootstrap compiller</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#lexing" accesskey="6">Lexing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="overview_002dwacc"></span><div class="header">
+<p>
+Next: <a href="#limitations" accesskey="n" rel="next">limitations</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="An-overview-of-the-Wacc"></span><h2 class="chapter">1 An overview of the Wacc</h2>
+
+<p>If your reading this, you probably already framiliar with the Wacc language.
+Hence this will not be a introduction to the language, nor a formal specification.
+Instead it is an overview of relavent pieces to building a self hosting wacc compiler.
+For a formal specification of the language, see 
+<a href="https://gitlab.doc.ic.ac.uk/lab2122_spring/wacc_examples/-/raw/master/WACCLangSpec.pdf">the spec</a>
+and <a href="https://gitlab.doc.ic.ac.uk/lab2122_spring/wacc_examples">the examples repo</a>.
+</p>
+
+<ul>
+<li> Incomplete Specification
+
+<p>The Specification given for Wacc is incomplete. <a href="https://gitlab.doc.ic.ac.uk/rd3918/wacc_examples/-/raw/master/The%20WACC%20Language%20Specification/WACCLangSpec.pdf">this version</a> 
+is what See <a href="#wacc_002dto_002dc">wacc-to-c</a> links too, but in time my own verion will be made.
+</p>
+</li><li> Bad strings
+
+<p>Wacc has very limited string support. They can do
+</p><ul>
+<li> <code>print</code> and <code>println</code> them
+</li><li> Be constructed by a litteral.
+</li></ul>
+
+<p>Thats all! So the only use for strings is fixed strings for output.
+Most of the &ldquo;string&rdquo; handling code must use <code>char[]</code>
+</p>
+</li></ul>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#extensions" accesskey="1">Extensions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="extensions"></span><div class="header">
+<p>
+Up: <a href="#overview_002dwacc" accesskey="u" rel="up">overview-wacc</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Extensions"></span><h3 class="section">1.1 Extensions</h3>
+<p>A key part of the &ldquo;Wacc Experience&rdquo; &reg; is designing and implementing extensions to the language.
+Wacc.wacc attempts to not make use of these, mainly to prove a point, but also to make it easier to implement, at the
+cost of making it harder to implement.
+</p>
+<p>One exception is the &ldquo;extern&rdquo; extension, which allows calling arbitrary C functions (provided their ABI can be expressed
+in the unextended wacc type system). This is nessisary for reading input (See <a href="#input">input</a>). However to keep this 
+modular, to allow for alternate IO extensions to be used to bootstrap, only <a href="https://www.gnu.org/software/libc/manual/html_node/Character-Input.html#index-getchar">getchar</a>
+is used. It is declaired as <code>extern int getchar()</code>, and we assume <code>EOF</code> is -1 and C&rsquo;s <code>int</code> is the same
+as wacc&rsquo;s <code>int</code> (32 bits each), which is true on most modern systems.
+</p>
+<p>Their are many extensions that I would like to use, but havn&rsquo;t, as they would increase the work to implement them,
+and would make this less of a &ldquo;self hosting wacc compiller&rdquo;, and more of a &ldquo;self hosting wacc++ compiler&rdquo;, even
+though it could be more accutatly described as a &ldquo;self hosting wacc with extern compiller&rdquo;.
+</p>
+<ul>
+<li> Arbitrary Expressions: Don&rsquo;t have special items in &lt;assign-rhs&gt;.
+</li><li> Switch statements
+</li><li> Agragate types
+</li><li> C style enums / C++ enum classes
+</li><li> Rust style enums
+</li><li> IO Library
+</li><li> Module system
+</li><li> More flexible if statement (eg if without else, else if without several fi&rsquo;s)
+</li><li> Dynamic array allocation
+</li><li> Garbage Collection
+</li><li> String and array slices
+</li><li> Built in generic higher level types (Go&rsquo;s slice and map)
+</li></ul>
+
+<hr>
+<span id="limitations"></span><div class="header">
+<p>
+Next: <a href="#build_002dsystem" accesskey="n" rel="next">build-system</a>, Previous: <a href="#overview_002dwacc" accesskey="p" rel="prev">overview-wacc</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Limitations"></span><h2 class="chapter">2 Limitations</h2>
+
+<p>Due the the idiosyncracies of WACC, and the fact that writing something that works at all
+is hard enough, wacc.wacc has several limitations over a &ldquo;fully complient&rdquo; Wacc compiler.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#lack_002dof_002dchecks" accesskey="1">Lack of checks.</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#input_002dfile_002dsize" accesskey="2">Input file size</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="lack_002dof_002dchecks"></span><div class="header">
+<p>
+Next: <a href="#input_002dfile_002dsize" accesskey="n" rel="next">input-file-size</a>, Up: <a href="#limitations" accesskey="u" rel="up">limitations</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Lack-of-checks_002e"></span><h3 class="section">2.1 Lack of checks.</h3>
+
+<p>Wacc.wacc will assume that the input is valid an not check it. This includes, but is not
+limited to
+</p>
+<ul>
+<li> Functions existing
+</li><li> Function arity
+</li><li> Function argument types
+</li><li> Function return types.
+</li></ul>
+
+<hr>
+<span id="input_002dfile_002dsize"></span><div class="header">
+<p>
+Previous: <a href="#lack_002dof_002dchecks" accesskey="p" rel="prev">lack-of-checks</a>, Up: <a href="#limitations" accesskey="u" rel="up">limitations</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Input-file-size"></span><h3 class="section">2.2 Input file size</h3>
+
+<p>Wacc.wacc can handle at most <em>L</em> &ldquo;logical lines&rdquo; of input, where each logical line
+has has at most <em>C</em> characters. For more info See <a href="#input">input</a>.
+</p>
+<p>These parametes are easily changed with the <code>NUM_LINES</code> and <code>NUM_CHARS</code> constants,
+in <code>py/gen_line_alloc.py</code>. Currenty they are <code>NUM_LINES = 3_000</code> and <code>NUM_CHARS = 400</code>.
+As the compiller is written, these will be increased to handle the larger input. I can&rsquo;t imagine anyone
+writing a program larger than the compiler, but if you do please let me know!
+</p>
+<p>Longer input that this will do something, possibly undefined.
+</p>
+
+<hr>
+<span id="build_002dsystem"></span><div class="header">
+<p>
+Next: <a href="#bs2" accesskey="n" rel="next">bs2</a>, Previous: <a href="#limitations" accesskey="p" rel="prev">limitations</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="The-build-system"></span><h2 class="chapter">3 The build system</h2>
+
+<hr>
+<span id="bs2"></span><div class="header">
+<p>
+Next: <a href="#wacc_002dto_002dc" accesskey="n" rel="next">wacc-to-c</a>, Previous: <a href="#build_002dsystem" accesskey="p" rel="prev">build-system</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="BS2_003a-A-Expiramental-compiller"></span><h2 class="chapter">4 BS2: A Expiramental compiller</h2>
+
+<hr>
+<span id="wacc_002dto_002dc"></span><div class="header">
+<p>
+Next: <a href="#lexing" accesskey="n" rel="next">lexing</a>, Previous: <a href="#bs2" accesskey="p" rel="prev">bs2</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Wacc_002dTo_002dC_003a-A-Bootstrap-compiller"></span><h2 class="chapter">5 Wacc-To-C: A Bootstrap compiller</h2>
+
+<hr>
+<span id="lexing"></span><div class="header">
+<p>
+Previous: <a href="#wacc_002dto_002dc" accesskey="p" rel="prev">wacc-to-c</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Lexing"></span><h2 class="chapter">6 Lexing</h2>
+
+<p>Other than reading input, lexing is relativly trivial. The lexer is based
+on the <a href="https://craftinginterpreters.com/scanning-on-demand.html">clox scanner</a>,
+by Bob Nystrom.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#input" accesskey="1">Reading input</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="input"></span><div class="header">
+<p>
+Up: <a href="#lexing" accesskey="u" rel="up">lexing</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<span id="Reading-input"></span><h3 class="section">6.1 Reading input</h3>
+
+<p>Reading input in wacc is suprisingly hard. The only build in way is the <code>read</code>, and it only
+supports integer and character IO. Additionaly these only read after a newline is entered, and
+their is no way to detect an EOF, making it (AFAIKT) unsuitable for reading input. Therefor
+getchar(3) is used. See <a href="#extensions">extensions</a> for how this is done.
+</p>
+<p>The next chalenge is to read all of stdin. The problem with this is that to allocate a char buffer
+to read <em>n</em> charecters, you need to allocate <em>4n</em> bytes (<code>' ',</code>). This is a problem for the
+compiler self hosting, as the buffer wouldnt be large enough to read the bytes that create the buffer.
+</p>
+<p>Therefor, instead of reading stdin to <code>char[]</code>, it is read to <code>char[][]</code>, where each line has
+its own buffer allocated. Becauase array literals are secretly <code>malloc</code>s, we can have one literal
+for the list of lines, and one literal for a single line, which is shared amound lines.
+</p>
+<p>However, we still want each token to only be on one line buffer. Most of the time using
+One line buffer per real line is fine, but not for multi-line string and char literal.
+Therefor &lsquo;io::read_all&lsquo; keeps track of if it is in a string (including escapes), and only switches to a new
+line buffer on a new line not in a string/char lit. This is the cause of &ldquo;logical lines&rdquo; in <a href="#input_002dfile_002dsize">input-file-size</a>.
+</p>
+<p>Finaly memory management is a little tricky. &lsquo;io::read_all&lsquo; takes 2 sentinal charecter arrays, both
+of which should be empty. 1 is the default empty line, and the other is just used to indicate the end
+of input. This allows freeing all non empty line buffers, as they are unique, and then freeing 
+the 2 sentinals.
+</p>
+<hr>
+
+
+
+</body>
+</html>

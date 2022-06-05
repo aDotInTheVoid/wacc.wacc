@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>input (Wacc.wacc)</title>
+
+<meta name="description" content="input (Wacc.wacc)">
+<meta name="keywords" content="input (Wacc.wacc)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="lexing.html" rel="up" title="lexing">
+<link href="lexing.html" rel="prev" title="lexing">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<span id="input"></span><div class="header">
+<p>
+Up: <a href="lexing.html" accesskey="u" rel="up">lexing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<hr>
+<span id="Reading-input"></span><h3 class="section">6.1 Reading input</h3>
+
+<p>Reading input in wacc is suprisingly hard. The only build in way is the <code>read</code>, and it only
+supports integer and character IO. Additionaly these only read after a newline is entered, and
+their is no way to detect an EOF, making it (AFAIKT) unsuitable for reading input. Therefor
+getchar(3) is used. See <a href="extensions.html">extensions</a> for how this is done.
+</p>
+<p>The next chalenge is to read all of stdin. The problem with this is that to allocate a char buffer
+to read <em>n</em> charecters, you need to allocate <em>4n</em> bytes (<code>' ',</code>). This is a problem for the
+compiler self hosting, as the buffer wouldnt be large enough to read the bytes that create the buffer.
+</p>
+<p>Therefor, instead of reading stdin to <code>char[]</code>, it is read to <code>char[][]</code>, where each line has
+its own buffer allocated. Becauase array literals are secretly <code>malloc</code>s, we can have one literal
+for the list of lines, and one literal for a single line, which is shared amound lines.
+</p>
+<p>However, we still want each token to only be on one line buffer. Most of the time using
+One line buffer per real line is fine, but not for multi-line string and char literal.
+Therefor &lsquo;io::read_all&lsquo; keeps track of if it is in a string (including escapes), and only switches to a new
+line buffer on a new line not in a string/char lit. This is the cause of &ldquo;logical lines&rdquo; in <a href="input_002dfile_002dsize.html">input-file-size</a>.
+</p>
+<p>Finaly memory management is a little tricky. &lsquo;io::read_all&lsquo; takes 2 sentinal charecter arrays, both
+of which should be empty. 1 is the default empty line, and the other is just used to indicate the end
+of input. This allows freeing all non empty line buffers, as they are unique, and then freeing 
+the 2 sentinals.
+</p>
+<hr>
+<div class="header">
+<p>
+Up: <a href="lexing.html" accesskey="u" rel="up">lexing</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+
+
+
+</body>
+</html>

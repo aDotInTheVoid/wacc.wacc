@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Top (Wacc.wacc)</title>
+
+<meta name="description" content="Top (Wacc.wacc)">
+<meta name="keywords" content="Top (Wacc.wacc)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="#Top" rel="start" title="Top">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="/manual" rel="up" title="(dir)">
+<link href="overview_002dwacc.html" rel="next" title="overview-wacc">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">Wacc.wacc</h1>
+
+
+
+<span id="SEC_Overview"></span>
+<h2 class="shortcontents-heading">Short Table of Contents</h2>
+
+<div class="shortcontents">
+<ul class="no-bullet">
+<li><a id="stoc-An-overview-of-the-Wacc" href="#toc-An-overview-of-the-Wacc">1 An overview of the Wacc</a></li>
+<li><a id="stoc-Limitations" href="#toc-Limitations">2 Limitations</a></li>
+<li><a id="stoc-The-build-system" href="#toc-The-build-system">3 The build system</a></li>
+<li><a id="stoc-BS2_003a-A-Expiramental-compiller" href="#toc-BS2_003a-A-Expiramental-compiller">4 BS2: A Expiramental compiller</a></li>
+<li><a id="stoc-Wacc_002dTo_002dC_003a-A-Bootstrap-compiller" href="#toc-Wacc_002dTo_002dC_003a-A-Bootstrap-compiller">5 Wacc-To-C: A Bootstrap compiller</a></li>
+<li><a id="stoc-Lexing" href="#toc-Lexing">6 Lexing</a></li>
+</ul>
+</div>
+
+<span id="SEC_Contents"></span>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a id="toc-An-overview-of-the-Wacc" href="overview_002dwacc.html#overview_002dwacc">1 An overview of the Wacc</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Extensions" href="extensions.html#extensions">1.1 Extensions</a></li>
+  </ul></li>
+  <li><a id="toc-Limitations" href="limitations.html#limitations">2 Limitations</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Lack-of-checks_002e" href="lack_002dof_002dchecks.html#lack_002dof_002dchecks">2.1 Lack of checks.</a></li>
+    <li><a id="toc-Input-file-size" href="input_002dfile_002dsize.html#input_002dfile_002dsize">2.2 Input file size</a></li>
+  </ul></li>
+  <li><a id="toc-The-build-system" href="build_002dsystem.html#build_002dsystem">3 The build system</a></li>
+  <li><a id="toc-BS2_003a-A-Expiramental-compiller" href="bs2.html#bs2">4 BS2: A Expiramental compiller</a></li>
+  <li><a id="toc-Wacc_002dTo_002dC_003a-A-Bootstrap-compiller" href="wacc_002dto_002dc.html#wacc_002dto_002dc">5 Wacc-To-C: A Bootstrap compiller</a></li>
+  <li><a id="toc-Lexing" href="lexing.html#lexing">6 Lexing</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Reading-input" href="input.html#input">6.1 Reading input</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+<span id="Top"></span><div class="header">
+<p>
+Up: <a href="/manual" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<hr>
+<span id="wacc_002ewacc"></span><h1 class="top">wacc.wacc</h1>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="overview_002dwacc.html" accesskey="1">An overview of the Wacc</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="limitations.html" accesskey="2">Limitations</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="build_002dsystem.html" accesskey="3">The build system</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="bs2.html" accesskey="4">BS2: A Expiramental compiller</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="wacc_002dto_002dc.html" accesskey="5">Wacc-To-C: A Bootstrap compiller</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="lexing.html" accesskey="6">Lexing</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<div class="header">
+<p>
+Up: <a href="/manual" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+
+
+
+</body>
+</html>

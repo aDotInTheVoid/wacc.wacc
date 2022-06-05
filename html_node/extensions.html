@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>extensions (Wacc.wacc)</title>
+
+<meta name="description" content="extensions (Wacc.wacc)">
+<meta name="keywords" content="extensions (Wacc.wacc)">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="index.html" rel="start" title="Top">
+<link href="index.html#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="overview_002dwacc.html" rel="up" title="overview-wacc">
+<link href="limitations.html" rel="next" title="limitations">
+<link href="overview_002dwacc.html" rel="prev" title="overview-wacc">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://www.gnu.org/software/gnulib/manual.css">
+
+
+</head>
+
+<body lang="en">
+<span id="extensions"></span><div class="header">
+<p>
+Up: <a href="overview_002dwacc.html" accesskey="u" rel="up">overview-wacc</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</p>
+</div>
+<hr>
+<span id="Extensions"></span><h3 class="section">1.1 Extensions</h3>
+<p>A key part of the &ldquo;Wacc Experience&rdquo; &reg; is designing and implementing extensions to the language.
+Wacc.wacc attempts to not make use of these, mainly to prove a point, but also to make it easier to implement, at the
+cost of making it harder to implement.
+</p>
+<p>One exception is the &ldquo;extern&rdquo; extension, which allows calling arbitrary C functions (provided their ABI can be expressed
+in the unextended wacc type system). This is nessisary for reading input (See <a href="input.html">input</a>). However to keep this 
+modular, to allow for alternate IO extensions to be used to bootstrap, only <a href="https://www.gnu.org/software/libc/manual/html_node/Character-Input.html#index-getchar">getchar</a>
+is used. It is declaired as <code>extern int getchar()</code>, and we assume <code>EOF</code> is -1 and C&rsquo;s <code>int</code> is the same
+as wacc&rsquo;s <code>int</code> (32 bits each), which is true on most modern systems.
+</p>
+<p>Their are many extensions that I would like to use, but havn&rsquo;t, as they would increase the work to implement them,
+and would make this less of a &ldquo;self hosting wacc compiller&rdquo;, and more of a &ldquo;self hosting wacc++ compiler&rdquo;, even
+though it could be more accutatly described as a &ldquo;self hosting wacc with extern compiller&rdquo;.
+</p>
+<ul>
+<li> Arbitrary Expressions: Don&rsquo;t have special items in &lt;assign-rhs&gt;.
+</li><li> Switch statements
+</li><li> Agragate types
+</li><li> C style enums / C++ enum classes
+</li><li> Rust style enums
+</li><li> IO Library
+</li><li> Module system
+</li><li> More flexible if statement (eg if without else, else if without several fi&rsquo;s)
+</li><li> Dynamic array allocation
+</li><li> Garbage Collection
+</li><li> String and array slices
+</li><li> Built in generic higher level types (Go&rsquo;s slice and map)
+</li></ul>
+
+
+
+
+</body>
+</html>
